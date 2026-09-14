@@ -1,8 +1,28 @@
-# r-doc
+<p align="center">
+  <img src="skills/r-doc/assets/r-doc.svg" alt="r-doc 图标" width="128" height="128">
+</p>
 
-![r-doc 图标](skills/r-doc/assets/r-doc.svg)
+<h1 align="center">r-doc</h1>
 
-面向 AI 代理与人类维护者的开发文档治理 Skill。
+<p align="center">面向 AI 代理与人类维护者的开发文档治理 Skill。</p>
+
+<p align="center">
+  <a href="https://github.com/riesaexe/r-doc">GitHub</a>
+  ·
+  <a href="https://github.com/riesaexe/r-doc/releases/latest">最新版本</a>
+  ·
+  <a href="https://github.com/riesaexe/r-doc/blob/main/LICENSE">MIT License</a>
+</p>
+
+<p align="center">
+  <code>AGENTS.md</code>
+  ·
+  <code>docs/</code>
+  ·
+  <code>npx skills</code>
+</p>
+
+---
 
 r-doc 帮助项目把需求、设计、接口、测试、发布和部署资料组织成可导航、可审查、可按需加载的知识库。
 
