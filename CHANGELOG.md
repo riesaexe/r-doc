@@ -4,7 +4,7 @@
 
 ## [Unreleased]
 
-- 后续开发在此记录，发布前移动到具体版本。
+- 修正 GitHub 与 `npx skills` 安装示例，明确仓库来源 `riesaexe/r-doc` 与技能名 `r-doc` 的区别。
 
 ## [0.1.0] - 2026-09-14
 

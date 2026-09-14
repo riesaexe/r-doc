@@ -36,6 +36,6 @@
 ## 平台验证
 
 - [ ] GitHub 仓库为公开仓库且包含 skills/r-doc/SKILL.md
-- [ ] npx skills add <owner>/<repo> --list 能发现 r-doc
-- [ ] npx skills add <owner>/<repo> --skill r-doc -g -y 安装成功
+- [ ] npx skills add riesaexe/r-doc --list 能发现 r-doc
+- [ ] npx skills add riesaexe/r-doc --skill r-doc -g -y 安装成功
 - [ ] SkillHub 已从 GitHub 地址手动导入并完成页面检查

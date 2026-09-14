@@ -26,23 +26,25 @@ r-doc 帮助项目把需求、设计、接口、测试、发布和部署资料�
 
 ## 安装
 
-将项目发布到公开 GitHub 仓库后，安装 r-doc：
+从本项目的公开 GitHub 仓库安装 r-doc：
 
 ```bash
-npx skills add <owner>/<repo> --skill r-doc -g -y
+npx skills add riesaexe/r-doc --skill r-doc -g -y
 ```
 
 只安装到当前项目时，去掉 -g：
 
 ```bash
-npx skills add <owner>/<repo> --skill r-doc -y
+npx skills add riesaexe/r-doc --skill r-doc -y
 ```
 
 也可以指定目标代理：
 
 ```bash
-npx skills add <owner>/<repo> --skill r-doc -a codex -y
+npx skills add riesaexe/r-doc --skill r-doc -a codex -y
 ```
+
+这里的 `riesaexe/r-doc` 是 GitHub 仓库来源，`--skill r-doc` 是仓库内的技能目录名；它们不是同一个参数。只有在安装其他仓库或你自己的 fork 时，才需要把仓库来源替换为对应的 `<owner>/<repo>`。
 
 ## 使用
 

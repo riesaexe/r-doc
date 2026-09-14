@@ -4,7 +4,7 @@
 
 Vercel Labs 的 skills CLI 通过 GitHub 或其他 Git 源安装 Skill。公开仓库应保留以下路径：
 
-~~~text
+```text
 <repository-root>/
 ├── skills/
 │   └── r-doc/
@@ -15,7 +15,7 @@ Vercel Labs 的 skills CLI 通过 GitHub 或其他 Git 源安装 Skill。公开�
 ├── README.md
 ├── LICENSE
 └── CHANGELOG.md
-~~~
+```
 
 SKILL.md 的 frontmatter 至少包含 name 和 description。r-doc 的源目录已经符合 skills/r-doc/SKILL.md 约定。
 
@@ -23,9 +23,9 @@ SKILL.md 的 frontmatter 至少包含 name 和 description。r-doc 的源目录�
 
 在仓库根目录运行：
 
-~~~bash
+```bash
 npx skills add . --list
-~~~
+```
 
 输出中应能看到 r-doc。这个命令只用于列出发现结果，不代表已经完成公开发布。
 
@@ -42,13 +42,15 @@ npx skills add . --list
 
 ## npx skills 安装验证
 
-将占位符替换为实际仓库后：
+本项目使用 `riesaexe/r-doc` 作为 GitHub 仓库来源，`--skill r-doc` 用于选择仓库内的技能目录：
 
-~~~bash
-npx skills add <owner>/<repo> --list
-npx skills add <owner>/<repo> --skill r-doc -g -y
+```bash
+npx skills add riesaexe/r-doc --list
+npx skills add riesaexe/r-doc --skill r-doc -g -y
 npx skills list -g
-~~~
+```
+
+如果验证的是其他仓库或 fork，再把 `riesaexe/r-doc` 替换为对应的 `<owner>/<repo>`；不要把 `r-doc` 单独作为仓库来源。
 
 若只想安装到当前项目，去掉 -g。如果需要指定代理，可增加 -a codex、-a claude-code 或其他受支持的代理名称。
 
