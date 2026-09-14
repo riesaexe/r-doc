@@ -22,11 +22,12 @@ The preview is read-only. Apply mode is explicit and guarded; read [repair.md](r
 The helper is read-only. It checks:
 
 - root `AGENTS.md`, the configured documentation root, and their required bidirectional navigation;
+- directly maintained Markdown files in the project root, such as `README.md`, `CONTRIBUTING.md`, and `SECURITY.md`, for links and sensitive values; metadata and index coverage remain scoped to the configured documentation root;
 - `README.md` indexes for documentation subdirectories;
-- relative, reference-style, and parenthesized Markdown links, missing targets, and resolved paths that escape the project root;
+- relative, reference-style, parenthesized, and image Markdown links, missing targets, and resolved paths that escape the project root; unused reference definitions are checked for target existence but do not create navigation edges;
 - whether documents under the configured documentation root are reachable from an index;
-- supported frontmatter fields, lifecycle status, duplicate IDs, dates, titles, relationship IDs, and configured document-type requirements;
-- project configuration, including duplicate files, invalid fields, stage gates, exclusions, and custom documentation roots;
+- supported frontmatter fields, lifecycle status, duplicate IDs, dates, titles, relationship IDs, existing `related_code` files, supersession successors and successor links, and configured document-type requirements;
+- project configuration, including duplicate files, invalid fields, configured stage names, stage gates, exclusions, and custom documentation roots;
 - common secret and token patterns.
 
 The helpers use PyYAML's safe `BaseLoader` for frontmatter mappings, nested mappings, and block lists. Malformed YAML or a non-mapping frontmatter block is reported as `frontmatter-parse`; it is not treated as an empty metadata object. PyYAML is pinned in the repository's `requirements-dev.txt` so local and CI behavior use the same parser.
@@ -46,7 +47,7 @@ The deterministic baseline is intentionally visible and finite. `audit_docs.py` 
 | Database URLs with credentials | `database-connection-string` | Covers common PostgreSQL, MySQL, MariaDB, MongoDB, Redis, and AMQP URL schemes when `user:password@host` is present. |
 | Generic password assignments | `generic-password` | Detects `password`, `passwd`, or `pwd` assignments with a non-placeholder value of at least eight characters; the built-in placeholder baseline includes common English markers and Chinese forms such as `你的密码`, `请输入你的密码`, `示例口令`, and `待填写`. |
 
-This is a deterministic baseline, not a complete secret scanner. Encoded, obfuscated, short, provider-specific, or placeholder values can evade it, and new patterns must be added with false-positive-aware tests. A passing audit never proves that a document contains no sensitive information.
+This is a deterministic baseline, not a complete secret scanner. Fenced code blocks are still scanned because real credentials can be copied into configuration examples. The exact public AWS documentation sample `AKIAIOSFODNN7EXAMPLE` is allowlisted; use clearly marked placeholders for other examples. Encoded, obfuscated, short, provider-specific, or placeholder values can evade the baseline, and new patterns must be added with false-positive-aware tests. A passing audit never proves that a document contains no sensitive information.
 
 Use normal mode during exploration. Use `--strict` before merge or release so warnings also fail the command.
 
@@ -69,11 +70,11 @@ The deterministic checks currently cover:
 
 | Area | Executed checks |
 | --- | --- |
-| Project configuration | Lookup precedence, duplicate files, unknown fields, path safety, exclusions, required document types, relationship requirements, and stage gates. |
-| Navigation and coverage | Root entrypoint/index bidirectionality, nested parent links, index coverage, missing indexes, and safe canonical paths. |
-| Markdown links | Inline, reference-style, parenthesized, broken, and project-root-escaping targets. |
-| Metadata relationships | IDs, title/H1 consistency, ISO dates and ordering, review dates, `related_docs`, `supersedes`, and `related_code` boundaries. |
-| Sensitive content | The finite token, credential, JWT, database URL, and password baseline documented below. |
+| Project configuration | Lookup precedence, duplicate files, unknown fields, path safety, exclusions, required document types, relationship requirements, configured stage names, and stage gates. |
+| Navigation and coverage | Root entrypoint/index bidirectionality, strict parent-to-direct-child index links, index coverage, missing indexes, and safe canonical paths. Images and unused reference definitions are validation targets, not navigation edges. |
+| Markdown links | Inline, reference-style, parenthesized, image, broken, unused-definition, and project-root-escaping targets. |
+| Metadata relationships | IDs, title/H1 consistency, ISO dates and ordering, review dates, `related_docs`, `supersedes`, existing `related_code` files, and superseded-document successor links. |
+| Sensitive content | The finite token, credential, JWT, database URL, password baseline, and exact public AWS sample exception documented below. |
 
 ## Validate the skill package
 
@@ -92,12 +93,13 @@ The bundled tests create isolated temporary projects and cover:
 1. a valid root entrypoint and nested index with bidirectional navigation;
 2. a missing required entrypoint;
 3. broken, reference-style, parenthesized, and out-of-root links;
-4. an unindexed document and an excluded generated directory;
-5. a suspicious secret pattern;
-6. a duplicate document ID;
-7. invalid and custom project configuration, stage gates, required types, and type relationships;
-8. metadata title, date-order, and related-document checks;
-9. a non-mutating repair preview, idempotent apply, missing index routes, and concurrent-change refusal.
+4. a broken image, an unused reference definition, an unindexed document, and an excluded generated directory;
+5. root-level Markdown link and sensitive-content checks;
+6. a suspicious secret pattern and the allowlisted AWS documentation example;
+7. a duplicate document ID;
+8. invalid and custom project configuration, invalid stage names, stage gates, required types, and type relationships;
+9. metadata title, date-order, related-document, existing-code-target, and supersession-successor checks;
+10. a non-mutating repair preview, idempotent apply, strict direct-child index routes, missing index routes, and concurrent-change refusal.
 
 Run them with:
 

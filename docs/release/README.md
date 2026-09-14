@@ -17,7 +17,7 @@ updated: 2026-09-14
 
 - 版本文件：[VERSION](../../VERSION)
 - 变更记录：[CHANGELOG.md](../../CHANGELOG.md)
-- 当前版本：0.2.4，补充重复 finding 去重、存量项目迁移说明和验证覆盖矩阵
+- 当前版本：0.2.5，补充根目录 Markdown 审计、图片链接校验、替代文档关系和无效阶段拒绝
 
 ## 发布步骤
 
@@ -27,7 +27,7 @@ updated: 2026-09-14
 4. 更新 VERSION，以及 skills/r-doc/SKILL.md 的 metadata.version。
 5. 确认公开 GitHub 仓库结构和许可证。
 6. 按 [GitHub 与 npx skills 发布指南](github-and-npx.md) 和 [发布检查清单](release-checklist.md) 执行校验和临时项目 QA。
-7. 生成带版本号的发布包（如果目标平台需要），例如 r-doc-v0.2.4.zip；包内顶层目录固定为 r-doc/。
+7. 生成带版本号的发布包（如果目标平台需要），例如 r-doc-v0.2.5.zip；包内顶层目录固定为 r-doc/。
 8. 将验证通过的发布内容同步到全局安装目录。
 9. 验证全局副本的版本、文件树和入口文件。
 10. 发布后记录仓库地址、标签、实际包路径、校验结果和已知限制。

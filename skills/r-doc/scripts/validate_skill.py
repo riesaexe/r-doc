@@ -6,7 +6,7 @@ import re
 import sys
 from pathlib import Path
 
-from audit_docs import FrontmatterParseError, LINK_PATTERN, SECRET_PATTERNS, parse_frontmatter, target_path
+from audit_docs import FrontmatterParseError, LINK_PATTERN, SECRET_PATTERNS, is_safe_example, parse_frontmatter, target_path
 
 
 def finding(path: Path, message: str) -> str:
@@ -58,7 +58,7 @@ def validate(skill_root: Path) -> list[str]:
         if re.search(r"(?:[A-Za-z]:[\\/]|/)(?:Users|home)[\\/]", content, flags=re.IGNORECASE):
             errors.append(finding(path, "contains a machine-specific user path"))
         for pattern, code in SECRET_PATTERNS:
-            if pattern.search(content):
+            if any(not is_safe_example(code, match.group(0)) for match in pattern.finditer(content)):
                 errors.append(finding(path, f"contains a possible sensitive value ({code})"))
     for script in (skill_root / "scripts").glob("*.py"):
         try:

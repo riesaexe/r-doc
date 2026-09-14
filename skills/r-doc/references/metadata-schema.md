@@ -34,7 +34,7 @@ Conditional fields:
 
 - `owner`: for documents that need ongoing maintenance or review;
 - `review_after`: for documents with a review cadence;
-- `related_code`: relative paths for documents affected by code, configuration, or data-model changes;
+- `related_code`: relative paths for existing files affected by code, configuration, or data-model changes;
 - `related_docs`: documents whose facts this document depends on;
 - `supersedes`: the old document replaced by this one.
 
@@ -43,7 +43,8 @@ The deterministic audit validates the relationships that can be checked without 
 - `created`, `updated`, and `review_after` must be valid ISO dates or timestamps; `updated` cannot precede `created`, and a past `review_after` is a warning;
 - `title` must match the first H1 when both are present;
 - `related_docs` must be a list of existing document IDs, and `supersedes` must name an existing document ID;
-- `related_code` must be a list of paths that remain inside the project root;
+- `related_code` must be a list of existing files whose canonical paths remain inside the project root;
+- a document with `status: superseded` must have a distinct successor document whose `supersedes` field names its ID, and must link to that successor in its Markdown body;
 - a project's `relationships.require_for` configuration can require relationships between document types.
 
 These checks validate references and structure, not whether the linked documents are semantically correct.
@@ -56,7 +57,7 @@ Root `AGENTS.md` and index `README.md` files are navigation entry points. They m
 draft      Being written; not a final rule
 proposed   A formed proposal awaiting review or approval
 active     A current project fact or rule
-superseded Replaced by a newer document; must point to the replacement
+superseded Replaced by a newer document; a successor must declare `supersedes` for this ID, and this document must link to that successor
 archived   Historical material; excluded from current rule decisions by default
 ~~~
 

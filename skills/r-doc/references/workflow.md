@@ -16,6 +16,8 @@ Inventory the non-code material maintained by the project team: plans, requireme
 
 Register unknown formats before editing them. Binary documents may be checked for existence, status, index coverage, and relationships, but edit them only with an appropriate document tool and user confirmation.
 
+The deterministic audit also scans directly maintained Markdown files in the project root, including `README.md`, `CONTRIBUTING.md`, and `SECURITY.md`, for broken links and sensitive values. Metadata, index coverage, and lifecycle relationships remain scoped to Markdown documents under the configured `docs_root`; generated or excluded paths are not scanned.
+
 ## 3. Initialize or repair entry points
 
 When entry points are missing, propose a minimal initialization plan, normally creating only `AGENTS.md` and `docs/README.md`. Create topic directories and documents only when the real project needs them. `AGENTS.md` should contain project navigation, common commands, mandatory rules, prohibitions, context-loading order, task or module routes, and a link to `docs/README.md`.
@@ -65,7 +67,7 @@ After confirmation, consolidate repeated content into one topic document. Link f
 
 ## 7. Run deterministic checks
 
-Run `scripts/audit_docs.py --root <project-root>` after the planned updates. Use `--strict` for a merge or release gate. The helper checks entry points, nested indexes, relative links, index coverage, document metadata, duplicate IDs, and common secret patterns. If it cannot run, perform equivalent checks manually and report the limitation.
+Run `scripts/audit_docs.py --root <project-root>` after the planned updates. Use `--strict` for a merge or release gate. The helper checks entry points, nested indexes, direct parent/child navigation, Markdown and image links, index coverage, document metadata, duplicate IDs, configured stage names, related code files, supersession links, and common secret patterns. If it cannot run, perform equivalent checks manually and report the limitation.
 
 ## 8. Complete the governance check
 

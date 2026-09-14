@@ -44,7 +44,7 @@ Optional fields:
 - `docs_root`: the documentation root, defaulting to `docs`;
 - `required_document_types`: document types explicitly required by the project;
 - `exclude`: additional directory or file patterns to exclude;
-- `gates`: stage strength such as `advisory`, `audit`, or `blocking`;
+- `gates`: stage strength such as `advisory`, `audit`, or `blocking`; a `--stage` value that is not configured is an `invalid-stage` error rather than a passing no-op;
 - `relationships.require_for`: minimum relationships between document types.
 
 ## Executed fields

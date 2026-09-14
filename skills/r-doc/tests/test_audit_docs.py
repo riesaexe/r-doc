@@ -122,6 +122,142 @@ class AuditDocsTests(unittest.TestCase):
             findings = audit_docs.audit(root)
             self.assertTrue(any(item.code == "sensitive-content" for item in findings))
 
+    def test_root_markdown_is_checked_for_links_and_sensitive_content(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, "NOTES.md", "[Missing](missing.md)\nAKIA1234567890ABCDEF\n")
+            findings = audit_docs.audit(root)
+            self.assertTrue(any(item.code == "broken-link" and item.path == "NOTES.md" for item in findings))
+            self.assertTrue(any(item.code == "sensitive-content" and item.path == "NOTES.md" for item in findings))
+
+    def test_known_aws_example_in_fenced_code_is_not_reported(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            sample_key = "AKIA" + "IOSFODNN7EXAMPLE"
+            content = topic("DOC-001") + f"\n\n```text\nAWS_ACCESS_KEY_ID={sample_key}\n```\n"
+            write_file(root, "docs/guide/doc.md", content)
+            findings = audit_docs.audit(root)
+            self.assertFalse(any(item.code == "sensitive-content" for item in findings))
+
+    def test_related_code_missing_file_is_reported(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            content = topic("DOC-001").replace(
+                "updated: 2026-09-14\n---",
+                "updated: 2026-09-14\nrelated_code:\n  - src/ghost.ts\n---",
+            )
+            write_file(root, "docs/guide/doc.md", content)
+            findings = audit_docs.audit(root)
+            self.assertTrue(any(item.code == "related-code-missing" for item in findings))
+
+    def test_related_code_directory_is_not_accepted_as_a_file(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            (root / "src").mkdir()
+            content = topic("DOC-001").replace(
+                "updated: 2026-09-14\n---",
+                "updated: 2026-09-14\nrelated_code:\n  - src\n---",
+            )
+            write_file(root, "docs/guide/doc.md", content)
+            findings = audit_docs.audit(root)
+            self.assertTrue(any(item.code == "related-code-missing" for item in findings))
+
+    def test_invalid_stage_is_reported_as_an_error(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, ".r-doc.yaml", "gates:\n  release: blocking\n")
+            with patch.object(sys, "argv", ["audit_docs.py", "--root", str(root), "--stage", "relaese"]):
+                with patch("builtins.print") as printer:
+                    self.assertEqual(audit_docs.main(), 1)
+            self.assertTrue(any("invalid-stage" in str(call) for call in printer.call_args_list))
+
+    def test_superseded_document_requires_a_successor(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, "docs/guide/doc.md", topic("DOC-001").replace("status: active", "status: superseded"))
+            findings = audit_docs.audit(root)
+            self.assertTrue(any(item.code == "superseded-successor-missing" for item in findings))
+
+    def test_superseded_document_with_successor_passes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            old_document = topic("DOC-001").replace("status: active", "status: superseded") + "\n[Replacement](replacement.md)\n"
+            write_file(root, "docs/guide/doc.md", old_document)
+            replacement = topic("DOC-002", "Replacement").replace(
+                "updated: 2026-09-14\n---",
+                "updated: 2026-09-14\nsupersedes: DOC-001\n---",
+            )
+            write_file(root, "docs/guide/replacement.md", replacement)
+            write_file(
+                root,
+                "docs/guide/README.md",
+                "# Guide\n\n[Topic](doc.md)\n[Replacement](replacement.md)\n[Docs](../README.md)\n",
+            )
+            findings = audit_docs.audit(root)
+            self.assertFalse(any(item.code == "superseded-successor-missing" for item in findings))
+            self.assertFalse(any(item.code == "superseded-successor-unlinked" for item in findings))
+
+    def test_superseded_document_must_link_to_successor(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, "docs/guide/doc.md", topic("DOC-001").replace("status: active", "status: superseded"))
+            replacement = topic("DOC-002", "Replacement").replace(
+                "updated: 2026-09-14\n---",
+                "updated: 2026-09-14\nsupersedes: DOC-001\n---",
+            )
+            write_file(root, "docs/guide/replacement.md", replacement)
+            write_file(
+                root,
+                "docs/guide/README.md",
+                "# Guide\n\n[Topic](doc.md)\n[Replacement](replacement.md)\n[Docs](../README.md)\n",
+            )
+            findings = audit_docs.audit(root)
+            self.assertTrue(any(item.code == "superseded-successor-unlinked" for item in findings))
+
+    def test_broken_image_is_reported_without_becoming_navigation(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, "docs/guide/doc.md", topic("DOC-001") + "\n\n![Diagram](missing.png)\n")
+            findings = audit_docs.audit(root)
+            self.assertTrue(any(item.code == "broken-link" for item in findings))
+
+    def test_unused_reference_definition_does_not_index_a_document(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, "docs/README.md", "# Docs\n\n[Entry](../AGENTS.md)\n\n[unused]: guide/README.md\n")
+            findings = audit_docs.audit(root)
+            codes = {item.code for item in findings}
+            self.assertIn("unindexed-document", codes)
+            self.assertIn("missing-navigation-link", codes)
+
+    def test_nested_index_requires_direct_parent_link(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_file(root, "AGENTS.md", "# Entry\n\n[Docs](docs/README.md)\n")
+            write_file(root, "docs/README.md", "# Docs\n\n[Entry](../AGENTS.md)\n[B](b/README.md)\n")
+            write_file(root, "docs/a/README.md", "# A\n\n[Parent](../README.md)\n[Topic](topic.md)\n")
+            write_file(root, "docs/a/topic.md", topic("DOC-A", "Topic A"))
+            write_file(root, "docs/b/README.md", "# B\n\n[Parent](../README.md)\n[A](../a/README.md)\n")
+            findings = audit_docs.audit(root)
+            self.assertTrue(
+                any(
+                    item.code == "missing-navigation-link"
+                    and item.path == "docs/README.md"
+                    and "docs/a/README.md" in item.message
+                    for item in findings
+                )
+            )
+
     def test_extended_sensitive_patterns_are_reported(self) -> None:
         cases = {
             "jwt": "eyJ" + "hbGciOiJIUzI1NiJ9" + ".eyJ" + "zdWIiOiIxMjM0NTY3ODkwIn0" + ".signature-value-12345",

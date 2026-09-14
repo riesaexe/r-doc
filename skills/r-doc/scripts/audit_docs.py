@@ -17,11 +17,14 @@ SKIP_DIRECTORIES = {".git", ".venv", "node_modules", "dist", "build", "coverage"
 CONFIG_PATHS = (Path(".r-doc.yaml"), Path("docs/r-doc.yaml"), Path("r-doc.yaml"))
 CONFIG_KEYS = {"version", "project_type", "docs_root", "required_document_types", "exclude", "gates", "relationships"}
 GATE_VALUES = {"advisory", "audit", "blocking"}
-LINK_PATTERN = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
+LINK_PATTERN = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 REFERENCE_DEFINITION_PATTERN = re.compile(
     r"(?im)^[ \t]{0,3}\[([^\]]+)\]:[ \t]*(?:<([^>\n]+)>|(\S+))"
 )
-REFERENCE_LINK_PATTERN = re.compile(r"(?<!!)\[([^\]\n]+)\]\[([^\]\n]*)\]")
+REFERENCE_LINK_PATTERN = re.compile(r"(?<!\!)!?\[([^\]\n]+)\]\[([^\]\n]*)\]")
+SAFE_EXAMPLE_VALUES = {
+    "aws-access-key": frozenset({"AKIAIOSFODNN7EXAMPLE"}),
+}
 SECRET_PATTERNS = (
     (re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"), "private-key-marker"),
     (re.compile(r"\bAKIA[0-9A-Z]{16}\b"), "aws-access-key"),
@@ -55,6 +58,21 @@ class Finding:
     path: str
     message: str
     line: int | None = None
+
+
+@dataclass(frozen=True)
+class MarkdownTarget:
+    raw_target: str
+    line: int
+    is_image: bool = False
+    is_definition: bool = False
+    definition_key: str | None = None
+
+
+class FindingList(list[Finding]):
+    def __init__(self) -> None:
+        super().__init__()
+        self._seen: set[Finding] = set()
 
 
 class FrontmatterParseError(ValueError):
@@ -234,10 +252,19 @@ def path_is_excluded(root: Path, path: Path, config: ProjectConfig) -> bool:
     return False
 
 
+def is_safe_example(code: str, value: str) -> bool:
+    return value in SAFE_EXAMPLE_VALUES.get(code, ())
+
+
 def add(finding_list: list[Finding], severity: str, code: str, root: Path, path: Path, message: str, line: int | None = None) -> None:
     finding = Finding(severity, code, relative(root, path), message, line)
-    if finding not in finding_list:
-        finding_list.append(finding)
+    if isinstance(finding_list, FindingList):
+        if finding in finding_list._seen:
+            return
+        finding_list._seen.add(finding)
+    elif finding in finding_list:
+        return
+    finding_list.append(finding)
 
 
 def markdown_files(directory: Path, root: Path, config: ProjectConfig) -> list[Path]:
@@ -249,6 +276,14 @@ def markdown_files(directory: Path, root: Path, config: ProjectConfig) -> list[P
             continue
         paths.append(path)
     return sorted(paths)
+
+
+def root_markdown_files(root: Path, config: ProjectConfig) -> list[Path]:
+    return sorted(
+        path
+        for path in root.glob("*.md")
+        if path.is_file() and path.name != "AGENTS.md" and not path_is_excluded(root, path, config)
+    )
 
 
 def read_text(path: Path, root: Path, findings: list[Finding]) -> str:
@@ -296,8 +331,8 @@ def target_path(source: Path, raw_target: str, root: Path) -> Path | None:
     return (root / target.lstrip("/")) if target.startswith("/") else (source.parent / target)
 
 
-def markdown_targets(text: str) -> list[tuple[str, int]]:
-    targets: list[tuple[int, str, int]] = []
+def markdown_targets(text: str) -> list[MarkdownTarget]:
+    targets: list[tuple[int, MarkdownTarget]] = []
     definitions: dict[str, str] = {}
     definition_spans: list[tuple[int, int]] = []
     for match in REFERENCE_DEFINITION_PATTERN.finditer(text):
@@ -306,10 +341,10 @@ def markdown_targets(text: str) -> list[tuple[str, int]]:
             key = " ".join(match.group(1).split()).casefold()
             definitions[key] = raw_target
             line = text.count("\n", 0, match.start()) + 1
-            targets.append((match.start(), raw_target, line))
+            targets.append((match.start(), MarkdownTarget(raw_target, line, is_definition=True, definition_key=key)))
             definition_spans.append((match.start(), match.end()))
 
-    inline_start = re.compile(r"(?<!!)\[[^\]\n]+\]\(")
+    inline_start = re.compile(r"(?<!\!)!?\[[^\]\n]+\]\(")
     for match in inline_start.finditer(text):
         cursor = match.end()
         if cursor < len(text) and text[cursor] == "<":
@@ -340,16 +375,21 @@ def markdown_targets(text: str) -> list[tuple[str, int]]:
                 continue
             raw_target = text[match.end() : close]
         line = text.count("\n", 0, match.start()) + 1
-        targets.append((match.start(), raw_target, line))
+        targets.append((match.start(), MarkdownTarget(raw_target, line, is_image=text[match.start()] == "!")))
 
     for match in REFERENCE_LINK_PATTERN.finditer(text):
         key = " ".join((match.group(2) or match.group(1)).split()).casefold()
         raw_target = definitions.get(key)
         if raw_target:
             line = text.count("\n", 0, match.start()) + 1
-            targets.append((match.start(), raw_target, line))
+            targets.append(
+                (
+                    match.start(),
+                    MarkdownTarget(raw_target, line, is_image=text[match.start()] == "!", definition_key=key),
+                )
+            )
 
-    for match in re.finditer(r"(?<!!)\[([^\]\n]+)\]", text):
+    for match in re.finditer(r"(?<!\!)!?\[([^\]\n]+)\]", text):
         after = text[match.end()] if match.end() < len(text) else ""
         before = text[match.start() - 1] if match.start() else ""
         if after in "([:":
@@ -360,16 +400,31 @@ def markdown_targets(text: str) -> list[tuple[str, int]]:
         raw_target = definitions.get(key)
         if raw_target:
             line = text.count("\n", 0, match.start()) + 1
-            targets.append((match.start(), raw_target, line))
+            targets.append(
+                (
+                    match.start(),
+                    MarkdownTarget(raw_target, line, is_image=text[match.start()] == "!", definition_key=key),
+                )
+            )
 
-    seen: set[tuple[int, str]] = set()
-    result: list[tuple[str, int]] = []
-    for position, raw_target, line in sorted(targets, key=lambda item: item[0]):
-        marker = (position, raw_target)
+    seen: set[tuple[int, str, bool, bool]] = set()
+    result: list[MarkdownTarget] = []
+    for position, target in sorted(targets, key=lambda item: item[0]):
+        marker = (position, target.raw_target, target.is_image, target.is_definition)
         if marker not in seen:
-            result.append((raw_target, line))
+            result.append(target)
             seen.add(marker)
     return result
+
+
+def validation_targets(text: str) -> list[MarkdownTarget]:
+    targets = markdown_targets(text)
+    used_definitions = {target.definition_key for target in targets if not target.is_definition and target.definition_key}
+    return [target for target in targets if not target.is_definition or target.definition_key not in used_definitions]
+
+
+def navigation_targets(text: str) -> list[MarkdownTarget]:
+    return [target for target in markdown_targets(text) if not target.is_definition and not target.is_image]
 
 
 def check_links(root: Path, files: list[Path], findings: list[Finding]) -> dict[Path, set[Path]]:
@@ -377,19 +432,20 @@ def check_links(root: Path, files: list[Path], findings: list[Finding]) -> dict[
     for path in files:
         text = read_text(path, root, findings)
         targets: set[Path] = set()
-        for raw_target, line_number in markdown_targets(text):
-            resolved = target_path(path, raw_target, root)
+        for target in validation_targets(text):
+            resolved = target_path(path, target.raw_target, root)
             if resolved is None:
                 continue
             if resolved.is_dir():
                 resolved = resolved / "README.md"
             canonical = canonical_path(root, resolved)
             if canonical is None:
-                add(findings, "error", "link-outside-root", root, path, f"link leaves the project root: {raw_target}", line_number)
+                add(findings, "error", "link-outside-root", root, path, f"link leaves the project root: {target.raw_target}", target.line)
                 continue
-            targets.add(canonical)
             if not canonical.exists():
-                add(findings, "error", "broken-link", root, path, f"target does not exist: {raw_target}", line_number)
+                add(findings, "error", "broken-link", root, path, f"target does not exist: {target.raw_target}", target.line)
+            if not target.is_image and not target.is_definition:
+                targets.add(canonical)
         outgoing[path] = targets
     return outgoing
 
@@ -403,7 +459,10 @@ def check_navigation(root: Path, docs: Path, files: list[Path], outgoing: dict[P
         routes.append((docs_index, agents))
     for index in files:
         if index.name == "README.md" and index != docs_index:
-            routes.append((index, index.parent.parent / "README.md"))
+            parent_index = index.parent.parent / "README.md"
+            routes.append((index, parent_index))
+            if parent_index.is_file():
+                routes.append((parent_index, index))
     for source, target in routes:
         source_key = canonical_path(root, source)
         target_key = canonical_path(root, target)
@@ -459,7 +518,14 @@ def first_heading(text: str) -> str | None:
     return None
 
 
-def check_metadata(root: Path, docs: Path, files: list[Path], findings: list[Finding], config: ProjectConfig) -> tuple[dict[Path, dict[str, object]], dict[str, Path]]:
+def check_metadata(
+    root: Path,
+    docs: Path,
+    files: list[Path],
+    outgoing: dict[Path, set[Path]],
+    findings: list[Finding],
+    config: ProjectConfig,
+) -> tuple[dict[Path, dict[str, object]], dict[str, Path]]:
     records: dict[Path, dict[str, object]] = {}
     seen_ids: dict[str, Path] = {}
     relation_values: dict[Path, dict[str, object]] = {}
@@ -523,8 +589,13 @@ def check_metadata(root: Path, docs: Path, files: list[Path], findings: list[Fin
         related_code = values.get("related_code")
         if isinstance(related_code, list):
             for code_path in related_code:
-                if isinstance(code_path, str) and canonical_path(root, root / code_path) is None:
+                if not isinstance(code_path, str):
+                    continue
+                canonical = canonical_path(root, root / code_path)
+                if canonical is None:
                     add(findings, "error", "related-code-outside-root", root, path, f"related_code leaves the project root: {code_path}")
+                elif not canonical.is_file():
+                    add(findings, "error", "related-code-missing", root, path, f"related_code target is not an existing file: {code_path}")
 
     document_types: dict[str, set[str]] = {}
     for values in records.values():
@@ -532,6 +603,13 @@ def check_metadata(root: Path, docs: Path, files: list[Path], findings: list[Fin
         identifier = values.get("id")
         if isinstance(document_type, str) and isinstance(identifier, str) and identifier.strip():
             document_types.setdefault(document_type, set()).add(identifier.strip())
+
+    successor_paths: dict[str, set[Path]] = {}
+    for successor_path, values in relation_values.items():
+        supersedes = values.get("supersedes")
+        canonical_successor = canonical_path(root, successor_path)
+        if isinstance(supersedes, str) and supersedes in seen_ids and canonical_successor is not None:
+            successor_paths.setdefault(supersedes, set()).add(canonical_successor)
 
     for path, values in relation_values.items():
         related_docs = values.get("related_docs")
@@ -542,6 +620,16 @@ def check_metadata(root: Path, docs: Path, files: list[Path], findings: list[Fin
         supersedes = values.get("supersedes")
         if isinstance(supersedes, str) and supersedes not in seen_ids:
             add(findings, "error", "supersedes-missing", root, path, f"superseded document ID does not exist: {supersedes}")
+
+        identifier = values.get("id")
+        if values.get("status") == "superseded" and isinstance(identifier, str) and identifier.strip():
+            replacements = successor_paths.get(identifier.strip(), set())
+            current_path = canonical_path(root, path)
+            replacements = {successor_path for successor_path in replacements if successor_path != current_path}
+            if not replacements:
+                add(findings, "error", "superseded-successor-missing", root, path, "superseded document has no successor that declares supersedes")
+            elif not replacements.intersection(outgoing.get(path, set())):
+                add(findings, "error", "superseded-successor-unlinked", root, path, "superseded document does not link to its successor")
 
         document_type = values.get("type")
         requirements = config.relationships or {}
@@ -563,12 +651,12 @@ def check_sensitive_content(root: Path, files: list[Path], findings: list[Findin
         text = read_text(path, root, findings)
         for line_number, line in enumerate(text.splitlines(), start=1):
             for pattern, code in SECRET_PATTERNS:
-                if pattern.search(line):
+                if any(not is_safe_example(code, match.group(0)) for match in pattern.finditer(line)):
                     add(findings, "error", "sensitive-content", root, path, f"possible sensitive value ({code})", line_number)
 
 
 def audit(root: Path) -> list[Finding]:
-    findings: list[Finding] = []
+    findings: FindingList = FindingList()
     root = root.resolve()
     if not root.is_dir():
         return [Finding("error", "root", ".", "project root does not exist")]
@@ -586,10 +674,11 @@ def audit(root: Path) -> list[Finding]:
     if not docs_index.is_file():
         add(findings, "error", "missing-index", root, docs_index, f"project must contain {config.docs_root}/README.md")
     files = markdown_files(docs, root, config)
-    check_files = ([agents] if agents.is_file() else []) + files
+    root_files = root_markdown_files(root, config)
+    check_files = ([agents] if agents.is_file() else []) + root_files + files
     outgoing = check_links(root, check_files, findings)
     check_indexes(root, docs, files, outgoing, findings, config, agents)
-    check_metadata(root, docs, files, findings, config)
+    check_metadata(root, docs, files, outgoing, findings, config)
     check_sensitive_content(root, check_files, findings)
     return findings
 
@@ -607,6 +696,8 @@ def main() -> int:
     args = parse_args()
     findings = audit(args.root)
     config, _ = load_project_config(args.root.resolve())
+    if args.stage and (not config.gates or args.stage not in config.gates):
+        add(findings, "error", "invalid-stage", args.root.resolve(), config.source or args.root.resolve(), f"stage is not configured: {args.stage}")
     gate = config.gate_for(args.stage)
     errors = [item for item in findings if item.severity == "error"]
     warnings = [item for item in findings if item.severity == "warning"]

@@ -110,6 +110,19 @@ This release turns more of the governance contract into executable, reviewable c
 
 The release keeps semantic decisions and real-agent behavior evaluation explicit: deterministic checks provide evidence, but they do not replace human or agent-level judgment.
 
+## What `0.2.5` adds
+
+This release closes the remaining audit blind spots identified through adversarial review:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Root Markdown coverage | Audits directly maintained root files such as `README.md`, `CONTRIBUTING.md`, and `SECURITY.md` for broken links and sensitive values. | Metadata and index coverage remain scoped to the configured documentation root. |
+| Complete link semantics | Checks image targets for existence, while unused reference definitions and images stay out of the navigation graph; nested indexes must link to direct parents and children. | Asset existence checks do not claim that an image's visual content is correct. |
+| Stronger metadata and gates | Validates existing `related_code` files, successor relations and backlinks for `superseded` documents, and rejects unconfigured `--stage` values. | Structural evidence still does not replace semantic review. |
+| Safer examples | Allow-lists the exact public AWS sample `AKIAIOSFODNN7EXAMPLE` without disabling scans for other fenced code. | This is a narrow exception, not a general code-block exemption. |
+
+The release is backed by 38 regression tests and the package, repair-preview, strict-audit, and Skill validator gates used for earlier releases.
+
 ## What `0.2.4` adds
 
 This hardening release closes the remaining small gaps identified after `0.2.3`:
