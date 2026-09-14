@@ -38,6 +38,16 @@ Conditional fields:
 - `related_docs`: documents whose facts this document depends on;
 - `supersedes`: the old document replaced by this one.
 
+The deterministic audit validates the relationships that can be checked without interpreting project prose:
+
+- `created`, `updated`, and `review_after` must be valid ISO dates or timestamps; `updated` cannot precede `created`, and a past `review_after` is a warning;
+- `title` must match the first H1 when both are present;
+- `related_docs` must be a list of existing document IDs, and `supersedes` must name an existing document ID;
+- `related_code` must be a list of paths that remain inside the project root;
+- a project's `relationships.require_for` configuration can require relationships between document types.
+
+These checks validate references and structure, not whether the linked documents are semantically correct.
+
 Root `AGENTS.md` and index `README.md` files are navigation entry points. They may use lighter metadata, but must have a clear title, scope, update information, or equivalent navigation evidence.
 
 ## Status semantics

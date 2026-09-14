@@ -2,6 +2,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "scripts"))
 
@@ -34,8 +35,8 @@ def topic(identifier: str, title: str = "Guide") -> str:
 
 def valid_project(root: Path) -> None:
     write_file(root, "AGENTS.md", "# Entry\n\n[Docs](docs/README.md)\n")
-    write_file(root, "docs/README.md", "# Docs\n\n[Guide](guide/README.md)\n")
-    write_file(root, "docs/guide/README.md", "# Guide\n\n[Topic](doc.md)\n")
+    write_file(root, "docs/README.md", "# Docs\n\n[Guide](guide/README.md)\n\n[Entry](../AGENTS.md)\n")
+    write_file(root, "docs/guide/README.md", "# Guide\n\n[Topic](doc.md)\n\n[Docs](../README.md)\n")
     write_file(root, "docs/guide/doc.md", topic("DOC-001"))
 
 
@@ -152,6 +153,99 @@ class AuditDocsTests(unittest.TestCase):
             write_file(root, "docs/guide/doc.md", topic("DOC-001") + "\npassword: 这是一个真实的生产口令\n")
             findings = audit_docs.audit(root)
             self.assertTrue(any("generic-password" in item.message for item in findings))
+
+    def test_reference_style_and_parenthesized_links_are_checked(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, "docs/guide/doc(with).md", topic("DOC-002", "With parentheses"))
+            write_file(
+                root,
+                "docs/guide/README.md",
+                "# Guide\n\n[Topic][doc]\n[Parent][parent]\n[Parenthesized](doc(with).md)\n\n[doc]: doc.md\n[parent]: ../README.md\n",
+            )
+            findings = audit_docs.audit(root)
+            self.assertFalse(any(item.code in {"broken-link", "missing-navigation-link"} for item in findings))
+
+    def test_resolved_link_cannot_escape_project_root(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, "docs/guide/README.md", "# Guide\n\n[Escape](../../../outside.md)\n\n[Docs](../README.md)\n")
+            findings = audit_docs.audit(root)
+            self.assertTrue(any(item.code == "link-outside-root" for item in findings))
+
+    def test_configured_docs_root_and_excluded_directory_are_applied(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_file(root, "AGENTS.md", "# Entry\n\n[Docs](documentation/README.md)\n")
+            write_file(root, "documentation/README.md", "# Documentation\n\n[Guide](guide.md)\n\n[Entry](../AGENTS.md)\n")
+            write_file(root, "documentation/guide.md", topic("DOC-001", "Guide"))
+            write_file(root, "documentation/generated/orphan.md", topic("DOC-002", "Generated"))
+            write_file(
+                root,
+                ".r-doc.yaml",
+                "docs_root: documentation\nexclude:\n  - generated\nrequired_document_types:\n  - guide\ngates:\n  review: audit\n",
+            )
+            findings = audit_docs.audit(root)
+            self.assertEqual(findings, [])
+            config, problems = audit_docs.load_project_config(root)
+            self.assertEqual(problems, [])
+            self.assertEqual(config.docs_root, "documentation")
+            self.assertEqual(config.gate_for("review"), "audit")
+
+    def test_invalid_or_duplicate_config_is_reported(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, ".r-doc.yaml", "docs_root: ../outside\nunknown: true\n")
+            write_file(root, "r-doc.yaml", "docs_root: docs\n")
+            findings = audit_docs.audit(root)
+            codes = {item.code for item in findings}
+            self.assertIn("config-duplicate", codes)
+            self.assertIn("config-unknown", codes)
+            self.assertIn("config-docs-root", codes)
+
+    def test_metadata_relationships_and_title_consistency_are_checked(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            content = topic("DOC-001").replace("title: Guide\n", "title: Wrong title\nrelated_docs:\n  - MISSING\n")
+            write_file(root, "docs/guide/doc.md", content.replace("# Guide", "# Actual title"))
+            findings = audit_docs.audit(root)
+            codes = {item.code for item in findings}
+            self.assertIn("metadata-title", codes)
+            self.assertIn("related-doc-missing", codes)
+
+    def test_relationship_requirements_are_enforced_by_config(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, ".r-doc.yaml", "relationships:\n  require_for:\n    guide:\n      - design\n")
+            findings = audit_docs.audit(root)
+            self.assertTrue(any(item.code == "relationship-required" for item in findings))
+
+    def test_stage_gate_promotes_warnings_to_failures(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, ".r-doc.yaml", "gates:\n  review: audit\n")
+            write_file(root, "docs/guide/no-meta.md", "# No metadata\n")
+            write_file(root, "docs/guide/README.md", "# Guide\n\n[Topic](doc.md)\n[No metadata](no-meta.md)\n[Docs](../README.md)\n")
+            with patch.object(sys, "argv", ["audit_docs.py", "--root", str(root), "--stage", "review"]):
+                with patch("builtins.print"):
+                    self.assertEqual(audit_docs.main(), 1)
+            with patch.object(sys, "argv", ["audit_docs.py", "--root", str(root)]):
+                with patch("builtins.print"):
+                    self.assertEqual(audit_docs.main(), 0)
+
+    def test_updated_date_cannot_precede_created_date(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, "docs/guide/doc.md", topic("DOC-001").replace("created: 2026-09-14", "created: 2026-09-15"))
+            findings = audit_docs.audit(root)
+            self.assertTrue(any(item.code == "metadata-date-order" for item in findings))
 
     def test_duplicate_id_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

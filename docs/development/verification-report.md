@@ -25,8 +25,8 @@ validation:
 | Skill 包结构、入口、链接和脚本语法 | `python skills/r-doc/scripts/validate_skill.py skills/r-doc` | PASS |
 | 安全结构修复预览 | `python skills/r-doc/scripts/repair_docs.py --root .` | PASS，无待写入修复 |
 | 项目文档结构、索引、链接、元数据和敏感值 | `python skills/r-doc/scripts/audit_docs.py --root . --strict` | PASS |
-| 临时项目行为场景 | `python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'` | PASS，18 tests；覆盖嵌套 frontmatter、解析错误、扩展敏感模式和中英文占位符排除 |
-| 官方 Skill creator 校验 | `python quick_validate.py skills/r-doc` | PASS |
+| 临时项目行为场景 | `python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'` | PASS，26 tests；覆盖嵌套 frontmatter、解析错误、扩展敏感模式、中英文占位符、配置、双向导航、引用式链接、元数据关系和阶段门 |
+| 官方 Skill creator 校验 | `PYTHONUTF8=1 python <skill-creator>/scripts/quick_validate.py skills/r-doc`（PowerShell 先设置 `$env:PYTHONUTF8='1'`） | PASS |
 | 本地 npx skills 发现 | `npx skills add . --list` | PASS，发现 1 个 r-doc |
 | 工作树空白错误 | `git diff --check` | PASS |
 
@@ -52,6 +52,10 @@ validation:
 - 发现重复文档 ID 时报告冲突。
 - 预览不会写入文件；显式应用后可重复运行且不再产生修复；
 - 缺失索引链接会被补入；并发修改会被拒绝，避免覆盖新内容。
+- 自定义文档根目录和排除目录会生效；重复或非法配置会失败；
+- 根入口、文档总索引和嵌套索引的双向导航会被检查；
+- 引用式、带括号和逃逸项目根目录的链接会被确定性解析和报告；
+- `related_docs`、`supersedes`、标题一致性、日期顺序和类型关系会被检查。
 
 ## 限制
 

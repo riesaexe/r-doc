@@ -12,7 +12,7 @@ Run from the Skill source directory:
 python scripts/repair_docs.py --root <project-root>
 ~~~
 
-The default mode is read-only. It may propose creating missing `AGENTS.md`, `docs/README.md`, or nested `README.md` indexes, and adding links for existing Markdown documents that are not listed by an index.
+The default mode is read-only. It loads the same project configuration as the audit helper and may propose creating missing `AGENTS.md`, the configured documentation-root `README.md`, or nested `README.md` indexes. It also adds missing downward index links and the required upward navigation links to the project entrypoint or parent index.
 
 ## Apply after confirmation
 
@@ -24,7 +24,7 @@ python scripts/repair_docs.py --root <project-root> --apply
 
 ## What it will not guess
 
-The repairer does not resolve broken links, duplicate IDs, stale claims, document conflicts, missing metadata, or sensitive content. Those findings need evidence and a human-confirmed decision. Run `audit_docs.py --strict` after any repair and report the remaining findings.
+The repairer does not resolve broken links, duplicate IDs, stale claims, document conflicts, missing metadata, relationship conflicts, or sensitive content. Those findings need evidence and a human-confirmed decision. Invalid or duplicate project configuration also stops repair rather than being guessed. Run `audit_docs.py --strict` after any repair and report the remaining findings.
 
 ## Exit statuses
 

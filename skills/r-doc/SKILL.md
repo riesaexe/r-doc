@@ -1,8 +1,8 @@
 ---
 name: r-doc
-description: "Govern project documentation when a user asks to initialize, audit, repair, or maintain AGENTS.md, docs/, indexes, plans, requirements, design, APIs, testing, releases, or deployment records, or when a change affects documented behavior. Do not activate for code-only edits with no documentation impact; do not replace business-code implementation."
+description: "Govern project documentation when a user asks to initialize, audit, repair, or maintain AGENTS.md, docs/, indexes, plans, requirements, design, APIs, testing, releases, or deployment records, or when a change affects public behavior, interfaces, configuration, architecture, deployment, or documented project rules. Do not activate for code-only edits with no documentation impact; do not replace business-code implementation."
 metadata:
-  version: "0.2.2"
+  version: "0.2.3"
 ---
 
 # r-doc: Project documentation governance
@@ -64,6 +64,7 @@ Choose a lightweight or complete workflow according to the task, but complete ev
 For stage checklists, read [references/lifecycle-checklists.md](references/lifecycle-checklists.md). For the complete operating workflow, read [references/workflow.md](references/workflow.md).
 For deterministic checks and temporary-project QA, read [references/verification.md](references/verification.md).
 For safe structural repairs, read [references/repair.md](references/repair.md). For concrete scenarios and common pitfalls, read [references/examples.md](references/examples.md) and [references/pitfalls.md](references/pitfalls.md).
+For cross-agent behavior evaluation, read [references/agent-evaluation.md](references/agent-evaluation.md). Package tests do not replace transcript-and-diff evaluation against a real agent.
 
 ## 60-second path
 

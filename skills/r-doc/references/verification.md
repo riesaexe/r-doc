@@ -21,11 +21,12 @@ The preview is read-only. Apply mode is explicit and guarded; read [repair.md](r
 
 The helper is read-only. It checks:
 
-- root `AGENTS.md` and `docs/README.md`;
+- root `AGENTS.md`, the configured documentation root, and their required bidirectional navigation;
 - `README.md` indexes for documentation subdirectories;
-- relative Markdown links and missing targets;
-- whether documents under `docs/` are reachable from an index;
-- supported frontmatter fields, lifecycle status, duplicate IDs, and dates;
+- relative, reference-style, and parenthesized Markdown links, missing targets, and resolved paths that escape the project root;
+- whether documents under the configured documentation root are reachable from an index;
+- supported frontmatter fields, lifecycle status, duplicate IDs, dates, titles, relationship IDs, and configured document-type requirements;
+- project configuration, including duplicate files, invalid fields, stage gates, exclusions, and custom documentation roots;
 - common secret and token patterns.
 
 The helpers use PyYAML's safe `BaseLoader` for frontmatter mappings, nested mappings, and block lists. Malformed YAML or a non-mapping frontmatter block is reported as `frontmatter-parse`; it is not treated as an empty metadata object. PyYAML is pinned in the repository's `requirements-dev.txt` so local and CI behavior use the same parser.
@@ -63,13 +64,15 @@ This checks the package entrypoint, frontmatter, resource links, UI metadata, ic
 
 The bundled tests create isolated temporary projects and cover:
 
-1. a valid root entrypoint and nested index;
+1. a valid root entrypoint and nested index with bidirectional navigation;
 2. a missing required entrypoint;
-3. a broken relative link;
-4. an unindexed document;
+3. broken, reference-style, parenthesized, and out-of-root links;
+4. an unindexed document and an excluded generated directory;
 5. a suspicious secret pattern;
-6. a duplicate document ID.
-7. a non-mutating repair preview, idempotent apply, missing index link, and concurrent-change refusal.
+6. a duplicate document ID;
+7. invalid and custom project configuration, stage gates, required types, and type relationships;
+8. metadata title, date-order, and related-document checks;
+9. a non-mutating repair preview, idempotent apply, missing index routes, and concurrent-change refusal.
 
 Run them with:
 

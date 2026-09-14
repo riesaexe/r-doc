@@ -97,6 +97,19 @@ This patch closes two small but important governance blind spots:
 | Chinese placeholder awareness | Recognizes common Chinese placeholders such as `你的密码`, `请输入你的密码`, and `示例口令` without hiding real Chinese password values. | The baseline remains finite and does not replace a full secret scanner. |
 | Self-hosted parser dogfood | Uses nested mapping and list frontmatter in r-doc's own verification record, so the repository exercises the parser it ships. | Passing the dogfood check proves parsing coverage, not semantic approval of arbitrary metadata. |
 
+## What `0.2.3` adds
+
+This release turns more of the governance contract into executable, reviewable checks:
+
+| Capability | What it does |
+| --- | --- |
+| Executable project configuration | Applies `.r-doc.yaml` to the documentation root, exclusions, required document types, document-type relationships, and lifecycle gates. |
+| Bidirectional navigation | Verifies the root entrypoint, documentation index, and nested indexes can navigate both downward and back to their parent. |
+| Deterministic link coverage | Checks inline, reference-style, and parenthesized Markdown links after resolving paths and rejecting project-root escapes. |
+| Metadata relationships | Checks document IDs, `related_docs`, `supersedes`, review dates, title headings, and creation/update order. |
+
+The release keeps semantic decisions and real-agent behavior evaluation explicit: deterministic checks provide evidence, but they do not replace human or agent-level judgment.
+
 For a repository maintainer, the guarded repair flow is:
 
 ```text
