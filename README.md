@@ -110,6 +110,18 @@ This release turns more of the governance contract into executable, reviewable c
 
 The release keeps semantic decisions and real-agent behavior evaluation explicit: deterministic checks provide evidence, but they do not replace human or agent-level judgment.
 
+## What `0.2.4` adds
+
+This hardening release closes the remaining small gaps identified after `0.2.3`:
+
+| Improvement | What it does |
+| --- | --- |
+| De-duplicated findings | Collapses identical findings from multiple audit phases, keeping symlink and unreadable-file reports actionable instead of noisy. |
+| Existing-project migration guidance | Explains how to adopt bidirectional navigation with preview-first repairs, without rewriting topic content. |
+| Verification coverage map | Documents the deterministic coverage for configuration, navigation, links, metadata relationships, and sensitive content. |
+
+The release is backed by 27 regression tests and the same package, repair-preview, strict-audit, and Skill validator gates used for earlier releases.
+
 For a repository maintainer, the guarded repair flow is:
 
 ```text
@@ -223,6 +235,7 @@ The generated files only establish navigation. You still add project-specific co
 | Existing docs conflict with code | Ask for an evidence report first; confirm which source is authoritative before changing either side. |
 | You need Chinese output | Ask for Chinese documentation or specify the target document language. Runtime rules remain in `SKILL.md`. |
 | Release checks fail | Run the repository's validation commands and inspect the reported path, link, metadata, or sensitive-content finding before retrying. |
+| An existing project fails `missing-navigation-link` after upgrading | Preview the safe repair, confirm the entrypoint and parent-index targets, apply the links, then rerun a strict audit. This rule does not rewrite topic content. |
 
 ## Installation options
 

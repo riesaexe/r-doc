@@ -235,7 +235,9 @@ def path_is_excluded(root: Path, path: Path, config: ProjectConfig) -> bool:
 
 
 def add(finding_list: list[Finding], severity: str, code: str, root: Path, path: Path, message: str, line: int | None = None) -> None:
-    finding_list.append(Finding(severity, code, relative(root, path), message, line))
+    finding = Finding(severity, code, relative(root, path), message, line)
+    if finding not in finding_list:
+        finding_list.append(finding)
 
 
 def markdown_files(directory: Path, root: Path, config: ProjectConfig) -> list[Path]:

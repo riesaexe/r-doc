@@ -47,6 +47,17 @@ class AuditDocsTests(unittest.TestCase):
             valid_project(root)
             self.assertEqual(audit_docs.audit(root), [])
 
+    def test_repeated_read_findings_are_collapsed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            unreadable_path = root / "docs/guide/unreadable.md"
+            unreadable_path.mkdir()
+            findings: list[audit_docs.Finding] = []
+            for _ in range(3):
+                audit_docs.read_text(unreadable_path, root, findings)
+            self.assertEqual([item.code for item in findings], ["read-error"])
+
     def test_nested_frontmatter_is_parsed_without_dropping_lists(self) -> None:
         text = "\n".join(
             [

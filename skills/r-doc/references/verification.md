@@ -50,6 +50,31 @@ This is a deterministic baseline, not a complete secret scanner. Encoded, obfusc
 
 Use normal mode during exploration. Use `--strict` before merge or release so warnings also fail the command.
 
+## Migrating an existing project
+
+The bidirectional navigation rule is intentional. After adopting the 0.2.3 governance checks, an existing project may newly report `missing-navigation-link` when `docs/README.md` does not link back to `AGENTS.md`, or when a nested `README.md` does not link to its parent index. This is an adaptation requirement, not a content rewrite requirement.
+
+For a safe migration:
+
+1. Run `repair_docs.py --root <project-root>` and review the preview;
+2. Confirm that the proposed links point to the intended entrypoint and parent indexes;
+3. Run `repair_docs.py --root <project-root> --apply` only after review;
+4. Run `audit_docs.py --root <project-root> --strict` and resolve any remaining semantic findings manually.
+
+The repairer adds navigation and index links without rewriting topic content. Projects with a custom `docs_root` should configure it before previewing the migration.
+
+## Coverage map
+
+The deterministic checks currently cover:
+
+| Area | Executed checks |
+| --- | --- |
+| Project configuration | Lookup precedence, duplicate files, unknown fields, path safety, exclusions, required document types, relationship requirements, and stage gates. |
+| Navigation and coverage | Root entrypoint/index bidirectionality, nested parent links, index coverage, missing indexes, and safe canonical paths. |
+| Markdown links | Inline, reference-style, parenthesized, broken, and project-root-escaping targets. |
+| Metadata relationships | IDs, title/H1 consistency, ISO dates and ordering, review dates, `related_docs`, `supersedes`, and `related_code` boundaries. |
+| Sensitive content | The finite token, credential, JWT, database URL, and password baseline documented below. |
+
 ## Validate the skill package
 
 Run:
