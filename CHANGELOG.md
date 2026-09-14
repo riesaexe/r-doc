@@ -2,6 +2,14 @@
 
 本文件记录 r-doc 的用户可见变化。
 
+## [0.2.6] - 2026-09-15
+
+- 让 Markdown 链接解析忽略 fenced code、行内代码和 HTML 注释，同时继续扫描 fenced code 中的敏感值；新增 Markdown fragment/anchor 存在性校验。
+- 增加 `sensitive_allowlist` 项目配置，为各检测器提供经过审查的精确示例值扩展通道；补充 Google `AIza` 风格 API key 基线检测。
+- 明确根目录 Markdown 的 `exclude` 交互：`README.md` 默认纳管，配置排除同样适用于根目录文件，`AGENTS.md` 始终作为入口检查。
+- 增加 `planned_code` 元数据字段，用于记录尚未创建但必须留在项目根目录内的计划代码路径，并保留 `related_code` 的现有文件约束。
+- 将临时项目测试拆分为审计核心、配置/敏感值和修复器三个聚焦模块，保持 45 个回归场景可独立定位。
+
 ## [0.2.5] - 2026-09-14
 
 - 将项目根目录中直接维护的 Markdown 文件纳入断链和敏感值审计，覆盖 README、贡献指南和安全说明等高风险入口；文档元数据和索引覆盖仍限定在配置的 `docs_root`。

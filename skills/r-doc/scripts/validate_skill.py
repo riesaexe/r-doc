@@ -6,7 +6,17 @@ import re
 import sys
 from pathlib import Path
 
-from audit_docs import FrontmatterParseError, LINK_PATTERN, SECRET_PATTERNS, is_safe_example, parse_frontmatter, target_path
+from audit_docs import (
+    FrontmatterParseError,
+    SECRET_PATTERNS,
+    _anchor_slug,
+    is_safe_example,
+    markdown_anchors,
+    parse_frontmatter,
+    target_path,
+    target_reference,
+    validation_targets,
+)
 
 
 def finding(path: Path, message: str) -> str:
@@ -31,11 +41,18 @@ def validate(skill_root: Path) -> list[str]:
     metadata = values.get("metadata")
     if not isinstance(metadata, dict) or not metadata.get("version"):
         errors.append(finding(skill_file, "metadata.version is required"))
-    for line_number, line in enumerate(text.splitlines(), start=1):
-        for match in LINK_PATTERN.finditer(line):
-            target = target_path(skill_file, match.group(1), skill_root)
-            if target is not None and not target.exists():
-                errors.append(finding(skill_file, f"line {line_number}: missing linked resource {match.group(1)}"))
+    for markdown_target in validation_targets(text):
+        target = target_path(skill_file, markdown_target.raw_target, skill_root)
+        if target is not None and not target.exists():
+            errors.append(finding(skill_file, f"line {markdown_target.line}: missing linked resource {markdown_target.raw_target}"))
+            continue
+        reference = target_reference(skill_file, markdown_target.raw_target, skill_root)
+        if reference is not None and reference.fragment and target is not None and target.suffix.lower() == ".md":
+            anchors = markdown_anchors(target, skill_root, [])
+            normalized_fragment = _anchor_slug(reference.fragment)
+            normalized_anchors = {anchor.casefold() for anchor in anchors}
+            if reference.fragment.casefold() not in normalized_anchors and normalized_fragment.casefold() not in normalized_anchors:
+                errors.append(finding(skill_file, f"line {markdown_target.line}: missing linked anchor {markdown_target.raw_target}"))
     ui_file = skill_root / "agents" / "openai.yaml"
     if not ui_file.is_file():
         errors.append(finding(ui_file, "missing OpenAI UI metadata"))

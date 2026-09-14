@@ -16,6 +16,8 @@ owner: team-name
 review_after: 2026-10-01
 related_code:
   - src/example.ts
+planned_code:
+  - src/future-module.ts
 related_docs:
   - DOC-002
 supersedes: DOC-000
@@ -35,6 +37,7 @@ Conditional fields:
 - `owner`: for documents that need ongoing maintenance or review;
 - `review_after`: for documents with a review cadence;
 - `related_code`: relative paths for existing files affected by code, configuration, or data-model changes;
+- `planned_code`: relative paths for code or configuration files expected to be created or changed; targets must stay inside the project root but do not need to exist yet;
 - `related_docs`: documents whose facts this document depends on;
 - `supersedes`: the old document replaced by this one.
 
@@ -44,6 +47,7 @@ The deterministic audit validates the relationships that can be checked without 
 - `title` must match the first H1 when both are present;
 - `related_docs` must be a list of existing document IDs, and `supersedes` must name an existing document ID;
 - `related_code` must be a list of existing files whose canonical paths remain inside the project root;
+- `planned_code` must be a list of non-empty paths whose canonical paths remain inside the project root; it is the planning channel for future files and is not an existence claim;
 - a document with `status: superseded` must have a distinct successor document whose `supersedes` field names its ID, and must link to that successor in its Markdown body;
 - a project's `relationships.require_for` configuration can require relationships between document types.
 

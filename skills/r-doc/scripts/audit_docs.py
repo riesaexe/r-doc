@@ -4,6 +4,7 @@ import argparse
 import json
 import re
 import sys
+import unicodedata
 from dataclasses import asdict, dataclass
 from datetime import date, datetime
 from pathlib import Path, PurePosixPath, PureWindowsPath
@@ -15,9 +16,17 @@ import yaml
 STATUS_VALUES = {"draft", "proposed", "active", "superseded", "archived"}
 SKIP_DIRECTORIES = {".git", ".venv", "node_modules", "dist", "build", "coverage"}
 CONFIG_PATHS = (Path(".r-doc.yaml"), Path("docs/r-doc.yaml"), Path("r-doc.yaml"))
-CONFIG_KEYS = {"version", "project_type", "docs_root", "required_document_types", "exclude", "gates", "relationships"}
+CONFIG_KEYS = {
+    "version",
+    "project_type",
+    "docs_root",
+    "required_document_types",
+    "exclude",
+    "gates",
+    "relationships",
+    "sensitive_allowlist",
+}
 GATE_VALUES = {"advisory", "audit", "blocking"}
-LINK_PATTERN = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 REFERENCE_DEFINITION_PATTERN = re.compile(
     r"(?im)^[ \t]{0,3}\[([^\]]+)\]:[ \t]*(?:<([^>\n]+)>|(\S+))"
 )
@@ -30,6 +39,7 @@ SECRET_PATTERNS = (
     (re.compile(r"\bAKIA[0-9A-Z]{16}\b"), "aws-access-key"),
     (re.compile(r"\bgh[pousr]_[A-Za-z0-9_]{20,}\b"), "github-token"),
     (re.compile(r"\bgithub_pat_[A-Za-z0-9_]{20,}\b"), "github-token"),
+    (re.compile(r"\bAIza[0-9A-Za-z_-]{20,}\b"), "google-api-key"),
     (re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{20,}\b"), "slack-token"),
     (re.compile(r"\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b"), "jwt"),
     (re.compile(r"\bsk-(?:proj-)?[A-Za-z0-9_-]{20,}\b"), "openai-api-key"),
@@ -49,6 +59,7 @@ SECRET_PATTERNS = (
         "generic-password",
     ),
 )
+SECRET_CODES = frozenset(code for _, code in SECRET_PATTERNS)
 
 
 @dataclass(frozen=True)
@@ -67,6 +78,13 @@ class MarkdownTarget:
     is_image: bool = False
     is_definition: bool = False
     definition_key: str | None = None
+
+
+@dataclass(frozen=True)
+class TargetReference:
+    path: Path | None
+    fragment: str | None = None
+    fragment_only: bool = False
 
 
 class FindingList(list[Finding]):
@@ -94,6 +112,7 @@ class ProjectConfig:
     required_document_types: tuple[str, ...] = ()
     gates: dict[str, str] | None = None
     relationships: dict[str, tuple[str, ...]] | None = None
+    sensitive_allowlist: dict[str, tuple[str, ...]] | None = None
     source: Path | None = None
 
     def docs_path(self, root: Path) -> Path:
@@ -221,12 +240,30 @@ def load_project_config(root: Path) -> tuple[ProjectConfig, list[ConfigProblem]]
                         continue
                     relationships[document_type] = parsed_targets
 
+    sensitive_allowlist: dict[str, tuple[str, ...]] | None = None
+    if "sensitive_allowlist" in values:
+        raw_allowlist = values["sensitive_allowlist"]
+        if not isinstance(raw_allowlist, dict):
+            problems.append(_config_error(source, "config-sensitive-allowlist", "sensitive_allowlist must be a mapping of detector codes to exact example values"))
+        else:
+            sensitive_allowlist = {}
+            for code, raw_values in raw_allowlist.items():
+                parsed_values = _string_list(raw_values)
+                if not isinstance(code, str) or code not in SECRET_CODES:
+                    problems.append(_config_error(source, "config-sensitive-allowlist", f"unsupported sensitive detector code: {code!r}"))
+                    continue
+                if parsed_values is None:
+                    problems.append(_config_error(source, "config-sensitive-allowlist", f"allowlist values for {code} must be a list of non-empty strings"))
+                    continue
+                sensitive_allowlist[code] = parsed_values
+
     return ProjectConfig(
         docs_root=docs_root,
         exclude=exclude,
         required_document_types=required_document_types,
         gates=gates,
         relationships=relationships,
+        sensitive_allowlist=sensitive_allowlist,
         source=source,
     ), problems
 
@@ -252,8 +289,10 @@ def path_is_excluded(root: Path, path: Path, config: ProjectConfig) -> bool:
     return False
 
 
-def is_safe_example(code: str, value: str) -> bool:
-    return value in SAFE_EXAMPLE_VALUES.get(code, ())
+def is_safe_example(code: str, value: str, allowlist: dict[str, tuple[str, ...]] | None = None) -> bool:
+    built_in = SAFE_EXAMPLE_VALUES.get(code, ())
+    configured = (allowlist or {}).get(code, ())
+    return value in built_in or value in configured
 
 
 def add(finding_list: list[Finding], severity: str, code: str, root: Path, path: Path, message: str, line: int | None = None) -> None:
@@ -314,29 +353,107 @@ def parse_frontmatter(text: str) -> tuple[dict[str, object], int]:
     return values, end + 1
 
 
-def target_path(source: Path, raw_target: str, root: Path) -> Path | None:
+def _blank_range(chars: list[str], start: int, end: int) -> None:
+    for index in range(start, end):
+        if chars[index] != "\n":
+            chars[index] = " "
+
+
+def _fence_marker(line: str) -> tuple[str, int] | None:
+    match = re.match(r"^ {0,3}(`{3,}|~{3,})", line)
+    if not match:
+        return None
+    marker = match.group(1)
+    return marker[0], len(marker)
+
+
+def mask_markdown_non_link_regions(text: str) -> str:
+    chars = list(text)
+    active_fence: tuple[str, int] | None = None
+    offset = 0
+    for line in text.splitlines(keepends=True):
+        body = line.rstrip("\r\n")
+        marker = _fence_marker(body)
+        if active_fence is not None:
+            _blank_range(chars, offset, offset + len(body))
+            fence_char, fence_length = active_fence
+            if re.match(rf"^ {{0,3}}{re.escape(fence_char)}{{{fence_length},}}[ \t]*$", body):
+                active_fence = None
+        elif marker is not None:
+            _blank_range(chars, offset, offset + len(body))
+            active_fence = marker
+        offset += len(line)
+
+    masked = "".join(chars)
+    cursor = 0
+    while True:
+        start = masked.find("<!--", cursor)
+        if start < 0:
+            break
+        end_marker = masked.find("-->", start + 4)
+        end = len(masked) if end_marker < 0 else end_marker + 3
+        _blank_range(chars, start, end)
+        masked = "".join(chars)
+        cursor = end
+
+    cursor = 0
+    while cursor < len(masked):
+        if masked[cursor] != "`":
+            cursor += 1
+            continue
+        run_end = cursor
+        while run_end < len(masked) and masked[run_end] == "`":
+            run_end += 1
+        run = masked[cursor:run_end]
+        close = masked.find(run, run_end)
+        if close < 0:
+            cursor = run_end
+            continue
+        _blank_range(chars, cursor, close + len(run))
+        masked = "".join(chars)
+        cursor = close + len(run)
+    return "".join(chars)
+
+
+def target_reference(source: Path, raw_target: str, root: Path) -> TargetReference | None:
     target = raw_target.strip()
     if target.startswith("<") and ">" in target:
         target = target[1 : target.index(">")]
     else:
         target = target.split()[0] if target else ""
-    if not target or target.startswith("#"):
+    if not target:
         return None
     lowered = target.lower()
     if lowered.startswith(("http://", "https://", "ftp://", "mailto:", "data:", "//")):
         return None
-    target = unquote(target.split("#", 1)[0].split("?", 1)[0])
+    fragment: str | None = None
+    if "#" in target:
+        target, fragment = target.split("#", 1)
+        fragment = unquote(fragment)
+    target = unquote(target.split("?", 1)[0])
     if not target:
-        return None
-    return (root / target.lstrip("/")) if target.startswith("/") else (source.parent / target)
+        return TargetReference(source, fragment, fragment_only=True) if fragment is not None else None
+    path = (root / target.lstrip("/")) if target.startswith("/") else (source.parent / target)
+    return TargetReference(path, fragment)
+
+
+def target_path(source: Path, raw_target: str, root: Path) -> Path | None:
+    reference = target_reference(source, raw_target, root)
+    return reference.path if reference is not None else None
 
 
 def markdown_targets(text: str) -> list[MarkdownTarget]:
+    lexical_text = mask_markdown_non_link_regions(text)
     targets: list[tuple[int, MarkdownTarget]] = []
     definitions: dict[str, str] = {}
     definition_spans: list[tuple[int, int]] = []
-    for match in REFERENCE_DEFINITION_PATTERN.finditer(text):
-        raw_target = match.group(2) or match.group(3)
+    for match in REFERENCE_DEFINITION_PATTERN.finditer(lexical_text):
+        raw_target = None
+        for group in (2, 3):
+            start, end = match.span(group)
+            if start >= 0:
+                raw_target = text[start:end]
+                break
         if raw_target:
             key = " ".join(match.group(1).split()).casefold()
             definitions[key] = raw_target
@@ -345,11 +462,11 @@ def markdown_targets(text: str) -> list[MarkdownTarget]:
             definition_spans.append((match.start(), match.end()))
 
     inline_start = re.compile(r"(?<!\!)!?\[[^\]\n]+\]\(")
-    for match in inline_start.finditer(text):
+    for match in inline_start.finditer(lexical_text):
         cursor = match.end()
-        if cursor < len(text) and text[cursor] == "<":
-            end = text.find(">", cursor + 1)
-            if end < 0 or end + 1 >= len(text) or text[end + 1] != ")":
+        if cursor < len(lexical_text) and lexical_text[cursor] == "<":
+            end = lexical_text.find(">", cursor + 1)
+            if end < 0 or end + 1 >= len(lexical_text) or lexical_text[end + 1] != ")":
                 continue
             raw_target = text[cursor + 1 : end]
             close = end + 1
@@ -357,8 +474,8 @@ def markdown_targets(text: str) -> list[MarkdownTarget]:
             depth = 0
             escaped = False
             close = -1
-            while cursor < len(text):
-                character = text[cursor]
+            while cursor < len(lexical_text):
+                character = lexical_text[cursor]
                 if escaped:
                     escaped = False
                 elif character == "\\":
@@ -377,7 +494,7 @@ def markdown_targets(text: str) -> list[MarkdownTarget]:
         line = text.count("\n", 0, match.start()) + 1
         targets.append((match.start(), MarkdownTarget(raw_target, line, is_image=text[match.start()] == "!")))
 
-    for match in REFERENCE_LINK_PATTERN.finditer(text):
+    for match in REFERENCE_LINK_PATTERN.finditer(lexical_text):
         key = " ".join((match.group(2) or match.group(1)).split()).casefold()
         raw_target = definitions.get(key)
         if raw_target:
@@ -389,8 +506,8 @@ def markdown_targets(text: str) -> list[MarkdownTarget]:
                 )
             )
 
-    for match in re.finditer(r"(?<!\!)!?\[([^\]\n]+)\]", text):
-        after = text[match.end()] if match.end() < len(text) else ""
+    for match in re.finditer(r"(?<!\!)!?\[([^\]\n]+)\]", lexical_text):
+        after = lexical_text[match.end()] if match.end() < len(lexical_text) else ""
         before = text[match.start() - 1] if match.start() else ""
         if after in "([:":
             continue
@@ -427,15 +544,46 @@ def navigation_targets(text: str) -> list[MarkdownTarget]:
     return [target for target in markdown_targets(text) if not target.is_definition and not target.is_image]
 
 
+def _anchor_slug(value: str) -> str:
+    value = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", value)
+    value = re.sub(r"`([^`]+)`", r"\1", value)
+    value = re.sub(r"<[^>]+>", "", value)
+    value = unicodedata.normalize("NFKC", value).casefold()
+    value = re.sub(r"[^\w\s-]", "", value, flags=re.UNICODE)
+    return re.sub(r"[-\s]+", "-", value).strip("-")
+
+
+def markdown_anchors(path: Path, root: Path, findings: list[Finding]) -> set[str]:
+    text = read_text(path, root, findings)
+    lexical_lines = mask_markdown_non_link_regions(text).splitlines()
+    anchors: set[str] = set()
+    counts: dict[str, int] = {}
+    for line, lexical_line in zip(text.splitlines(), lexical_lines):
+        if not lexical_line.strip():
+            continue
+        lexical_match = re.match(r"^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$", lexical_line)
+        original_match = re.match(r"^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$", line)
+        if not lexical_match or not original_match:
+            continue
+        slug = _anchor_slug(original_match.group(1))
+        if not slug:
+            continue
+        index = counts.get(slug, 0)
+        counts[slug] = index + 1
+        anchors.add(slug if index == 0 else f"{slug}-{index}")
+    return anchors
+
+
 def check_links(root: Path, files: list[Path], findings: list[Finding]) -> dict[Path, set[Path]]:
     outgoing: dict[Path, set[Path]] = {}
     for path in files:
         text = read_text(path, root, findings)
         targets: set[Path] = set()
         for target in validation_targets(text):
-            resolved = target_path(path, target.raw_target, root)
-            if resolved is None:
+            reference = target_reference(path, target.raw_target, root)
+            if reference is None or reference.path is None:
                 continue
+            resolved = reference.path
             if resolved.is_dir():
                 resolved = resolved / "README.md"
             canonical = canonical_path(root, resolved)
@@ -444,7 +592,13 @@ def check_links(root: Path, files: list[Path], findings: list[Finding]) -> dict[
                 continue
             if not canonical.exists():
                 add(findings, "error", "broken-link", root, path, f"target does not exist: {target.raw_target}", target.line)
-            if not target.is_image and not target.is_definition:
+            elif reference.fragment and canonical.suffix.lower() == ".md":
+                anchors = markdown_anchors(canonical, root, findings)
+                normalized_fragment = _anchor_slug(reference.fragment)
+                normalized_anchors = {anchor.casefold() for anchor in anchors}
+                if reference.fragment.casefold() not in normalized_anchors and normalized_fragment.casefold() not in normalized_anchors:
+                    add(findings, "error", "broken-anchor", root, path, f"anchor does not exist: {target.raw_target}", target.line)
+            if not target.is_image and not target.is_definition and not reference.fragment_only:
                 targets.add(canonical)
         outgoing[path] = targets
     return outgoing
@@ -578,7 +732,7 @@ def check_metadata(
             else:
                 seen_ids[identifier] = path
 
-        for key in ("related_docs", "related_code"):
+        for key in ("related_docs", "related_code", "planned_code"):
             if key in values:
                 value = values[key]
                 if _string_list(value) is None:
@@ -596,6 +750,13 @@ def check_metadata(
                     add(findings, "error", "related-code-outside-root", root, path, f"related_code leaves the project root: {code_path}")
                 elif not canonical.is_file():
                     add(findings, "error", "related-code-missing", root, path, f"related_code target is not an existing file: {code_path}")
+        planned_code = values.get("planned_code")
+        if isinstance(planned_code, list):
+            for code_path in planned_code:
+                if not isinstance(code_path, str):
+                    continue
+                if canonical_path(root, root / code_path) is None:
+                    add(findings, "error", "planned-code-outside-root", root, path, f"planned_code leaves the project root: {code_path}")
 
     document_types: dict[str, set[str]] = {}
     for values in records.values():
@@ -646,12 +807,17 @@ def check_metadata(
     return records, seen_ids
 
 
-def check_sensitive_content(root: Path, files: list[Path], findings: list[Finding]) -> None:
+def check_sensitive_content(
+    root: Path,
+    files: list[Path],
+    findings: list[Finding],
+    config: ProjectConfig | None = None,
+) -> None:
     for path in files:
         text = read_text(path, root, findings)
         for line_number, line in enumerate(text.splitlines(), start=1):
             for pattern, code in SECRET_PATTERNS:
-                if any(not is_safe_example(code, match.group(0)) for match in pattern.finditer(line)):
+                if any(not is_safe_example(code, match.group(0), config.sensitive_allowlist if config else None) for match in pattern.finditer(line)):
                     add(findings, "error", "sensitive-content", root, path, f"possible sensitive value ({code})", line_number)
 
 
@@ -679,7 +845,7 @@ def audit(root: Path) -> list[Finding]:
     outgoing = check_links(root, check_files, findings)
     check_indexes(root, docs, files, outgoing, findings, config, agents)
     check_metadata(root, docs, files, outgoing, findings, config)
-    check_sensitive_content(root, check_files, findings)
+    check_sensitive_content(root, check_files, findings, config)
     return findings
 
 

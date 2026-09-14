@@ -4,7 +4,7 @@ type: report
 status: active
 title: r-doc 可复现验证记录
 created: 2026-09-14
-updated: 2026-09-14
+updated: 2026-09-15
 validation:
   parser: PyYAML BaseLoader
   scenarios:
@@ -25,7 +25,7 @@ validation:
 | Skill 包结构、入口、链接和脚本语法 | `python skills/r-doc/scripts/validate_skill.py skills/r-doc` | PASS |
 | 安全结构修复预览 | `python skills/r-doc/scripts/repair_docs.py --root .` | PASS，无待写入修复 |
 | 项目文档结构、索引、链接、元数据和敏感值 | `python skills/r-doc/scripts/audit_docs.py --root . --strict` | PASS |
-| 临时项目行为场景 | `python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'` | PASS，38 tests；覆盖嵌套 frontmatter、解析错误、扩展敏感模式、中英文占位符、根目录 Markdown、图片与引用定义、配置、双向导航、元数据关系、阶段门和重复 finding 去重 |
+| 临时项目行为场景 | `python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'` | PASS，45 tests；覆盖词法链接过滤、Markdown 锚点、嵌套 frontmatter、解析错误、扩展敏感模式、项目白名单、中英文占位符、根目录 Markdown 排除、图片与引用定义、配置、双向导航、元数据关系、阶段门和重复 finding 去重 |
 | 官方 Skill creator 校验 | `PYTHONUTF8=1 python <skill-creator>/scripts/quick_validate.py skills/r-doc`（PowerShell 先设置 `$env:PYTHONUTF8='1'`） | PASS |
 | 本地 npx skills 发现 | `npx skills add . --list` | PASS，发现 1 个 r-doc |
 | 工作树空白错误 | `git diff --check` | PASS |
@@ -60,6 +60,11 @@ validation:
 - 根目录直接维护的 Markdown 会参与断链和敏感值检查；图片目标会检查存在性但不会改变导航覆盖图。
 - `related_code` 必须指向项目根目录内的现有文件；`status: superseded` 必须有声明 `supersedes` 的替代文档，并由旧文档正文回链。
 - 未配置的 `--stage` 会报告 `invalid-stage` 并以失败退出；未使用的引用定义不会伪造文档可达性。
+- fenced code、行内代码和 HTML 注释中的链接语法不会被当作真实链接；Markdown fragment 会校验目标文档中的标题锚点。
+- 根目录 `README.md` 默认参与审计，`.r-doc.yaml` 的 `exclude` 同样可以排除根目录 Markdown，但不会排除 `AGENTS.md`。
+- `planned_code` 可以指向尚未创建但仍在项目根目录内的未来路径；`related_code` 仍必须指向现有文件。
+- `sensitive_allowlist` 可以为受支持检测器登记精确的官方示例值，非法检测器配置会失败。
+- 测试按 `test_audit_docs.py`、`test_config_and_sensitive.py`、`test_repair_docs.py` 拆分，便于按责任域定位回归。
 
 ## 限制
 

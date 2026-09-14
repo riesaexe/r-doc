@@ -8,7 +8,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from audit_docs import ProjectConfig, canonical_path, load_project_config, navigation_targets, path_is_excluded, target_path
+from audit_docs import ProjectConfig, canonical_path, load_project_config, navigation_targets, path_is_excluded, target_reference
 
 
 @dataclass(frozen=True)
@@ -132,9 +132,9 @@ def agent_content(docs_root: str) -> str:
 def linked_targets_from_text(text: str, path: Path, root: Path) -> set[Path]:
     targets: set[Path] = set()
     for markdown_target in navigation_targets(text):
-        target = target_path(path, markdown_target.raw_target, root)
-        if target is not None:
-            canonical = canonical_path(root, target)
+        reference = target_reference(path, markdown_target.raw_target, root)
+        if reference is not None and reference.path is not None and not reference.fragment_only:
+            canonical = canonical_path(root, reference.path)
             if canonical is not None:
                 targets.add(canonical)
     return targets

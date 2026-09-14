@@ -123,6 +123,20 @@ This release closes the remaining audit blind spots identified through adversari
 
 The release is backed by 38 regression tests and the package, repair-preview, strict-audit, and Skill validator gates used for earlier releases.
 
+## What `0.2.6` adds
+
+This release hardens the audit boundary against false positives and project-specific documentation workflows:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Context-aware link parsing | Ignores link-shaped text inside fenced code, inline code, and HTML comments, while still checking real image and reference targets. | Sensitive-value scanning still inspects fenced code. |
+| Fragment validation | Verifies that Markdown links point to an existing heading anchor, not only an existing file. | Heading slug matching is deterministic; semantic link intent still needs review. |
+| Configurable example exceptions | Adds exact `sensitive_allowlist` entries for reviewed provider documentation examples and expands the baseline to Google `AIza`-style keys. | Exceptions are exact strings, never patterns, and must not contain real credentials. |
+| Planning-aware metadata | Adds `planned_code` for future paths while keeping `related_code` strict about existing files. | Planned paths must remain inside the project root. |
+| Root-file and test coverage | Documents root Markdown exclusion behavior and separates audit, configuration, and repair regression suites. | Root `AGENTS.md` remains mandatory and always checked. |
+
+The release is backed by 45 regression tests, package validation, repair-preview, strict-audit, and the official Skill validator.
+
 ## What `0.2.4` adds
 
 This hardening release closes the remaining small gaps identified after `0.2.3`:
