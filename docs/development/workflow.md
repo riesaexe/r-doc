@@ -18,14 +18,28 @@ related_code:
 3. 修改 skills/r-doc/ 源文件，不直接修改全局安装副本。
 4. 如果改变了用户可见行为，更新本文件或对应设计/发布文档。
 
+## 确定性验证
+
+在项目根目录运行以下命令。脚本只读检查，不会替项目修改文档：
+
+```bash
+python skills/r-doc/scripts/validate_skill.py skills/r-doc
+python skills/r-doc/scripts/repair_docs.py --root .
+python skills/r-doc/scripts/audit_docs.py --root . --strict
+python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
+```
+
+`validate_skill.py` 检查 Skill 包的入口、UI 元数据、内部链接、脚本语法、机器特定路径和敏感值。`repair_docs.py` 默认只预览安全结构修复，只有显式 `--apply` 才写入。`audit_docs.py` 检查项目入口、嵌套索引、链接、索引覆盖、frontmatter 和敏感值。`--strict` 会把元数据缺失等警告视为失败。
+
 ## 验证顺序
 
 1. 检查 frontmatter、命名和占位符。
 2. 检查 SKILL.md 引用的 references 是否存在。
 3. 检查引用文档中的 Markdown 相对链接。
-4. 用临时项目验证根入口、根索引、嵌套索引、冲突和排除目录。
-5. 检查敏感信息和未经脱敏的示例。
-6. 验证通过后再同步全局安装副本。
+4. 运行确定性脚本和单元测试。
+5. 用临时项目验证根入口、根索引、嵌套索引、冲突和排除目录。
+6. 检查敏感信息和未经脱敏的示例。
+7. 验证通过后再同步全局安装副本。
 
 ## 同步原则
 

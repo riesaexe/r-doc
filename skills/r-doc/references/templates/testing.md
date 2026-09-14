@@ -2,7 +2,7 @@
 id: TEST-001
 type: testing
 status: proposed
-title: 测试计划或报告标题
+title: Test plan or report title
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 related_docs:
@@ -10,26 +10,26 @@ related_docs:
   - DES-001
 ---
 
-# 测试计划或报告标题
+# Test plan or report title
 
-## 目标与范围
+## Goal and scope
 
-说明验证哪些需求、设计不变量和风险。
+State which requirements, design invariants, and risks are being verified.
 
-## 方法与环境
+## Method and environment
 
-记录测试层级、环境、数据准备和限制。敏感数据使用脱敏样例。
+Record test levels, environment, data preparation, and limitations. Use sanitized examples.
 
-## 场景清单
+## Scenarios
 
-- [ ] 正常路径
-- [ ] 边界和错误路径
-- [ ] 兼容性或迁移路径
+- [ ] Happy path
+- [ ] Boundary and error paths
+- [ ] Compatibility or migration path
 
-## 证据
+## Evidence
 
-记录命令、结果、时间、失败项和重现方式。
+Record commands, results, timestamps, failures, and reproduction steps.
 
-## 未解决问题
+## Unresolved issues
 
-区分阻塞项和非阻塞项，不用空泛的“已测试”替代证据。
+Separate blocking and non-blocking items. Do not replace evidence with a vague “tested” statement.

@@ -1,15 +1,18 @@
-# r-doc 文档模板
+# r-doc document templates
 
-模板是起点，不是必须原样复制的格式。先确认项目已有约定，再选择与当前任务匹配的模板。不要批量生成没有真实内容的空文档。
+Templates are starting points, not formats that must be copied unchanged. Check the project's existing conventions first, then choose the template that matches the task. Do not generate batches of empty documents.
 
-## 模板选择
+Read [practical examples](../examples.md) before copying a template and [common pitfalls](../pitfalls.md) before declaring the document complete.
 
-- 目标、范围和验收标准：requirements.md；
-- 技术方案、边界和实现结构：design.md；
-- 重大架构或不可逆决定：adr.md；
-- 公共接口、命令、数据格式和兼容性：api.md；
-- 测试策略、计划和证据：testing.md；
-- 发布、升级、迁移和变更：release.md；
-- 目录索引和阅读顺序：README.template.md。
+## Choose a template
 
-Skill 可以根据仓库特征识别项目类型，并在保留这些核心模板结构的基础上增加项目需要的字段。项目配置优先于自动识别。
+- Project entrypoint and navigation: `AGENTS.md`;
+- Goals, scope, and acceptance criteria: `requirements.md`;
+- Technical approach, boundaries, and implementation structure: `design.md`;
+- Major architecture or irreversible decision: `adr.md`;
+- Public interface, command, data format, and compatibility: `api.md`;
+- Test strategy, plan, and evidence: `testing.md`;
+- Release, upgrade, migration, and change notes: `release.md`;
+- Directory scope and reading order: `README.template.md`.
+
+The skill may identify a project type from repository evidence and extend these structures with project-specific fields. Project configuration takes precedence over automatic detection.

@@ -5,3 +5,5 @@ coverage/
 *.zip
 *.tgz
 *.tar.gz
+__pycache__/
+*.py[cod]

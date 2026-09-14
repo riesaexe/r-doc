@@ -1,8 +1,8 @@
 ---
 name: r-doc
-description: "Project documentation governance: automatically initialize, index, audit, and maintain AGENTS.md, docs/, and planning, requirements, design, API, testing, release, and deployment documents. Use when users ask to manage project documentation, check documentation consistency, update AGENTS.md, or trace change impact; not a replacement for business-code implementation."
+description: "Govern project documentation when a user asks to initialize, audit, repair, or maintain AGENTS.md, docs/, indexes, plans, requirements, design, APIs, testing, releases, or deployment records, or when a change affects documented behavior. Do not activate for code-only edits with no documentation impact; do not replace business-code implementation."
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # r-doc: Project documentation governance
@@ -24,6 +24,16 @@ Use this skill automatically in the following situations, or whenever the user e
 - Finding missing, stale, duplicated, conflicting, broken, or incorrectly loaded documentation.
 
 Do not start the full documentation-governance workflow for a purely local code refactor that does not affect public behavior, data, configuration, architecture, or project rules.
+
+## Activation gate
+
+Implicit activation is intentionally supported, but apply this gate before doing substantial work. Continue only when at least one condition is true:
+
+- The user explicitly invokes `$r-doc` or asks for documentation governance;
+- The task creates or changes public behavior, interfaces, configuration, data formats, architecture, processes, deployment, release behavior, or project rules;
+- The task asks to initialize, index, audit, repair, synchronize, review, or publish project documentation.
+
+Do not turn an unrelated code edit into a documentation project merely because the repository contains `AGENTS.md` or `docs/`.
 
 ## Non-negotiable constraints
 
@@ -47,10 +57,21 @@ Choose a lightweight or complete workflow according to the task, but complete ev
 4. Build a document inventory and mark missing, stale, unindexed, broken, status-invalid, duplicated, conflicting, or suspiciously sensitive content.
 5. Ask necessary clarification questions, then provide a focused modification plan. Do not write, move, archive, or configure documentation before the plan is confirmed.
 6. Create or update `AGENTS.md`, indexes, topic documents, metadata, and project configuration according to the plan. Mechanical index, link, and date updates may be automated after confirmation.
-7. Verify context-loading order, index coverage, links, metadata, relationships, stage gates, and sensitive-content checks.
-8. Produce a governance report covering scope, findings, completed updates, blockers, non-blockers, verification evidence, and whether the current stage gate is satisfied.
+7. Run the deterministic helpers in `scripts/` when the target environment can execute them. At minimum, run `audit_docs.py --root <project-root>`; use `--strict` for release or merge gates. If a helper cannot run, perform the equivalent checks and report the limitation.
+8. Verify context-loading order, index coverage, links, metadata, relationships, stage gates, and sensitive-content checks.
+9. Produce a governance report covering scope, findings, completed updates, blockers, non-blockers, verification evidence, and whether the current stage gate is satisfied.
 
 For stage checklists, read [references/lifecycle-checklists.md](references/lifecycle-checklists.md). For the complete operating workflow, read [references/workflow.md](references/workflow.md).
+For deterministic checks and temporary-project QA, read [references/verification.md](references/verification.md).
+For safe structural repairs, read [references/repair.md](references/repair.md). For concrete scenarios and common pitfalls, read [references/examples.md](references/examples.md) and [references/pitfalls.md](references/pitfalls.md).
+
+## 60-second path
+
+1. Explicitly invoke `$r-doc` or confirm that the change has documentation impact.
+2. Read `AGENTS.md`, `docs/README.md`, and the relevant topic index.
+3. Preview safe structural repairs with `python scripts/repair_docs.py --root <project-root>`.
+4. After confirmation, apply only the displayed repairs with `--apply`, then run `audit_docs.py --strict`.
+5. Report automated results separately from semantic conflicts and decisions that still need confirmation.
 
 ## Document structure and indexes
 
@@ -62,7 +83,7 @@ docs/
 └── README.md
 ```
 
-Add topic directories such as `requirements/`, `design/`, `decisions/`, `api/`, `testing/`, `releases/`, or `operations/` only when needed. Each topic directory's `README.md` must define its scope, list its documents, state the recommended reading order, and link to the parent index and specific documents. The root `AGENTS.md` must link to `docs/README.md`.
+Add topic directories such as `requirements/`, `design/`, `decisions/`, `api/`, `testing/`, `releases/`, or `operations/` only when needed. Each topic directory's `README.md` must define its scope, list its documents, state the recommended reading order, and link to the parent index and specific documents. Use [references/templates/AGENTS.md](references/templates/AGENTS.md) when the project needs a new root entrypoint, and use [references/templates/README.template.md](references/templates/README.template.md) for nested indexes. The root `AGENTS.md` must link to `docs/README.md`.
 
 The recommended context-loading order is:
 

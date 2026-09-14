@@ -1,51 +1,51 @@
-# 生命周期检查清单
+# Lifecycle checklists
 
-按当前阶段选择检查项。无关阶段不要求生成空文档。
+Choose the checks that match the current stage. Do not create empty documents for unrelated stages.
 
-## 计划阶段
+## Planning
 
-- 目标、范围、非目标和约束清楚；
-- 验收标准或可观察结果明确；
-- 相关背景、用户、依赖和风险有来源；
-- 根 AGENTS.md 和 docs/README.md 能引导到计划资料；
-- 已识别需要后续设计、测试和发布说明的影响。
+- Goals, scope, non-goals, and constraints are clear;
+- Acceptance criteria or observable outcomes are explicit;
+- Background, users, dependencies, and risks have sources;
+- The root `AGENTS.md` and `docs/README.md` lead to the planning material;
+- The impact on later design, testing, and release documentation is identified.
 
-## 设计阶段
+## Design
 
-- 技术方案、边界、接口、数据和失败路径有说明；
-- 重大或不可逆决策有 ADR，包含背景、选项、决定和后果；
-- 设计文档与需求、代码入口和测试策略建立关联；
-- 方案变更时，旧决定已标记为替代或归档，而不是留下两个有效事实。
+- Technical approach, boundaries, interfaces, data, and failure paths are documented;
+- Important or irreversible decisions have an ADR with context, options, decision, and consequences;
+- Design documents link to requirements, code entry points, and the test strategy;
+- When a design changes, the old decision is marked superseded or archived instead of leaving two active facts.
 
-## 实现阶段
+## Implementation
 
-- 根据代码和配置变更完成文档影响评估；
-- 公共行为、接口、配置、数据格式、命令和迁移步骤已同步；
-- 新的非显而易见约束、踩坑和操作步骤已记录；
-- 变更没有把敏感值写进文档或示例。
+- The documentation impact of code and configuration changes is assessed;
+- Public behavior, interfaces, configuration, data formats, commands, and migration steps are synchronized;
+- New non-obvious constraints, pitfalls, and operating steps are recorded;
+- The change does not put sensitive values in documentation or examples.
 
-## 审查或合并前
+## Review or merge
 
-- 需求、设计、代码、测试和文档对同一行为的描述一致；
-- 受影响文档已在索引中可达；
-- 链接、状态、更新时间和关联路径有效；
-- 遗留问题明确标为阻塞或非阻塞；
-- 不以“代码已工作”替代文档完成。
+- Requirements, design, code, tests, and documentation describe the same behavior consistently;
+- Affected documents are reachable through indexes;
+- Links, status, dates, and relationships are valid;
+- Remaining issues are explicitly marked blocking or non-blocking;
+- “The code works” is not used as a substitute for documentation completion.
 
-## 发布阶段
+## Release
 
-- 变更记录和发布说明准确描述用户可见变化；
-- 部署、迁移、回滚、配置和运维说明已更新；
-- 破坏性变化、兼容性和升级步骤有明确说明；
-- 发布文档链接到对应需求、设计、测试或决策。
+- Changelog and release notes accurately describe user-visible changes;
+- Deployment, migration, rollback, configuration, and operations guidance is updated;
+- Breaking changes, compatibility, and upgrade steps are explicit;
+- Release documentation links to the related requirement, design, test, or decision.
 
-## 维护和归档阶段
+## Maintenance and archival
 
-- 文档负责人、状态和最后更新时间仍然有效；
-- 已失效内容标记为 superseded 或 archived，并指向替代内容；
-- 索引移除失效入口前保留历史可追踪性；
-- 归档不应让当前维护者误读为仍然有效的规范。
+- Document owners, status, and last-updated dates are still valid;
+- Invalid content is marked `superseded` or `archived` and points to its replacement;
+- An index preserves historical traceability before removing an obsolete entry;
+- Archived content cannot be mistaken for a current rule by maintainers.
 
-## 默认门槛
+## Default gate
 
-默认使用审查模式：有未解决的关键文档问题时，不能宣布当前阶段完成。项目可以在 .r-doc.yaml 中将特定阶段升级为发布或合并门禁，但配置不能关闭敏感信息保护、冲突报告或事实核验。
+Use audit mode by default: do not declare the current stage complete while critical documentation issues remain unresolved. A project may raise a stage to `release` or `blocking` in `.r-doc.yaml`, but configuration cannot disable sensitive-content protection, conflict reporting, or evidence requirements.

@@ -1,3 +1,12 @@
+---
+id: REL-CHECKLIST-001
+type: checklist
+status: active
+title: r-doc 发布检查清单
+created: 2026-09-14
+updated: 2026-09-14
+---
+
 # r-doc 发布检查清单
 
 ## 源文件
@@ -8,6 +17,9 @@
 - [ ] references/ 中没有未完成占位符
 - [ ] 所有入口引用的文件都存在
 - [ ] 模板没有真实密钥或敏感示例
+- [ ] references/、scripts/ 和 tests/ 的中英文入口与目录结构一致
+- [ ] `validate_skill.py`、`audit_docs.py --strict` 和单元测试通过
+- [ ] `repair_docs.py` 的默认预览没有未经确认的待写入修复
 - [ ] 根 README 的 GitHub 和 npx skills 安装命令已更新为实际仓库地址
 - [ ] LICENSE 已选择并提交
 
@@ -18,6 +30,7 @@
 - [ ] 能检查缺失、过时、重复、冲突和断链
 - [ ] 能区分源副本与全局安装副本
 - [ ] 能在高风险或事实冲突时暂停并报告
+- [ ] 具备至少一个真实或临时项目验证记录
 
 ## 版本与记录
 

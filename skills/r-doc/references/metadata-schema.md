@@ -1,15 +1,15 @@
-# 文档元数据
+# Document metadata
 
-## 推荐 frontmatter
+## Recommended frontmatter
 
-主题文档优先使用 YAML frontmatter：
+Topic documents should use YAML frontmatter when the format supports it:
 
 ~~~yaml
 ---
 id: DOC-001
 type: design
 status: draft
-title: 示例技术设计
+title: Example technical design
 created: 2026-09-14
 updated: 2026-09-14
 owner: team-name
@@ -22,48 +22,48 @@ supersedes: DOC-000
 ---
 ~~~
 
-必需字段：
+Required fields for topic documents:
 
-- id：项目内稳定、唯一的文档标识；
-- type：文档类型，例如 requirements、design、adr、api、testing、release；
-- status：见状态流转；
-- title：与正文标题一致；
-- created、updated：使用 ISO 8601 日期或带时区的时间。
+- `id`: a stable, unique document identifier within the project;
+- `type`: a document type such as `requirements`, `design`, `adr`, `api`, `testing`, or `release`;
+- `status`: one of the lifecycle states below;
+- `title`: consistent with the document heading;
+- `created` and `updated`: ISO 8601 dates or timezone-aware timestamps.
 
-条件字段：
+Conditional fields:
 
-- owner：需要持续维护或审查的文档；
-- review_after：有复审周期的文档；
-- related_code：受代码、配置或数据模型影响的文档，使用相对路径；
-- related_docs：依赖其他文档事实的文档；
-- supersedes：替代旧文档时使用。
+- `owner`: for documents that need ongoing maintenance or review;
+- `review_after`: for documents with a review cadence;
+- `related_code`: relative paths for documents affected by code, configuration, or data-model changes;
+- `related_docs`: documents whose facts this document depends on;
+- `supersedes`: the old document replaced by this one.
 
-根 AGENTS.md 和索引 README.md 是导航入口，允许不使用完整 frontmatter，但必须有清晰标题、范围、更新时间或等价信息，并满足导航要求。
+Root `AGENTS.md` and index `README.md` files are navigation entry points. They may use lighter metadata, but must have a clear title, scope, update information, or equivalent navigation evidence.
 
-## 状态语义
+## Status semantics
 
 ~~~text
-draft      仍在编写，不能作为最终规范
-proposed   已形成方案，等待审查或批准
-active     当前有效的项目事实或规范
-superseded 已被新文档替代，必须指向替代文档
-archived   历史资料，默认不参与当前规范判断
+draft      Being written; not a final rule
+proposed   A formed proposal awaiting review or approval
+active     A current project fact or rule
+superseded Replaced by a newer document; must point to the replacement
+archived   Historical material; excluded from current rule decisions by default
 ~~~
 
-不要用 active 掩盖未确认的草稿，也不要把已实现但与期望不一致的代码自动写成 active 规范。
+Do not use `active` to hide an unapproved draft. Do not turn implemented behavior that differs from the intended design into an `active` rule without recording the conflict.
 
-## 文档类型
+## Document types
 
-类型不是固定枚举；至少保持以下常用类型语义稳定：
+Types are not a closed enum. Keep the meaning of these common types stable:
 
 ~~~text
-requirements  目标、范围、验收标准
-design        技术方案和边界
-adr           架构或重大决策
-api           接口、命令、数据格式和兼容性
-testing       测试策略、计划、报告和验证证据
-release       发布、变更和升级说明
-operations    部署、运维、迁移、回滚和排障
-guide         面向维护者或用户的操作说明
-policy        项目规则和约束
+requirements  Goals, scope, and acceptance criteria
+design        Technical approach and boundaries
+adr           Architecture or major decision
+api           Interfaces, commands, data formats, and compatibility
+testing       Test strategy, plans, reports, and evidence
+release       Release, change, and upgrade notes
+operations    Deployment, operations, migration, rollback, and troubleshooting
+guide         Instructions for maintainers or users
+policy        Project rules and constraints
 ~~~

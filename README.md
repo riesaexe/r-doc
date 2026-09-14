@@ -20,6 +20,12 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/riesaexe/r-doc/actions/workflows/quality.yml">
+    <img src="https://github.com/riesaexe/r-doc/actions/workflows/quality.yml/badge.svg" alt="Quality checks">
+  </a>
+</p>
+
+<p align="center">
   <code>Standards first</code>
   ·
   <code>Traceable changes</code>
@@ -99,6 +105,63 @@ r-doc is not a one-off document generator. It is a governance layer for the deve
 - Finding missing, stale, duplicated, conflicting, or hard-to-navigate project documents.
 
 r-doc governs development documentation and knowledge. It does not replace business-code implementation; by default, it maintains documents, indexes, metadata, and documentation comments without changing business code.
+
+## See it in action
+
+Initialize an existing repository:
+
+```text
+$r-doc Inspect this repository and establish its AGENTS.md and docs/ knowledge base. Preserve existing facts, report conflicts, and show the files changed.
+```
+
+When an API changes, ask for an impact pass before implementation is considered complete:
+
+```text
+$r-doc The public POST /users response now includes `role`. Trace the documentation impact, update the relevant API and testing documents, and report anything that still needs confirmation.
+```
+
+Before release, make the governance result explicit:
+
+```text
+$r-doc Audit the release documentation. Check indexes, links, metadata, stale claims, deployment steps, and known limitations. Do not silently rewrite conflicting facts.
+```
+
+Typical results are a maintained `AGENTS.md`, updated topic indexes, synchronized documents, and a concise report of missing or conflicting facts. r-doc does not infer a release decision when evidence is incomplete.
+
+### A small project example
+
+Before governance:
+
+```text
+checkout-service/
+├── README.md
+├── src/
+└── tests/
+```
+
+Ask r-doc to inspect the repository and preview safe repairs. After confirmation, the result is a navigable skeleton:
+
+```text
+checkout-service/
+├── AGENTS.md
+├── docs/
+│   └── README.md
+├── README.md
+├── src/
+└── tests/
+```
+
+The generated files only establish navigation. You still add project-specific commands, rules, requirements, and decisions; r-doc will then keep those documents indexed and report structural or semantic gaps.
+
+## Troubleshooting
+
+| Situation | What to ask |
+| --- | --- |
+| The skill did not activate | Use `$r-doc` explicitly and describe the documentation or governance change. Code-only edits with no documentation impact are intentionally out of scope. |
+| A document is reported as unindexed | Ask r-doc to update the nearest `README.md` index and preserve the document's existing content. |
+| Existing docs conflict with code | Ask for an evidence report first; confirm which source is authoritative before changing either side. |
+| You need Chinese output | Ask for Chinese documentation or specify the target document language. Runtime rules remain in `SKILL.md`. |
+| Release checks fail | Run the repository's validation commands and inspect the reported path, link, metadata, or sensitive-content finding before retrying. |
 
 ## Installation options
 

@@ -11,25 +11,26 @@ updated: 2026-09-14
 
 ## 发布对象
 
-发布对象是 skills/r-doc/ 目录本身，目标是让其他工具能够读取其中的 SKILL.md 和支持资源。C:/Users/RiESA/.agents/skills/r-doc/ 是本机安装位置，不是发布源。
+发布对象是 skills/r-doc/ 目录本身，目标是让其他工具能够读取其中的 SKILL.md 和支持资源。`~/.agents/skills/r-doc/` 是本机安装位置，不是发布源。
 
 ## 当前版本
 
 - 版本文件：[VERSION](../../VERSION)
 - 变更记录：[CHANGELOG.md](../../CHANGELOG.md)
-- 当前基线：0.1.0，初始开发版本
+- 当前版本：0.2.0，新增安全修复、确定性验证和案例指南
 
 ## 发布步骤
 
 1. 在 skills/r-doc/ 中完成修改。
 2. 更新项目文档和 CHANGELOG.md。
-3. 更新 VERSION，以及 skills/r-doc/SKILL.md 的 metadata.version。
-4. 确认公开 GitHub 仓库结构和许可证。
-5. 按 [GitHub 与 npx skills 发布指南](github-and-npx.md) 和 [发布检查清单](release-checklist.md) 执行校验和临时项目 QA。
-6. 生成带版本号的发布包（如果目标平台需要），例如 r-doc-v0.1.0.zip；包内顶层目录固定为 r-doc/。
-7. 将验证通过的发布内容同步到全局安装目录。
-8. 验证全局副本的版本、文件树和入口文件。
-9. 发布后记录仓库地址、标签、实际包路径、校验结果和已知限制。
+3. 预览 `repair_docs.py` 的安全修复，确认没有未经审查的计划；再运行 `validate_skill.py`、`audit_docs.py --strict`、单元测试和官方 Skill 校验器。
+4. 更新 VERSION，以及 skills/r-doc/SKILL.md 的 metadata.version。
+5. 确认公开 GitHub 仓库结构和许可证。
+6. 按 [GitHub 与 npx skills 发布指南](github-and-npx.md) 和 [发布检查清单](release-checklist.md) 执行校验和临时项目 QA。
+7. 生成带版本号的发布包（如果目标平台需要），例如 r-doc-v0.2.0.zip；包内顶层目录固定为 r-doc/。
+8. 将验证通过的发布内容同步到全局安装目录。
+9. 验证全局副本的版本、文件树和入口文件。
+10. 发布后记录仓库地址、标签、实际包路径、校验结果和已知限制。
 
 ## 版本规则
 

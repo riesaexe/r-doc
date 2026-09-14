@@ -1,0 +1,18 @@
+name: quality
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: python skills/r-doc/scripts/repair_docs.py --root .
+      - run: python skills/r-doc/scripts/validate_skill.py skills/r-doc
+      - run: python skills/r-doc/scripts/audit_docs.py --root . --strict
+      - run: python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'

@@ -16,9 +16,9 @@ r-doc 由项目源副本和全局安装副本组成。项目源副本用于版�
 ## 目录关系
 
 ~~~text
-D:/AI/自建skill/skills/r-doc/
+<project-root>/skills/r-doc/
     ↓ 验证后同步
-C:/Users/RiESA/.agents/skills/r-doc/
+~/.agents/skills/r-doc/
 ~~~
 
 源副本包含 SKILL.md、agents/openai.yaml 和 references/。项目文档位于根 docs/，不复制进 Skill 包，避免把开发记录和运行时指令混在一起。
@@ -38,9 +38,11 @@ C:/Users/RiESA/.agents/skills/r-doc/
 - references/lifecycle-checklists.md：开发阶段门槛；
 - references/metadata-schema.md：文档状态和 frontmatter；
 - references/project-config.md：项目覆盖配置；
-- references/templates/：按需使用的文档模板。
+- references/templates/：按需使用的文档模板；
+- scripts/：不修改项目文件的确定性验证脚本；
+- tests/：验证脚本和临时项目行为测试。
 - assets/r-doc.svg：Skill 界面和项目 README 使用的品牌图标。
 
 ## 兼容性边界
 
-其他工具是否自动发现 C:/Users/RiESA/.agents/skills/ 取决于工具自身协议。r-doc 的核心内容保持为普通 Markdown；需要特定工具适配时，应在源项目中增加明确的适配文件，并在发布说明中记录。
+其他工具是否自动发现 ~/.agents/skills/ 取决于工具自身协议。r-doc 的核心内容保持为普通 Markdown；需要特定工具适配时，应在源项目中增加明确的适配文件，并在发布说明中记录。

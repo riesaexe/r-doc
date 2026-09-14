@@ -2,32 +2,32 @@
 id: REQ-001
 type: requirements
 status: draft
-title: 需求标题
+title: Requirement title
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 owner: team-name
 ---
 
-# 需求标题
+# Requirement title
 
-## 摘要
+## Summary
 
-用几句话说明要解决的问题和预期结果。
+Describe the problem and expected outcome in a few sentences.
 
-## 适用范围
+## Scope
 
-说明目标用户、包含范围和明确不包含的范围。
+State the target users, included scope, and explicitly excluded scope.
 
-## 约束与依赖
+## Constraints and dependencies
 
-列出技术、业务、合规、兼容性和外部依赖。
+List technical, business, compliance, compatibility, and external dependencies.
 
-## 验收标准
+## Acceptance criteria
 
-- [ ] 可观察结果一
-- [ ] 可观察结果二
+- [ ] Observable outcome one
+- [ ] Observable outcome two
 
-## 相关文档
+## Related documents
 
-- [设计文档](../design/)
-- [测试文档](../testing/)
+- [Design document](../design/)
+- [Testing document](../testing/)

@@ -4,7 +4,7 @@
 
 本项目维护可复用的 Codex Skill。当前主产品是 r-doc：用于在其他项目中建立和持续维护 AGENTS.md 与 docs/ 文档知识库。
 
-项目源文件位于 skills/，全局安装目录 C:/Users/RiESA/.agents/skills/ 只是已验证的运行副本。后续迭代必须先修改项目源文件，再通过发布流程同步安装副本。
+项目源文件位于 `skills/`，全局安装目录（例如 `~/.agents/skills/`）只是已验证的运行副本。后续迭代必须先修改项目源文件，再通过发布流程同步安装副本。
 
 ## 快速开始
 
@@ -38,12 +38,17 @@ AGENTS.md
 
 ## 常用命令
 
-在 Windows 主机上验证 Skill：
+在项目根目录验证 Skill：
 
 ~~~powershell
 $env:PYTHONUTF8 = '1'
-py C:/Users/RiESA/.codex/skills/.system/skill-creator/scripts/quick_validate.py D:/AI/自建skill/skills/r-doc
+python skills/r-doc/scripts/validate_skill.py skills/r-doc
+python skills/r-doc/scripts/repair_docs.py --root .
+python skills/r-doc/scripts/audit_docs.py --root . --strict
+python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 ~~~
+
+如果当前环境提供 Codex 的 `skill-creator` 校验器，再额外运行其 `quick_validate.py skills/r-doc`；不要把个人机器上的绝对路径写入项目文档。
 
 ## 强制规则
 
@@ -56,7 +61,7 @@ py C:/Users/RiESA/.codex/skills/.system/skill-creator/scripts/quick_validate.py 
 
 ## 禁止事项
 
-- 不在 C:/Users/RiESA/.agents/skills/r-doc/ 中直接开发。
+- 不在用户级安装目录（例如 `~/.agents/skills/r-doc/`）中直接开发。
 - 不把未经验证的源文件标记为已发布。
 - 不为了通过校验删除失败证据、测试或历史记录。
 - 不把业务代码、第三方依赖、构建产物或缓存塞入 Skill 源目录。

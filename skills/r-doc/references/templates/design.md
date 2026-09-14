@@ -2,7 +2,7 @@
 id: DES-001
 type: design
 status: proposed
-title: 技术设计标题
+title: Technical design title
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 related_code:
@@ -11,24 +11,24 @@ related_docs:
   - REQ-001
 ---
 
-# 技术设计标题
+# Technical design title
 
-## 摘要
+## Summary
 
-说明方案解决什么问题，以及它与需求的关系。
+Explain what the design solves and how it relates to the requirement.
 
-## 边界与不变量
+## Boundaries and invariants
 
-列出组件边界、数据不变量、兼容性和失败时必须保持的行为。
+List component boundaries, data invariants, compatibility, and behavior that must hold on failure.
 
-## 方案
+## Approach
 
-描述关键组件、数据流、接口和实现策略。细节过多时拆分到专门文档。
+Describe key components, data flow, interfaces, and implementation strategy. Split excessive detail into focused documents.
 
-## 备选方案与取舍
+## Alternatives and trade-offs
 
-记录重要替代方案，以及放弃它们的原因。
+Record important alternatives and why they were rejected.
 
-## 验证方式
+## Verification
 
-说明如何通过测试、检查或观测证明设计成立。
+Explain how tests, checks, or observations will prove that the design works.

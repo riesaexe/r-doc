@@ -2,26 +2,26 @@
 id: DOC-INDEX
 type: guide
 status: active
-title: 文档索引
+title: Documentation index
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ---
 
-# 文档索引
+# Documentation index
 
-## 本目录范围
+## Scope of this directory
 
-说明本目录维护的主题边界，以及不应放在这里的内容。
+Describe the topic boundary maintained here and the content that belongs elsewhere.
 
-## 推荐阅读顺序
+## Recommended reading order
 
-1. [文档一](./document-one.md)
-2. [文档二](./document-two.md)
+1. [Document one](./document-one.md)
+2. [Document two](./document-two.md)
 
-## 文档列表
+## Document list
 
-| 文档 | 用途 | 状态 |
+| Document | Purpose | Status |
 | --- | --- | --- |
-| [文档一](./document-one.md) | 简短说明 | active |
+| [Document one](./document-one.md) | Short description | active |
 
-返回：[上级索引](../README.md) · [项目入口](../../AGENTS.md)
+Return to the [parent index](../README.md) or [project entrypoint](../../AGENTS.md).

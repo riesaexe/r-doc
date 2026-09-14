@@ -2,30 +2,30 @@
 id: ADR-001
 type: adr
 status: proposed
-title: 决策标题
+title: Decision title
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 owner: team-name
 ---
 
-# 决策标题
+# Decision title
 
-## 状态
+## Status
 
 proposed
 
-## 背景
+## Context
 
-说明触发决策的问题、约束和上下文。
+Describe the problem, constraints, and context that triggered the decision.
 
-## 选项
+## Options
 
-列出实际考虑过的方案及其代价。
+List the options that were actually considered and their trade-offs.
 
-## 决定
+## Decision
 
-明确选择了什么，以及适用边界。
+State what was chosen and where it applies.
 
-## 后果
+## Consequences
 
-记录收益、代价、风险、迁移和后续维护影响。
+Record benefits, costs, risks, migration, and future maintenance impact.

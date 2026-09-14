@@ -1,84 +1,80 @@
-# r-doc 工作流程
+# r-doc workflow
 
-## 1. 确认作用域
+## 1. Confirm scope
 
-优先使用 git rev-parse --show-toplevel 确认项目根目录。若当前目录不是 Git 项目，使用用户明确的项目根目录，不要把个人目录或工作区父目录误当作项目根目录。
+Prefer `git rev-parse --show-toplevel` to identify the project root. If the current directory is not a Git project, use the project root explicitly named by the user. Do not mistake a personal directory or workspace parent for the project root.
 
-确认作用域后，先读取已有的根 AGENTS.md、docs/README.md、相关主题索引和项目级 .r-doc.yaml。不要为了了解项目而读取整个仓库；先由索引选择最小文档集合。
+After confirming scope, read the existing root `AGENTS.md`, `docs/README.md`, relevant topic indexes, and project-level `.r-doc.yaml`. Do not read the entire repository just to understand it; use indexes to select the minimum document set.
 
-## 2. 盘点文档
+## 2. Inventory documentation
 
-纳入盘点的是项目团队维护的非代码资料，包括计划、需求、设计、决策、接口、测试、发布、部署、规则、说明、流程和记录。默认排除：
+Inventory the non-code material maintained by the project team: plans, requirements, designs, decisions, interfaces, tests, releases, deployments, rules, guides, processes, and records. Exclude by default:
 
-- .git/、依赖目录、供应商目录、缓存和临时目录；
-- 构建产物、日志、覆盖率输出和完全自动生成且不可手工维护的文件；
-- 实际源代码、测试代码和脚本代码本身。
+- `.git/`, dependency, vendor, cache, and temporary directories;
+- build output, logs, coverage output, and fully generated files that are not hand-maintained;
+- source code, test code, and scripts themselves.
 
-对未知格式先登记，不要假设它可以安全编辑。二进制文档可以检查存在性、状态、索引和关联，但只有在有合适的文档工具且用户已确认时才编辑。
+Register unknown formats before editing them. Binary documents may be checked for existence, status, index coverage, and relationships, but edit them only with an appropriate document tool and user confirmation.
 
-## 3. 初始化或修复入口
+## 3. Initialize or repair entry points
 
-项目没有入口时，提出最小初始化计划，通常只创建：
+When entry points are missing, propose a minimal initialization plan, normally creating only `AGENTS.md` and `docs/README.md`. Create topic directories and documents only when the real project needs them. `AGENTS.md` should contain project navigation, common commands, mandatory rules, prohibitions, context-loading order, task or module routes, and a link to `docs/README.md`.
 
-~~~text
-AGENTS.md
-docs/
-└── README.md
-~~~
+When entry points already exist:
 
-根据真实项目内容再创建主题目录和文档，不创建空的全套目录。AGENTS.md 应包含项目导航、常用命令、强制规则、禁止事项、上下文加载顺序、任务/角色/模块路线，以及指向 docs/README.md 的链接。
+1. Preserve existing facts, constraints, and historical links;
+2. Fill missing navigation and indexes;
+3. Keep reverse links when moving detail into `docs/`;
+4. Report conflicts, duplication, or uncertain facts instead of deleting or rewriting them.
 
-已有入口时：
+## 4. Analyze change impact
 
-1. 保留原有事实、约束和历史链接；
-2. 补齐缺失的导航和索引；
-3. 把详细内容移到 docs/ 时保留反向链接；
-4. 发现冲突、重复或不确定事实时先列入报告，不直接删除或改写。
+Use the user request and Git diff to build an impact table. Check especially:
 
-## 4. 变更影响分析
+- whether public interfaces, commands, configuration, data models, or file formats affect API, design, usage, or migration documents;
+- whether behavior, process, or architecture changes affect requirements, ADRs, testing strategy, or deployment guidance;
+- whether release or delivery changes require a changelog, release notes, or operations manual update;
+- whether project rules, directory structure, or tooling changes require updates to `AGENTS.md` and indexes.
 
-根据用户任务和 Git diff 建立影响表。重点检查：
+Record related code, requirements, tests, and releases with relative paths in key topic documents. General rules may have no code relationship.
 
-- 公共接口、命令、配置、数据模型或文件格式变化是否影响 API、设计、使用说明和迁移文档；
-- 行为、流程或架构变化是否影响需求、ADR、测试策略和部署说明；
-- 发布或交付变化是否需要变更记录、发布说明或运维手册；
-- 项目规则、目录结构或工具链变化是否需要更新 AGENTS.md 和相关索引。
+## 5. Plan and confirm
 
-关键主题文档应使用相对路径记录关联代码、相关需求、测试或发布记录。通用规范可以没有代码关联。
-
-## 5. 计划和确认
-
-在修改前输出：
+Before writing, report:
 
 ~~~text
-范围：将检查或修改哪些目录和文件
-判断：哪些文档缺失、过时、重复或冲突
-计划：准备创建、更新、拆分、归档或索引哪些内容
-风险：哪些事实无法从仓库确定，哪些文件无法安全编辑
-验证：完成后如何证明入口、索引和关联关系有效
+Scope: directories and files to inspect or change
+Findings: missing, stale, duplicated, or conflicting documents
+Plan: documents to create, update, split, archive, or index
+Risks: facts not established by the repository and files that cannot be edited safely
+Verification: evidence that will prove entry points, indexes, and relationships work
 ~~~
 
-用户确认后，才执行文档写入。若只是重新检查同一任务中已确认的机械性索引、链接、日期或状态更新，不重复询问；出现新范围、新事实或高风险操作时重新暂停。
+Write only after the user confirms the plan. Do not ask again for mechanical index, link, date, or status updates that were already approved within the same task. Pause again when the scope, facts, or risk changes.
 
-## 6. 冲突和单一事实来源
+## 6. Resolve conflicts and preserve a single source of truth
 
-遇到重复或矛盾内容时，保留证据并写清：
+When facts are duplicated or inconsistent, preserve the evidence and state:
 
-- 期望行为：需求、已批准设计或用户当前要求表达的目标；
-- 当前行为：代码、测试、部署配置或现有文档实际表达的内容；
-- 冲突位置：具体文件和主题；
-- 建议来源：哪一份文档应成为规范来源，以及需要谁确认。
+- Intended behavior: the goal in requirements, an approved design, or the user's current request;
+- Current behavior: what code, tests, deployment configuration, or existing documents actually say;
+- Conflict location: the exact files and topics;
+- Proposed source: which document should become authoritative and who must confirm it.
 
-确认后，把重复内容收敛到一个主题文档，其他位置改为链接或标记为 superseded，不要无确认删除历史信息。
+After confirmation, consolidate repeated content into one topic document. Link from other locations or mark them `superseded`; do not delete historical information without confirmation.
 
-## 7. 完成检查
+## 7. Run deterministic checks
 
-完成前至少检查：
+Run `scripts/audit_docs.py --root <project-root>` after the planned updates. Use `--strict` for a merge or release gate. The helper checks entry points, nested indexes, relative links, index coverage, document metadata, duplicate IDs, and common secret patterns. If it cannot run, perform equivalent checks manually and report the limitation.
 
-1. 根 AGENTS.md 和 docs/README.md 存在且互相可达；
-2. 每个主题索引都能向上、向下导航；
-3. 索引中的文档真实存在，文档中的关键链接没有断裂；
-4. 文档状态、更新时间和关联关系与当前变更一致；
-5. 关键约束和决策没有只散落在对话或代码中；
-6. 输出中没有密钥、令牌、密码或敏感个人信息；
-7. 当前阶段的文档门槛满足，或所有未满足项已明确列出。
+## 8. Complete the governance check
+
+Before completion, verify:
+
+1. Root `AGENTS.md` and `docs/README.md` exist and are reachable from one another;
+2. Every topic index navigates upward and downward;
+3. Indexed documents exist and important links are not broken;
+4. Status, dates, and relationships match the current change;
+5. Important constraints and decisions are not left only in conversation or code;
+6. Output contains no secrets, tokens, passwords, or sensitive personal information;
+7. The current stage gate is satisfied, or every unsatisfied item is explicitly listed.

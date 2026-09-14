@@ -3,6 +3,6 @@ interface:
   short_description: "Automated project documentation governance"
   icon_small: "./assets/r-doc.svg"
   icon_large: "./assets/r-doc.svg"
-  default_prompt: "Use $r-doc to automatically initialize, audit, and maintain the project's AGENTS.md and docs/ knowledge base."
+  default_prompt: "Use $r-doc to govern the project's AGENTS.md and docs/ knowledge base, including deterministic index and link checks."
 policy:
   allow_implicit_invocation: true

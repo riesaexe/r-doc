@@ -1,3 +1,12 @@
+---
+id: REL-GITHUB-NPX-001
+type: guide
+status: active
+title: GitHub 与 npx skills 发布指南
+created: 2026-09-14
+updated: 2026-09-14
+---
+
 # GitHub 与 npx skills 发布指南
 
 ## 目标结构
@@ -11,13 +20,15 @@ Vercel Labs 的 skills CLI 通过 GitHub 或其他 Git 源安装 Skill。公开�
 │       ├── SKILL.md
 │       ├── agents/
 │       ├── references/
+│       ├── scripts/
+│       ├── tests/
 │       └── assets/
 ├── README.md
 ├── LICENSE
 └── CHANGELOG.md
 ```
 
-SKILL.md 的 frontmatter 至少包含 name 和 description。r-doc 的源目录已经符合 skills/r-doc/SKILL.md 约定。
+SKILL.md 的 frontmatter 至少包含 name 和 description。r-doc 的源目录还包含可复现的验证脚本和测试，发布时应一并保留。r-doc 的源目录已经符合 skills/r-doc/SKILL.md 约定。
 
 ## 本地发现检查
 
@@ -25,6 +36,10 @@ SKILL.md 的 frontmatter 至少包含 name 和 description。r-doc 的源目录�
 
 ```bash
 npx skills add . --list
+python skills/r-doc/scripts/validate_skill.py skills/r-doc
+python skills/r-doc/scripts/repair_docs.py --root .
+python skills/r-doc/scripts/audit_docs.py --root . --strict
+python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 ```
 
 输出中应能看到 r-doc。这个命令只用于列出发现结果，不代表已经完成公开发布。
@@ -36,7 +51,7 @@ npx skills add . --list
 1. 在本地初始化或连接 Git 仓库；
 2. 提交 skills/r-doc、README、docs、VERSION、CHANGELOG 和 LICENSE；
 3. 推送默认分支到公开 GitHub 仓库；
-4. 创建与 VERSION 一致的版本标签，例如 v0.1.0；
+4. 创建与 VERSION 一致的版本标签，例如 v0.2.0；
 5. 创建 GitHub Release，附上变更说明和必要的发布包；
 6. 从公开仓库地址执行 npx 安装验证。
 
@@ -59,6 +74,7 @@ npx skills list -g
 - CLI 能发现 r-doc；
 - 安装后目标代理能读取 r-doc/SKILL.md；
 - references/ 文件没有被遗漏；
+- scripts/ 和 tests/ 能在干净环境运行；
 - 全局安装副本与公开源版本一致。
 
 ## SkillHub 导入
