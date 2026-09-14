@@ -6,12 +6,18 @@ on:
 
 jobs:
   quality:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install -r requirements-dev.txt
       - run: python skills/r-doc/scripts/repair_docs.py --root .
       - run: python skills/r-doc/scripts/validate_skill.py skills/r-doc
       - run: python skills/r-doc/scripts/audit_docs.py --root . --strict

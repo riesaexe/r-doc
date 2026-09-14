@@ -42,6 +42,7 @@ AGENTS.md
 
 ~~~powershell
 $env:PYTHONUTF8 = '1'
+python -m pip install -r requirements-dev.txt
 python skills/r-doc/scripts/validate_skill.py skills/r-doc
 python skills/r-doc/scripts/repair_docs.py --root .
 python skills/r-doc/scripts/audit_docs.py --root . --strict

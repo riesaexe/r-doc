@@ -5,6 +5,7 @@
 From the skill source directory, run:
 
 ~~~bash
+python -m pip install -r scripts/requirements.txt
 python scripts/audit_docs.py --root <project-root>
 python scripts/audit_docs.py --root <project-root> --strict
 ~~~
@@ -26,6 +27,25 @@ The helper is read-only. It checks:
 - whether documents under `docs/` are reachable from an index;
 - supported frontmatter fields, lifecycle status, duplicate IDs, and dates;
 - common secret and token patterns.
+
+The helpers use PyYAML's safe `BaseLoader` for frontmatter mappings, nested mappings, and block lists. Malformed YAML or a non-mapping frontmatter block is reported as `frontmatter-parse`; it is not treated as an empty metadata object. PyYAML is pinned in the repository's `requirements-dev.txt` so local and CI behavior use the same parser.
+
+## Sensitive-value baseline
+
+The deterministic baseline is intentionally visible and finite. `audit_docs.py` and `validate_skill.py` currently look for:
+
+| Pattern | Finding code | Coverage boundary |
+| --- | --- | --- |
+| PEM private-key markers | `private-key-marker` | Detects the marker, not every encoded key format. |
+| AWS access keys | `aws-access-key` | Detects `AKIA`-style access-key IDs, not every AWS credential form. |
+| GitHub tokens | `github-token` | Detects classic, fine-grained, and legacy `gh*` token prefixes. |
+| Slack tokens | `slack-token` | Detects `xox*` token prefixes. |
+| Compact JWTs | `jwt` | Requires three JWT-like base64url segments. |
+| OpenAI API keys | `openai-api-key` | Detects `sk-` and `sk-proj-`-style keys of sufficient length. |
+| Database URLs with credentials | `database-connection-string` | Covers common PostgreSQL, MySQL, MariaDB, MongoDB, Redis, and AMQP URL schemes when `user:password@host` is present. |
+| Generic password assignments | `generic-password` | Detects `password`, `passwd`, or `pwd` assignments with a non-placeholder value of at least eight characters. |
+
+This is a deterministic baseline, not a complete secret scanner. Encoded, obfuscated, short, provider-specific, or placeholder values can evade it, and new patterns must be added with false-positive-aware tests. A passing audit never proves that a document contains no sensitive information.
 
 Use normal mode during exploration. Use `--strict` before merge or release so warnings also fail the command.
 

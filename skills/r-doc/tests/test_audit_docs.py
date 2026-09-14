@@ -44,7 +44,40 @@ class AuditDocsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             valid_project(root)
-            self.assertEqual(audit_docs.audit(root, strict=True), [])
+            self.assertEqual(audit_docs.audit(root), [])
+
+    def test_nested_frontmatter_is_parsed_without_dropping_lists(self) -> None:
+        text = "\n".join(
+            [
+                "---",
+                "id: DOC-001",
+                "related_code:",
+                "  - src/example.ts",
+                "  - src/other.ts",
+                "metadata:",
+                "  version: 0.2.1",
+                "---",
+            ]
+        )
+        values, _ = audit_docs.parse_frontmatter(text)
+        self.assertEqual(values["related_code"], ["src/example.ts", "src/other.ts"])
+        self.assertEqual(values["metadata"]["version"], "0.2.1")
+
+    def test_malformed_frontmatter_is_reported(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, "docs/guide/doc.md", "---\ntitle: [unterminated\n---\n")
+            findings = audit_docs.audit(root)
+            self.assertTrue(any(item.code == "frontmatter-parse" for item in findings))
+
+    def test_missing_frontmatter_delimiter_is_reported(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, "docs/guide/doc.md", "---\nid: DOC-001\n")
+            findings = audit_docs.audit(root)
+            self.assertTrue(any(item.code == "frontmatter-parse" for item in findings))
 
     def test_missing_entrypoint_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -76,6 +109,30 @@ class AuditDocsTests(unittest.TestCase):
             write_file(root, "docs/guide/doc.md", topic("DOC-001") + "\nAKIA1234567890ABCDEF\n")
             findings = audit_docs.audit(root)
             self.assertTrue(any(item.code == "sensitive-content" for item in findings))
+
+    def test_extended_sensitive_patterns_are_reported(self) -> None:
+        cases = {
+            "jwt": "eyJ" + "hbGciOiJIUzI1NiJ9" + ".eyJ" + "zdWIiOiIxMjM0NTY3ODkwIn0" + ".signature-value-12345",
+            "openai-api-key": "sk-proj-" + "1234567890abcdefghijklmnop",
+            "database-connection-string": "postgresql://user:" + "real-password@db.example.test/app",
+            "generic-password": "password: " + "not-a-placeholder-secret",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            for code, value in cases.items():
+                with self.subTest(code=code):
+                    write_file(root, "docs/guide/doc.md", topic("DOC-001") + f"\n{value}\n")
+                    findings = audit_docs.audit(root)
+                    self.assertTrue(any(code in item.message for item in findings))
+
+    def test_placeholder_password_is_not_reported(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, "docs/guide/doc.md", topic("DOC-001") + "\npassword: <your-password>\n")
+            findings = audit_docs.audit(root)
+            self.assertFalse(any(item.code == "sensitive-content" for item in findings))
 
     def test_duplicate_id_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

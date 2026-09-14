@@ -78,6 +78,16 @@ r-doc 不是一次性的文档生成器，而是开发过程中的文档治理�
 | 真实工作流指导 | 提供项目初始化、接口变更、发布审计、主题目录案例和集中式避坑指南。 | 只按当前任务加载相关 references。 |
 | 发布质量门禁 | 通过 CI、测试和可复现临时项目 QA 固化验证路径。 | 校验通过不代表未决的产品决策已经完成。 |
 
+## `0.2.1` 新增了什么
+
+这一补丁版本进一步提高确定性治理层对真实项目元数据和不同开发平台的可靠性：
+
+| 能力 | 作用 | 安全边界 |
+| --- | --- | --- |
+| 真正解析 YAML frontmatter | 使用安全 YAML 解析器处理嵌套映射和列表，并显式报告格式错误。 | 解析错误会成为审计 finding；通过审计不代表语义已获批准。 |
+| 更完整的敏感信息基线 | 在常见平台令牌之外，检查 JWT、OpenAI key、带凭据数据库连接串和通用密码赋值。 | 这是确定性基线，不是完整的密钥扫描器。 |
+| 跨平台质量门禁 | 在 Ubuntu、Windows 和固定的 Python 3.10–3.13 上运行校验。 | CI 兼容不替代项目自身运行时验证。 |
+
 对于项目维护者，推荐使用带防护的修复流程：
 
 ```text
@@ -88,6 +98,7 @@ $r-doc 先预览安全的文档结构修复，不要立即写入文件。
 源仓库也提供可执行的确定性工具：
 
 ```bash
+python -m pip install -r requirements-dev.txt
 python skills/r-doc/scripts/repair_docs.py --root .
 python skills/r-doc/scripts/repair_docs.py --root . --apply
 python skills/r-doc/scripts/audit_docs.py --root . --strict

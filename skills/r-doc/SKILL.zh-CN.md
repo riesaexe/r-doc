@@ -2,7 +2,7 @@
 name: r-doc-zh-cn-reference
 description: "面向人类维护者的 r-doc 中文参考指针；运行时加载入口始终是 SKILL.md。"
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
   runtime: "human-reference-only"
 ---
 

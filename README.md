@@ -78,6 +78,16 @@ The latest release makes documentation governance more actionable and less depen
 | Real workflow guidance | Includes initialization, API-change, release-audit, topic-directory examples, and a dedicated pitfalls guide. | Load only the references relevant to the current task. |
 | Release quality gates | Runs tests and validation in CI, with a reproducible temporary-project QA path. | A green check does not declare unresolved product decisions complete. |
 
+## What `0.2.1` adds
+
+This patch tightens the deterministic governance layer for real project metadata and multiple development platforms:
+
+| Capability | What it does | Safety boundary |
+| --- | --- | --- |
+| Real YAML frontmatter | Parses nested mappings and lists with a safe YAML loader and reports malformed frontmatter explicitly. | Parser errors are findings; a passing audit is not semantic approval. |
+| Broader secret baseline | Checks JWTs, OpenAI keys, credentialed database URLs, and generic password assignments in addition to common provider tokens. | It is a deterministic baseline, not a complete secret scanner. |
+| Cross-platform quality gate | Exercises Ubuntu and Windows on pinned Python 3.10–3.13 versions. | CI compatibility does not replace validation on a project's own runtime. |
+
 For a repository maintainer, the guarded repair flow is:
 
 ```text
@@ -88,6 +98,7 @@ Review the plan, then apply only the safe structural repairs and run a strict au
 The executable helpers are also available in the source repository:
 
 ```bash
+python -m pip install -r requirements-dev.txt
 python skills/r-doc/scripts/repair_docs.py --root .
 python skills/r-doc/scripts/repair_docs.py --root . --apply
 python skills/r-doc/scripts/audit_docs.py --root . --strict

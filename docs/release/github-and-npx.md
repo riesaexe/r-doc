@@ -35,6 +35,7 @@ SKILL.md 的 frontmatter 至少包含 name 和 description。r-doc 的源目录�
 在仓库根目录运行：
 
 ```bash
+python -m pip install -r requirements-dev.txt
 npx skills add . --list
 python skills/r-doc/scripts/validate_skill.py skills/r-doc
 python skills/r-doc/scripts/repair_docs.py --root .
@@ -51,7 +52,7 @@ python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 1. 在本地初始化或连接 Git 仓库；
 2. 提交 skills/r-doc、README、docs、VERSION、CHANGELOG 和 LICENSE；
 3. 推送默认分支到公开 GitHub 仓库；
-4. 创建与 VERSION 一致的版本标签，例如 v0.2.0；
+4. 创建与 VERSION 一致的版本标签，例如 v0.2.1；
 5. 创建 GitHub Release，附上变更说明和必要的发布包；
 6. 从公开仓库地址执行 npx 安装验证。
 

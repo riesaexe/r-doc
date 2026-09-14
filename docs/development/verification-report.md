@@ -20,7 +20,7 @@ updated: 2026-09-14
 | Skill 包结构、入口、链接和脚本语法 | `python skills/r-doc/scripts/validate_skill.py skills/r-doc` | PASS |
 | 安全结构修复预览 | `python skills/r-doc/scripts/repair_docs.py --root .` | PASS，无待写入修复 |
 | 项目文档结构、索引、链接、元数据和敏感值 | `python skills/r-doc/scripts/audit_docs.py --root . --strict` | PASS |
-| 临时项目行为场景 | `python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'` | PASS，12 tests |
+| 临时项目行为场景 | `python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'` | PASS，17 tests；覆盖嵌套 frontmatter、解析错误、扩展敏感模式和占位符排除 |
 | 官方 Skill creator 校验 | `python quick_validate.py skills/r-doc` | PASS |
 | 本地 npx skills 发现 | `npx skills add . --list` | PASS，发现 1 个 r-doc |
 | 工作树空白错误 | `git diff --check` | PASS |

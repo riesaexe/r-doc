@@ -8,6 +8,8 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from urllib.parse import unquote
 
+import yaml
+
 
 STATUS_VALUES = {"draft", "proposed", "active", "superseded", "archived"}
 SKIP_DIRECTORIES = {".git", ".venv", "node_modules", "dist", "build", "coverage"}
@@ -18,6 +20,21 @@ SECRET_PATTERNS = (
     (re.compile(r"\bgh[pousr]_[A-Za-z0-9_]{20,}\b"), "github-token"),
     (re.compile(r"\bgithub_pat_[A-Za-z0-9_]{20,}\b"), "github-token"),
     (re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{20,}\b"), "slack-token"),
+    (re.compile(r"\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b"), "jwt"),
+    (re.compile(r"\bsk-(?:proj-)?[A-Za-z0-9_-]{20,}\b"), "openai-api-key"),
+    (
+        re.compile(
+            r"\b(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\+srv)?|redis|amqp)://[^/\s:@]+:[^@\s]+@[^)\s]+"
+        ),
+        "database-connection-string",
+    ),
+    (
+        re.compile(
+            r"(?i)\b(?:password|passwd|pwd)\s*[:=]\s*['\"]?"
+            r"(?!<|your\b|example\b|sample\b|dummy\b|redacted\b|changeme\b|\*{3,})[^\s'\"]{8,}"
+        ),
+        "generic-password",
+    ),
 )
 
 
@@ -28,6 +45,10 @@ class Finding:
     path: str
     message: str
     line: int | None = None
+
+
+class FrontmatterParseError(ValueError):
+    pass
 
 
 def relative(root: Path, path: Path) -> str:
@@ -62,19 +83,21 @@ def read_text(path: Path, root: Path, findings: list[Finding]) -> str:
     return ""
 
 
-def parse_frontmatter(text: str) -> tuple[dict[str, str], int]:
+def parse_frontmatter(text: str) -> tuple[dict[str, object], int]:
     lines = text.splitlines()
     if not lines or lines[0].strip() != "---":
         return {}, 0
     end = next((index for index in range(1, len(lines)) if lines[index].strip() == "---"), -1)
     if end < 0:
-        return {}, 0
-    values: dict[str, str] = {}
-    for line in lines[1:end]:
-        if not line.strip() or line.lstrip().startswith("#") or ":" not in line:
-            continue
-        key, value = line.split(":", 1)
-        values[key.strip()] = value.strip().strip("\"'")
+        raise FrontmatterParseError("frontmatter closing delimiter is missing")
+    try:
+        values = yaml.load("\n".join(lines[1:end]), Loader=yaml.BaseLoader)
+    except yaml.YAMLError as error:
+        raise FrontmatterParseError(str(error)) from error
+    if values is None:
+        return {}, end + 1
+    if not isinstance(values, dict):
+        raise FrontmatterParseError("frontmatter must contain a YAML mapping")
     return values, end + 1
 
 
@@ -146,22 +169,27 @@ def check_metadata(root: Path, docs: Path, files: list[Path], findings: list[Fin
         if path.name == "README.md":
             continue
         text = read_text(path, root, findings)
-        values, _ = parse_frontmatter(text)
+        try:
+            values, _ = parse_frontmatter(text)
+        except FrontmatterParseError as error:
+            add(findings, "error", "frontmatter-parse", root, path, str(error))
+            continue
         if not values:
             add(findings, "warning", "metadata-missing", root, path, "topic document has no frontmatter")
             continue
         for key in ("id", "type", "status", "title", "created", "updated"):
-            if not values.get(key):
+            value = values.get(key)
+            if not isinstance(value, str) or not value.strip():
                 add(findings, "error", "metadata-field", root, path, f"missing frontmatter field: {key}")
         status = values.get("status")
-        if status and status not in STATUS_VALUES:
+        if status and (not isinstance(status, str) or status not in STATUS_VALUES):
             add(findings, "error", "metadata-status", root, path, f"unsupported status: {status}")
         for key in ("created", "updated"):
             value = values.get(key, "")
-            if value and not re.fullmatch(r"\d{4}-\d{2}-\d{2}(?:T.*)?", value):
+            if value and (not isinstance(value, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}(?:T.*)?", value)):
                 add(findings, "error", "metadata-date", root, path, f"invalid {key} date: {value}")
         identifier = values.get("id")
-        if identifier:
+        if isinstance(identifier, str) and identifier:
             if identifier in seen_ids:
                 add(findings, "error", "duplicate-id", root, path, f"ID also used by {relative(root, seen_ids[identifier])}: {identifier}")
             else:
@@ -177,7 +205,7 @@ def check_sensitive_content(root: Path, files: list[Path], findings: list[Findin
                     add(findings, "error", "sensitive-content", root, path, f"possible sensitive value ({code})", line_number)
 
 
-def audit(root: Path, strict: bool = False) -> list[Finding]:
+def audit(root: Path) -> list[Finding]:
     findings: list[Finding] = []
     root = root.resolve()
     if not root.is_dir():
@@ -195,8 +223,6 @@ def audit(root: Path, strict: bool = False) -> list[Finding]:
     check_indexes(root, docs, files, outgoing, findings)
     check_metadata(root, docs, files, findings)
     check_sensitive_content(root, check_files, findings)
-    if strict:
-        return findings
     return findings
 
 
@@ -210,7 +236,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    findings = audit(args.root, args.strict)
+    findings = audit(args.root)
     errors = [item for item in findings if item.severity == "error"]
     warnings = [item for item in findings if item.severity == "warning"]
     failed = bool(errors or (args.strict and warnings))

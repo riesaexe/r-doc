@@ -6,7 +6,7 @@ import re
 import sys
 from pathlib import Path
 
-from audit_docs import LINK_PATTERN, SECRET_PATTERNS, parse_frontmatter, target_path
+from audit_docs import FrontmatterParseError, LINK_PATTERN, SECRET_PATTERNS, parse_frontmatter, target_path
 
 
 def finding(path: Path, message: str) -> str:
@@ -20,12 +20,16 @@ def validate(skill_root: Path) -> list[str]:
     if not skill_file.is_file():
         return [finding(skill_file, "missing SKILL.md")]
     text = skill_file.read_text(encoding="utf-8")
-    values, _ = parse_frontmatter(text)
+    try:
+        values, _ = parse_frontmatter(text)
+    except FrontmatterParseError as error:
+        return [finding(skill_file, f"frontmatter parse failed: {error}")]
     if values.get("name") != skill_root.name:
         errors.append(finding(skill_file, f"frontmatter name must be {skill_root.name!r}"))
     if not values.get("description"):
         errors.append(finding(skill_file, "frontmatter description is required"))
-    if not values.get("metadata.version") and "metadata:" not in text:
+    metadata = values.get("metadata")
+    if not isinstance(metadata, dict) or not metadata.get("version"):
         errors.append(finding(skill_file, "metadata.version is required"))
     for line_number, line in enumerate(text.splitlines(), start=1):
         for match in LINK_PATTERN.finditer(line):

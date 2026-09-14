@@ -23,13 +23,14 @@ related_code:
 在项目根目录运行以下命令。脚本只读检查，不会替项目修改文档：
 
 ```bash
+python -m pip install -r requirements-dev.txt
 python skills/r-doc/scripts/validate_skill.py skills/r-doc
 python skills/r-doc/scripts/repair_docs.py --root .
 python skills/r-doc/scripts/audit_docs.py --root . --strict
 python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 ```
 
-`validate_skill.py` 检查 Skill 包的入口、UI 元数据、内部链接、脚本语法、机器特定路径和敏感值。`repair_docs.py` 默认只预览安全结构修复，只有显式 `--apply` 才写入。`audit_docs.py` 检查项目入口、嵌套索引、链接、索引覆盖、frontmatter 和敏感值。`--strict` 会把元数据缺失等警告视为失败。
+`requirements-dev.txt` 提供确定性 frontmatter 解析所需的 PyYAML。`validate_skill.py` 检查 Skill 包的入口、UI 元数据、内部链接、脚本语法、机器特定路径和敏感值。`repair_docs.py` 默认只预览安全结构修复，只有显式 `--apply` 才写入。`audit_docs.py` 使用 PyYAML 解析嵌套 frontmatter，解析错误会作为明确 finding 报告，不会静默丢弃列表；它还检查项目入口、嵌套索引、链接、索引覆盖、frontmatter 和敏感值。`--strict` 会把元数据缺失等警告视为失败。
 
 ## 验证顺序
 
