@@ -31,7 +31,9 @@ SECRET_PATTERNS = (
     (
         re.compile(
             r"(?i)\b(?:password|passwd|pwd)\s*[:=]\s*['\"]?"
-            r"(?!<|your\b|example\b|sample\b|dummy\b|redacted\b|changeme\b|\*{3,})[^\s'\"]{8,}"
+            r"(?!<|your\b|example\b|sample\b|dummy\b|redacted\b|changeme\b|"
+            r"(?:你的|请输入|请填写|请替换|示例|样例|占位符)[^\s'\"]{0,16}(?:密码|口令)|"
+            r"(?:待填写|待补充|待设置|未设置)|\*{3,})[^\s'\"]{8,}"
         ),
         "generic-password",
     ),

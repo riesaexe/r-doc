@@ -5,6 +5,11 @@ status: active
 title: r-doc 可复现验证记录
 created: 2026-09-14
 updated: 2026-09-14
+validation:
+  parser: PyYAML BaseLoader
+  scenarios:
+    - nested-mapping
+    - nested-list
 ---
 
 # r-doc 可复现验证记录
@@ -20,10 +25,22 @@ updated: 2026-09-14
 | Skill 包结构、入口、链接和脚本语法 | `python skills/r-doc/scripts/validate_skill.py skills/r-doc` | PASS |
 | 安全结构修复预览 | `python skills/r-doc/scripts/repair_docs.py --root .` | PASS，无待写入修复 |
 | 项目文档结构、索引、链接、元数据和敏感值 | `python skills/r-doc/scripts/audit_docs.py --root . --strict` | PASS |
-| 临时项目行为场景 | `python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'` | PASS，17 tests；覆盖嵌套 frontmatter、解析错误、扩展敏感模式和占位符排除 |
+| 临时项目行为场景 | `python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'` | PASS，18 tests；覆盖嵌套 frontmatter、解析错误、扩展敏感模式和中英文占位符排除 |
 | 官方 Skill creator 校验 | `python quick_validate.py skills/r-doc` | PASS |
 | 本地 npx skills 发现 | `npx skills add . --list` | PASS，发现 1 个 r-doc |
 | 工作树空白错误 | `git diff --check` | PASS |
+
+## 嵌套 frontmatter dogfood
+
+本记录自身的 `validation` 字段使用嵌套映射和列表，作为仓库真实文档对 YAML frontmatter 解析能力的 dogfood 样例。严格审计会读取并保留以下结构，而不是把它降级为扁平键值：
+
+```yaml
+validation:
+  parser: PyYAML BaseLoader
+  scenarios:
+    - nested-mapping
+    - nested-list
+```
 
 ## 覆盖的临时项目场景
 

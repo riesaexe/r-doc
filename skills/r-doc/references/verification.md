@@ -43,7 +43,7 @@ The deterministic baseline is intentionally visible and finite. `audit_docs.py` 
 | Compact JWTs | `jwt` | Requires three JWT-like base64url segments. |
 | OpenAI API keys | `openai-api-key` | Detects `sk-` and `sk-proj-`-style keys of sufficient length. |
 | Database URLs with credentials | `database-connection-string` | Covers common PostgreSQL, MySQL, MariaDB, MongoDB, Redis, and AMQP URL schemes when `user:password@host` is present. |
-| Generic password assignments | `generic-password` | Detects `password`, `passwd`, or `pwd` assignments with a non-placeholder value of at least eight characters. |
+| Generic password assignments | `generic-password` | Detects `password`, `passwd`, or `pwd` assignments with a non-placeholder value of at least eight characters; the built-in placeholder baseline includes common English markers and Chinese forms such as `你的密码`, `请输入你的密码`, `示例口令`, and `待填写`. |
 
 This is a deterministic baseline, not a complete secret scanner. Encoded, obfuscated, short, provider-specific, or placeholder values can evade it, and new patterns must be added with false-positive-aware tests. A passing audit never proves that a document contains no sensitive information.
 

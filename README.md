@@ -88,6 +88,15 @@ This patch tightens the deterministic governance layer for real project metadata
 | Broader secret baseline | Checks JWTs, OpenAI keys, credentialed database URLs, and generic password assignments in addition to common provider tokens. | It is a deterministic baseline, not a complete secret scanner. |
 | Cross-platform quality gate | Exercises Ubuntu and Windows on pinned Python 3.10–3.13 versions. | CI compatibility does not replace validation on a project's own runtime. |
 
+## What `0.2.2` adds
+
+This patch closes two small but important governance blind spots:
+
+| Capability | What it does | Safety boundary |
+| --- | --- | --- |
+| Chinese placeholder awareness | Recognizes common Chinese placeholders such as `你的密码`, `请输入你的密码`, and `示例口令` without hiding real Chinese password values. | The baseline remains finite and does not replace a full secret scanner. |
+| Self-hosted parser dogfood | Uses nested mapping and list frontmatter in r-doc's own verification record, so the repository exercises the parser it ships. | Passing the dogfood check proves parsing coverage, not semantic approval of arbitrary metadata. |
+
 For a repository maintainer, the guarded repair flow is:
 
 ```text

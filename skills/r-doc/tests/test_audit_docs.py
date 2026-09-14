@@ -55,13 +55,13 @@ class AuditDocsTests(unittest.TestCase):
                 "  - src/example.ts",
                 "  - src/other.ts",
                 "metadata:",
-                "  version: 0.2.1",
+                "  version: 0.2.2",
                 "---",
             ]
         )
         values, _ = audit_docs.parse_frontmatter(text)
         self.assertEqual(values["related_code"], ["src/example.ts", "src/other.ts"])
-        self.assertEqual(values["metadata"]["version"], "0.2.1")
+        self.assertEqual(values["metadata"]["version"], "0.2.2")
 
     def test_malformed_frontmatter_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -133,6 +133,25 @@ class AuditDocsTests(unittest.TestCase):
             write_file(root, "docs/guide/doc.md", topic("DOC-001") + "\npassword: <your-password>\n")
             findings = audit_docs.audit(root)
             self.assertFalse(any(item.code == "sensitive-content" for item in findings))
+
+    def test_chinese_placeholder_password_is_not_reported(self) -> None:
+        cases = [
+            "password: 你的数据库密码",
+            "passwd: 请输入你的密码",
+            "pwd: 示例口令",
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            for value in cases:
+                with self.subTest(value=value):
+                    write_file(root, "docs/guide/doc.md", topic("DOC-001") + f"\n{value}\n")
+                    findings = audit_docs.audit(root)
+                    self.assertFalse(any("generic-password" in item.message for item in findings))
+
+            write_file(root, "docs/guide/doc.md", topic("DOC-001") + "\npassword: 这是一个真实的生产口令\n")
+            findings = audit_docs.audit(root)
+            self.assertTrue(any("generic-password" in item.message for item in findings))
 
     def test_duplicate_id_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
