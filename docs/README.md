@@ -10,7 +10,8 @@
 2. [开发文档索引](development/README.md)
 3. [发布指南](release/README.md)
 4. [GitHub 与 npx skills 发布指南](release/github-and-npx.md)
-5. [发布检查清单](release/release-checklist.md)
+5. [版本迁移总览](../skills/r-doc/references/migration-matrix.md)
+6. [发布检查清单](release/release-checklist.md)
 
 ## 文档列表
 
@@ -23,6 +24,7 @@
 | [可复现验证记录](development/verification-report.md) | 当前源副本的验证证据和限制 | active |
 | [发布指南](release/README.md) | 版本和发布流程 | active |
 | [GitHub 与 npx skills 发布指南](release/github-and-npx.md) | 公开仓库、安装和 SkillHub 导入 | active |
+| [版本迁移总览](../skills/r-doc/references/migration-matrix.md) | r-doc 审计行为变化与升级步骤 | active |
 | [发布检查清单](release/release-checklist.md) | 发布前逐项核对 | active |
 
 返回：[项目入口](../AGENTS.md)

@@ -17,7 +17,7 @@ updated: 2026-09-15
 
 - 版本文件：[VERSION](../../VERSION)
 - 变更记录：[CHANGELOG.md](../../CHANGELOG.md)
-- 当前版本：0.2.6，补充上下文感知链接解析、Markdown 锚点校验、项目级敏感值示例白名单和 planned_code 规划元数据
+- 当前版本：0.2.7，补充 GitHub-compatible 锚点、可见白名单证据、配置/迁移总览和 Agent 评测证据校验器
 
 ## 发布步骤
 
@@ -27,7 +27,7 @@ updated: 2026-09-15
 4. 更新 VERSION，以及 skills/r-doc/SKILL.md 的 metadata.version。
 5. 确认公开 GitHub 仓库结构和许可证。
 6. 按 [GitHub 与 npx skills 发布指南](github-and-npx.md) 和 [发布检查清单](release-checklist.md) 执行校验和临时项目 QA。
-7. 生成带版本号的发布包（如果目标平台需要），例如 r-doc-v0.2.6.zip；包内顶层目录固定为 r-doc/。
+7. 生成带版本号的发布包（如果目标平台需要），例如 r-doc-v0.2.7.zip；包内顶层目录固定为 r-doc/。
 8. 将验证通过的发布内容同步到全局安装目录。
 9. 验证全局副本的版本、文件树和入口文件。
 10. 发布后记录仓库地址、标签、实际包路径、校验结果和已知限制。
@@ -39,6 +39,10 @@ updated: 2026-09-15
 - MAJOR：改变默认工作流、门槛、状态语义或破坏既有配置。
 
 未完成发布验证前，版本保持在 Unreleased，不把未经验证的副本称为正式发布。
+
+## 升级策略
+
+0.2.x 的补丁版本也可能收紧确定性审计覆盖，因此采用者应将精确标签固定在 CI 中，并在升级前执行预览和严格审计。完整的逐版本行为变化、风险和迁移动作见 [版本迁移总览](../../skills/r-doc/references/migration-matrix.md)。
 
 ## SkillHub 流程
 

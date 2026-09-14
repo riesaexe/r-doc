@@ -92,6 +92,18 @@ class ConfigAndSensitiveTests(unittest.TestCase):
             write_file(root, ".r-doc.yaml", f"sensitive_allowlist:\n  google-api-key:\n    - {sample_key}\n")
             findings = audit_docs.audit(root)
             self.assertFalse(any(item.code == "sensitive-content" for item in findings))
+            self.assertTrue(any(item.code == "allowlisted-sensitive-example" for item in findings))
+
+    def test_root_exclude_applies_to_readme_but_not_agents(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, "README.md", "[Missing](readme-missing.md)\n")
+            write_file(root, "AGENTS.md", "# Entry\n\n[Missing](agents-missing.md)\n")
+            write_file(root, ".r-doc.yaml", "exclude:\n  - README.md\n  - AGENTS.md\n")
+            findings = audit_docs.audit(root)
+            self.assertFalse(any(item.code == "broken-link" and item.path == "README.md" for item in findings))
+            self.assertTrue(any(item.code == "broken-link" and item.path == "AGENTS.md" for item in findings))
 
     def test_invalid_sensitive_allowlist_code_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

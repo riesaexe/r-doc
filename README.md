@@ -137,6 +137,19 @@ This release hardens the audit boundary against false positives and project-spec
 
 The release is backed by 45 regression tests, package validation, repair-preview, strict-audit, and the official Skill validator.
 
+## What `0.2.7` adds
+
+This release closes the remaining edge cases from the v0.2.6 adversarial review and makes adoption evidence easier to verify:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| GitHub-compatible anchors | Checks ATX and Setext headings, CJK text, punctuation, consecutive spaces, duplicate-heading suffixes, and explicit HTML `name`/`id` anchors. | The contract is GitHub-compatible; renderer-specific slug rules are not guessed. |
+| Visible allowlist evidence | Keeps exact `sensitive_allowlist` matches as informational findings instead of silently hiding them. | Allowlist values must be reviewed public examples, never real credentials. |
+| Configuration and migration clarity | Documents all eight project configuration fields, separates frontmatter `planned_code`, and adds a version migration matrix. | Upgrade notes do not rewrite project content automatically. |
+| Executable agent-evaluation evidence | Adds five scenario definitions and a validator for prompts, file traces, diffs, reports, commands, and scorecard results. | The validator checks supplied evidence; it does not fabricate model traces. |
+
+The release is backed by 50 regression tests, package validation, repair-preview, strict-audit, the official Skill validator, and the executable evaluation-evidence path.
+
 ## What `0.2.4` adds
 
 This hardening release closes the remaining small gaps identified after `0.2.3`:

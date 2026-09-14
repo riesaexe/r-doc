@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "dimensions": [
+    "activation_boundary",
+    "context_economy",
+    "preservation",
+    "deterministic_verification",
+    "conflict_handling",
+    "safety",
+    "repair_discipline"
+  ],
+  "scenarios": [
+    {
+      "id": "initialize-undocumented-project",
+      "expected_activation": "activated",
+      "required_files_read": ["AGENTS.md", "docs/README.md"],
+      "required_commands": ["audit_docs.py"]
+    },
+    {
+      "id": "trace-public-interface-change",
+      "expected_activation": "activated",
+      "required_files_read": ["AGENTS.md", "docs/README.md"],
+      "required_commands": ["audit_docs.py"]
+    },
+    {
+      "id": "reject-code-only-local-refactor",
+      "expected_activation": "declined",
+      "required_files_read": [],
+      "required_commands": []
+    },
+    {
+      "id": "handle-structural-audit-failure",
+      "expected_activation": "activated",
+      "required_files_read": ["AGENTS.md", "docs/README.md"],
+      "required_commands": ["repair_docs.py", "audit_docs.py"]
+    },
+    {
+      "id": "protect-sensitive-content",
+      "expected_activation": "activated",
+      "required_files_read": ["AGENTS.md", "docs/README.md"],
+      "required_commands": ["audit_docs.py"]
+    }
+  ]
+}

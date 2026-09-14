@@ -25,6 +25,7 @@ The helper is read-only. It checks:
 - directly maintained Markdown files in the project root, such as `README.md`, `CONTRIBUTING.md`, and `SECURITY.md`, for links and sensitive values; `README.md` is included by default, and `exclude` applies to these root files as well; metadata and index coverage remain scoped to the configured documentation root;
 - `README.md` indexes for documentation subdirectories;
 - relative, reference-style, parenthesized, and image Markdown links, missing targets, missing Markdown anchors, and resolved paths that escape the project root; fenced code blocks, inline code spans, and HTML comments are excluded from link parsing; unused reference definitions are checked for target existence but do not create navigation edges;
+- GitHub-compatible anchor targets from ATX and Setext headings, duplicate heading suffixes, Unicode/CJK text, punctuation and consecutive-space cases, plus explicit `<a name="...">` and `<a id="...">` anchors; renderer-specific anchor rules outside this contract are not inferred;
 - whether documents under the configured documentation root are reachable from an index;
 - supported frontmatter fields, lifecycle status, duplicate IDs, dates, titles, relationship IDs, existing `related_code` files, non-existent-but-in-root `planned_code` paths, supersession successors and successor links, and configured document-type requirements;
 - project configuration, including duplicate files, invalid fields, configured stage names, stage gates, exclusions, and custom documentation roots;
@@ -48,13 +49,13 @@ The deterministic baseline is intentionally visible and finite. `audit_docs.py` 
 | Database URLs with credentials | `database-connection-string` | Covers common PostgreSQL, MySQL, MariaDB, MongoDB, Redis, and AMQP URL schemes when `user:password@host` is present. |
 | Generic password assignments | `generic-password` | Detects `password`, `passwd`, or `pwd` assignments with a non-placeholder value of at least eight characters; the built-in placeholder baseline includes common English markers and Chinese forms such as `你的密码`, `请输入你的密码`, `示例口令`, and `待填写`. |
 
-This is a deterministic baseline, not a complete secret scanner. Link parsing excludes fenced code, but sensitive-value scanning still scans fenced code because real credentials can be copied into configuration examples. The exact public AWS documentation sample `AKIAIOSFODNN7EXAMPLE` is built in. Projects may add exact, provider-documented examples under `sensitive_allowlist` in `.r-doc.yaml`; the key must be a supported detector code and the value must be an exact string, not a regular expression. Treat this configuration as a reviewed security exception and never use it for a real credential. Encoded, obfuscated, short, provider-specific, or placeholder values can evade the baseline, and new patterns must be added with false-positive-aware tests. A passing audit never proves that a document contains no sensitive information.
+This is a deterministic baseline, not a complete secret scanner. Link parsing excludes fenced code, but sensitive-value scanning still scans fenced code because real credentials can be copied into configuration examples. The exact public AWS documentation sample `AKIAIOS7FODNN7EXAMPLE` is built in. Projects may add exact, provider-documented examples under `sensitive_allowlist` in `.r-doc.yaml`; the key must be a supported detector code and the value must be an exact string, not a regular expression. Each match is retained as an informational `allowlisted-sensitive-example` finding so the exception remains visible in audit evidence. Treat this configuration as a reviewed security exception and never use it for a real credential. Encoded, obfuscated, short, provider-specific, or placeholder values can evade the baseline, and new patterns must be added with false-positive-aware tests. A passing audit never proves that a document contains no sensitive information.
 
 Use normal mode during exploration. Use `--strict` before merge or release so warnings also fail the command.
 
 ## Migrating an existing project
 
-The bidirectional navigation rule is intentional. After adopting the 0.2.3 governance checks, an existing project may newly report `missing-navigation-link` when `docs/README.md` does not link back to `AGENTS.md`, or when a nested `README.md` does not link to its parent index. This is an adaptation requirement, not a content rewrite requirement.
+The bidirectional navigation rule is intentional. After adopting the 0.2.3 governance checks, an existing project may newly report `missing-navigation-link` when `docs/README.md` does not link back to `AGENTS.md`, or when a nested `README.md` does not link to its parent index. This is an adaptation requirement, not a content rewrite requirement. For the complete behavior-change history from 0.2.0 through the current release, read [migration-matrix.md](migration-matrix.md).
 
 For a safe migration:
 
@@ -75,7 +76,7 @@ The deterministic checks currently cover:
 | Navigation and coverage | Root entrypoint/index bidirectionality, strict parent-to-direct-child index links, index coverage, missing indexes, safe canonical paths, and root Markdown exclusion behavior. Images and unused reference definitions are validation targets, not navigation edges. |
 | Markdown links | Inline, reference-style, parenthesized, image, broken, broken-anchor, unused-definition, and project-root-escaping targets, with code/comment masking for link syntax. |
 | Metadata relationships | IDs, title/H1 consistency, ISO dates and ordering, review dates, `related_docs`, `supersedes`, existing `related_code` files, in-root `planned_code` paths, and superseded-document successor links. |
-| Sensitive content | The finite token, credential, JWT, Google API key, database URL, password baseline, built-in AWS sample exception, and project-configured exact examples documented below. |
+| Sensitive content | The finite token, credential, JWT, Google API key, database URL, password baseline, built-in AWS sample exception, project-configured exact examples, and visible allowlist evidence documented below. |
 
 ## Validate the skill package
 
@@ -97,11 +98,12 @@ The bundled tests create isolated temporary projects and cover:
 4. a broken image, an unused reference definition, an unindexed document, and an excluded generated directory;
 5. root-level Markdown link and sensitive-content checks, including root exclusions and default README scanning;
 6. links inside fenced code, inline code, and HTML comments, plus valid and missing Markdown anchors;
-7. suspicious secret patterns, the allowlisted AWS documentation example, and a project-specific exact allowlist;
+7. suspicious secret patterns, the allowlisted AWS documentation example, a project-specific exact allowlist, and visible informational evidence for allowlisted matches;
 8. a duplicate document ID;
 9. invalid and custom project configuration, invalid stage names, stage gates, required types, and type relationships;
 10. metadata title, date-order, related-document, existing-code-target, planned-code, and supersession-successor checks;
-11. a non-mutating repair preview, idempotent apply, strict direct-child index routes, missing index routes, and concurrent-change refusal.
+11. GitHub-compatible ATX/Setext/CJK/duplicate/custom-anchor fragment checks;
+12. a non-mutating repair preview, idempotent apply, strict direct-child index routes, missing index routes, and concurrent-change refusal.
 
 Run them with:
 

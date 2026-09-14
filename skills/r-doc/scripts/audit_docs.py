@@ -4,7 +4,6 @@ import argparse
 import json
 import re
 import sys
-import unicodedata
 from dataclasses import asdict, dataclass
 from datetime import date, datetime
 from pathlib import Path, PurePosixPath, PureWindowsPath
@@ -548,29 +547,51 @@ def _anchor_slug(value: str) -> str:
     value = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", value)
     value = re.sub(r"`([^`]+)`", r"\1", value)
     value = re.sub(r"<[^>]+>", "", value)
-    value = unicodedata.normalize("NFKC", value).casefold()
-    value = re.sub(r"[^\w\s-]", "", value, flags=re.UNICODE)
-    return re.sub(r"[-\s]+", "-", value).strip("-")
+    value = value.lower()
+    value = re.sub(r"[^\w -]", "", value, flags=re.UNICODE)
+    return value.replace(" ", "-")
 
 
 def markdown_anchors(path: Path, root: Path, findings: list[Finding]) -> set[str]:
     text = read_text(path, root, findings)
     lexical_lines = mask_markdown_non_link_regions(text).splitlines()
+    original_lines = text.splitlines()
     anchors: set[str] = set()
     counts: dict[str, int] = {}
-    for line, lexical_line in zip(text.splitlines(), lexical_lines):
-        if not lexical_line.strip():
-            continue
-        lexical_match = re.match(r"^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$", lexical_line)
-        original_match = re.match(r"^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$", line)
-        if not lexical_match or not original_match:
-            continue
-        slug = _anchor_slug(original_match.group(1))
+
+    def register_heading(value: str) -> None:
+        slug = _anchor_slug(value)
         if not slug:
-            continue
+            return
         index = counts.get(slug, 0)
         counts[slug] = index + 1
         anchors.add(slug if index == 0 else f"{slug}-{index}")
+
+    try:
+        _, frontmatter_end = parse_frontmatter(text)
+    except FrontmatterParseError:
+        frontmatter_end = 0
+    for index, (line, lexical_line) in enumerate(zip(original_lines, lexical_lines)):
+        if index < frontmatter_end or not lexical_line.strip():
+            continue
+        lexical_match = re.match(r"^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$", lexical_line)
+        original_match = re.match(r"^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$", line)
+        if lexical_match and original_match:
+            register_heading(original_match.group(1))
+            continue
+        if index + 1 >= len(lexical_lines) or not line.strip():
+            continue
+        if re.match(r"^\s{0,3}(?:=+|-+)\s*$", lexical_lines[index + 1]):
+            register_heading(line.strip())
+
+    anchor_pattern = re.compile(
+        r"<a\b[^>]*?\b(?:id|name)\s*=\s*(?:\"([^\"]+)\"|'([^']+)'|([^\s>]+))[^>]*>",
+        flags=re.IGNORECASE,
+    )
+    lexical_text = mask_markdown_non_link_regions(text)
+    for match in anchor_pattern.finditer(lexical_text):
+        value = next(group for group in match.groups() if group is not None)
+        anchors.add(value)
     return anchors
 
 
@@ -595,8 +616,8 @@ def check_links(root: Path, files: list[Path], findings: list[Finding]) -> dict[
             elif reference.fragment and canonical.suffix.lower() == ".md":
                 anchors = markdown_anchors(canonical, root, findings)
                 normalized_fragment = _anchor_slug(reference.fragment)
-                normalized_anchors = {anchor.casefold() for anchor in anchors}
-                if reference.fragment.casefold() not in normalized_anchors and normalized_fragment.casefold() not in normalized_anchors:
+                normalized_anchors = {anchor.lower() for anchor in anchors}
+                if reference.fragment.lower() not in normalized_anchors and normalized_fragment.lower() not in normalized_anchors:
                     add(findings, "error", "broken-anchor", root, path, f"anchor does not exist: {target.raw_target}", target.line)
             if not target.is_image and not target.is_definition and not reference.fragment_only:
                 targets.add(canonical)
@@ -817,7 +838,19 @@ def check_sensitive_content(
         text = read_text(path, root, findings)
         for line_number, line in enumerate(text.splitlines(), start=1):
             for pattern, code in SECRET_PATTERNS:
-                if any(not is_safe_example(code, match.group(0), config.sensitive_allowlist if config else None) for match in pattern.finditer(line)):
+                matches = list(pattern.finditer(line))
+                allowlist = config.sensitive_allowlist if config else None
+                if any(is_safe_example(code, match.group(0), allowlist) for match in matches):
+                    add(
+                        findings,
+                        "info",
+                        "allowlisted-sensitive-example",
+                        root,
+                        path,
+                        f"reviewed example matched sensitive detector ({code}); value was not recorded",
+                        line_number,
+                    )
+                if any(not is_safe_example(code, match.group(0), allowlist) for match in matches):
                     add(findings, "error", "sensitive-content", root, path, f"possible sensitive value ({code})", line_number)
 
 

@@ -50,8 +50,8 @@ def validate(skill_root: Path) -> list[str]:
         if reference is not None and reference.fragment and target is not None and target.suffix.lower() == ".md":
             anchors = markdown_anchors(target, skill_root, [])
             normalized_fragment = _anchor_slug(reference.fragment)
-            normalized_anchors = {anchor.casefold() for anchor in anchors}
-            if reference.fragment.casefold() not in normalized_anchors and normalized_fragment.casefold() not in normalized_anchors:
+            normalized_anchors = {anchor.lower() for anchor in anchors}
+            if reference.fragment.lower() not in normalized_anchors and normalized_fragment.lower() not in normalized_anchors:
                 errors.append(finding(skill_file, f"line {markdown_target.line}: missing linked anchor {markdown_target.raw_target}"))
     ui_file = skill_root / "agents" / "openai.yaml"
     if not ui_file.is_file():

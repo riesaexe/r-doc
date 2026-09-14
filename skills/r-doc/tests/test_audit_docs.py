@@ -62,6 +62,35 @@ class AuditDocsTests(unittest.TestCase):
             self.assertTrue(any(item.code == "broken-anchor" for item in findings))
             self.assertFalse(any(item.code == "broken-link" for item in findings))
 
+    def test_github_anchor_rules_cover_cjk_spacing_duplicates_setext_and_html(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            content = topic("DOC-001") + "\n".join(
+                [
+                    "",
+                    "## 目标小节",
+                    "## API & 设计",
+                    "## API & 设计",
+                    "",
+                    "Setext Title",
+                    "============",
+                    "",
+                    '<a name="custom-anchor"></a>',
+                    "<a id='custom-id'></a>",
+                    "",
+                    "[CJK](#目标小节)",
+                    "[Punctuation](#api--设计)",
+                    "[Duplicate](#api--设计-1)",
+                    "[Setext](#setext-title)",
+                    "[Name](#custom-anchor)",
+                    "[ID](#custom-id)",
+                ]
+            )
+            write_file(root, "docs/guide/doc.md", content)
+            findings = audit_docs.audit(root)
+            self.assertFalse(any(item.code == "broken-anchor" for item in findings))
+
     def test_unindexed_document_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

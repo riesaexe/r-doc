@@ -19,6 +19,7 @@ updated: 2026-09-14
 - [ ] 模板没有真实密钥或敏感示例
 - [ ] references/、scripts/ 和 tests/ 的中英文入口与目录结构一致
 - [ ] `validate_skill.py`、`audit_docs.py --strict` 和单元测试通过
+- [ ] Agent 行为评测证据通过 `evaluate_agent.py --strict --json` 校验，且证据不含敏感值
 - [ ] `repair_docs.py` 的默认预览没有未经确认的待写入修复
 - [ ] 根 README 的 GitHub 和 npx skills 安装命令已更新为实际仓库地址
 - [ ] LICENSE 已选择并提交

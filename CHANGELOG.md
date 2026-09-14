@@ -2,6 +2,13 @@
 
 本文件记录 r-doc 的用户可见变化。
 
+## [0.2.7] - 2026-09-15
+
+- 将 Markdown 锚点校验扩展为 GitHub-compatible 的 ATX/Setext 标题、CJK/连续空格/标点边界、重复标题后缀和显式 HTML `name`/`id` 锚点，并加入对应回归测试。
+- 让 `sensitive_allowlist` 的命中保留为 informational finding，补充八个项目配置字段的完整矩阵、`planned_code` 的 frontmatter 归属说明和根目录 `exclude` 测试证据。
+- 增加跨版本迁移总览和可执行的 Agent 评测证据校验器，明确快速补丁版本可能新增审计发现的升级策略。
+- 将临时项目回归测试扩展到 50 个，并通过 Skill 包、官方 Skill Creator、修复预览和严格审计门禁。
+
 ## [0.2.6] - 2026-09-15
 
 - 让 Markdown 链接解析忽略 fenced code、行内代码和 HTML 注释，同时继续扫描 fenced code 中的敏感值；新增 Markdown fragment/anchor 存在性校验。

@@ -43,13 +43,31 @@ sensitive_allowlist:
 
 Optional fields:
 
-- `project_type`: `auto` or a project-type name; use it to override automatic detection;
+- `version`: configuration schema version; currently only `1` is accepted;
+- `project_type`: `auto` or a project-type name; it is validated as a project convention and does not replace the document-type rules below;
 - `docs_root`: the documentation root, defaulting to `docs`;
 - `required_document_types`: document types explicitly required by the project;
 - `exclude`: additional directory or file patterns to exclude;
 - `gates`: stage strength such as `advisory`, `audit`, or `blocking`; a `--stage` value that is not configured is an `invalid-stage` error rather than a passing no-op;
-- `relationships.require_for`: minimum relationships between document types.
+- `relationships.require_for`: minimum relationships between document types;
 - `sensitive_allowlist`: exact, reviewed provider-documentation examples keyed by a supported detector code; values are literal strings, never regular expressions, and must not be real credentials.
+
+## Supported field matrix
+
+The recommended shape above is intentionally complete: the audit recognizes eight top-level fields. The first two protect configuration compatibility and describe project conventions; the remaining six affect document discovery or audit behavior.
+
+| Field | Deterministic effect | Typical location |
+| --- | --- | --- |
+| `version` | Rejects unsupported configuration schema versions. | `.r-doc.yaml` |
+| `project_type` | Validates the project-type value; it does not silently change required checks. | `.r-doc.yaml` |
+| `docs_root` | Selects the documentation root used by audit and repair. | `.r-doc.yaml` |
+| `required_document_types` | Requires at least one topic document of each listed type. | `.r-doc.yaml` |
+| `exclude` | Excludes matching files/directories from scanning and coverage, including directly maintained root Markdown; `AGENTS.md` remains mandatory. | `.r-doc.yaml` |
+| `gates` | Maps `--stage` names to `advisory`, `audit`, or `blocking` behavior. | `.r-doc.yaml` |
+| `relationships.require_for` | Requires configured `related_docs` edges between document types. | `.r-doc.yaml` |
+| `sensitive_allowlist` | Allows only exact, reviewed public examples for named detectors and emits an informational audit record when one matches. | `.r-doc.yaml` |
+
+`planned_code` is deliberately not a configuration field. It belongs in a topic document's frontmatter because it describes that document's planned code relationship. Use `planned_code` for an in-root path that may not exist yet; use `related_code` only for an existing file. See [metadata-schema.md](metadata-schema.md).
 
 ## Executed fields
 
@@ -61,6 +79,6 @@ The helpers execute these fields rather than treating them as descriptive metada
 - `required_document_types` requires at least one topic document of each listed type;
 - `gates` maps a `--stage <name>` invocation to `advisory`, `audit`, or `blocking`; the latter two treat warnings as failures;
 - `relationships.require_for` requires a source document's `related_docs` to include at least one document of each configured target type.
-- `sensitive_allowlist` suppresses only exact matching values for the named detector; it cannot disable a detector or turn a malformed configuration into a pass.
+- `sensitive_allowlist` records an informational finding for each exact matching value and suppresses only the corresponding error; it cannot disable a detector or turn a malformed configuration into a pass. Use it only for public, unusable, provider-documented examples, never for credentials.
 
 The path and list fields must be relative, non-empty, and type-correct. Report unknown fields and invalid configuration, then continue audit checks with safe defaults. Do not treat a configuration error as a passing audit.
