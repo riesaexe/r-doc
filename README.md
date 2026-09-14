@@ -67,6 +67,34 @@ r-doc is not a one-off document generator. It is a governance layer for the deve
 
 > Define the standard before the change. Record facts before making judgments. Surface conflicts before they become history.
 
+## What `0.2.0` adds
+
+The latest release makes documentation governance more actionable and less dependent on an agent remembering every rule:
+
+| Capability | What it does | Safety boundary |
+| --- | --- | --- |
+| Safe structural repair | Previews and, after confirmation, creates missing entrypoints, nested indexes, and missing index links. | Never overwrites, deletes, moves, or guesses through a conflict. |
+| Deterministic checks | Audits links, index coverage, metadata, duplicate IDs, sensitive-value patterns, and Skill package structure. | Structural checks do not replace semantic review. |
+| Real workflow guidance | Includes initialization, API-change, release-audit, topic-directory examples, and a dedicated pitfalls guide. | Load only the references relevant to the current task. |
+| Release quality gates | Runs tests and validation in CI, with a reproducible temporary-project QA path. | A green check does not declare unresolved product decisions complete. |
+
+For a repository maintainer, the guarded repair flow is:
+
+```text
+$r-doc Preview safe documentation repairs. Do not write files yet.
+Review the plan, then apply only the safe structural repairs and run a strict audit.
+```
+
+The executable helpers are also available in the source repository:
+
+```bash
+python skills/r-doc/scripts/repair_docs.py --root .
+python skills/r-doc/scripts/repair_docs.py --root . --apply
+python skills/r-doc/scripts/audit_docs.py --root . --strict
+```
+
+Read the [safe repair guide](skills/r-doc/references/repair.md), [practical examples](skills/r-doc/references/examples.md), and [common pitfalls](skills/r-doc/references/pitfalls.md) for the full boundaries.
+
 ## Why r-doc
 
 | Governance principle   | How r-doc applies it                                                                                                                                                              |

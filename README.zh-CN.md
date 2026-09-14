@@ -67,6 +67,34 @@ r-doc 不是一次性的文档生成器，而是开发过程中的文档治理�
 
 > 先建立规范，再推动变更；先记录事实，再做判断；发现冲突，暂停确认。
 
+## `0.2.0` 新增了什么
+
+这一版让文档治理更可执行，也降低了对 AI 代理“记住全部规则”的依赖：
+
+| 能力 | 作用 | 安全边界 |
+| --- | --- | --- |
+| 安全结构修复 | 预览并在确认后补齐缺失入口、嵌套索引和索引链接。 | 不覆盖、删除、移动文件，也不猜测解决冲突。 |
+| 确定性校验 | 检查链接、索引覆盖、元数据、重复 ID、敏感值模式和 Skill 包结构。 | 结构校验不能替代语义审查。 |
+| 真实工作流指导 | 提供项目初始化、接口变更、发布审计、主题目录案例和集中式避坑指南。 | 只按当前任务加载相关 references。 |
+| 发布质量门禁 | 通过 CI、测试和可复现临时项目 QA 固化验证路径。 | 校验通过不代表未决的产品决策已经完成。 |
+
+对于项目维护者，推荐使用带防护的修复流程：
+
+```text
+$r-doc 先预览安全的文档结构修复，不要立即写入文件。
+我确认计划后，再只应用安全修复，并运行严格审计。
+```
+
+源仓库也提供可执行的确定性工具：
+
+```bash
+python skills/r-doc/scripts/repair_docs.py --root .
+python skills/r-doc/scripts/repair_docs.py --root . --apply
+python skills/r-doc/scripts/audit_docs.py --root . --strict
+```
+
+完整边界请阅读[安全修复指南](skills/r-doc/references/repair.md)、[实际案例](skills/r-doc/references/examples.md)和[常见避坑指南](skills/r-doc/references/pitfalls.md)。
+
 ## 为什么是 r-doc
 
 | 治理原则       | r-doc 的做法                                                                                                  |
