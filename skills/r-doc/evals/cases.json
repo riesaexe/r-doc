@@ -34,11 +34,29 @@
       "required_files_read": ["AGENTS.md", "docs/README.md"],
       "required_commands": ["repair_docs.py", "audit_docs.py"]
     },
+   {
+     "id": "protect-sensitive-content",
+     "expected_activation": "activated",
+     "required_files_read": ["AGENTS.md", "docs/README.md"],
+     "required_commands": ["audit_docs.py"]
+    },
     {
-      "id": "protect-sensitive-content",
+      "id": "apply-configuration-driven-governance",
+      "expected_activation": "activated",
+      "required_files_read": ["AGENTS.md", "docs/README.md", ".r-doc.yaml"],
+      "required_commands": ["audit_docs.py"]
+    },
+    {
+      "id": "close-superseded-document-chain",
       "expected_activation": "activated",
       "required_files_read": ["AGENTS.md", "docs/README.md"],
       "required_commands": ["audit_docs.py"]
-    }
-  ]
+    },
+    {
+      "id": "validate-markdown-anchor",
+      "expected_activation": "activated",
+      "required_files_read": ["AGENTS.md", "docs/README.md"],
+      "required_commands": ["audit_docs.py"]
+   }
+ ]
 }

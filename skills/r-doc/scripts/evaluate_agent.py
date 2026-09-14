@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from audit_docs import SECRET_PATTERNS, is_safe_example
+from rdoc.security import SECRET_PATTERNS, is_safe_example
 
 
 SCORE_VALUES = {"pass": 1.0, "partial": 0.5, "fail": 0.0}

@@ -25,13 +25,15 @@ The helper is read-only. It checks:
 - directly maintained Markdown files in the project root, such as `README.md`, `CONTRIBUTING.md`, and `SECURITY.md`, for links and sensitive values; `README.md` is included by default, and `exclude` applies to these root files as well; metadata and index coverage remain scoped to the configured documentation root;
 - `README.md` indexes for documentation subdirectories;
 - relative, reference-style, parenthesized, and image Markdown links, missing targets, missing Markdown anchors, and resolved paths that escape the project root; fenced code blocks, inline code spans, and HTML comments are excluded from link parsing; unused reference definitions are checked for target existence but do not create navigation edges;
-- GitHub-compatible anchor targets from ATX and Setext headings, duplicate heading suffixes, Unicode/CJK text, punctuation and consecutive-space cases, plus explicit `<a name="...">` and `<a id="...">` anchors; renderer-specific anchor rules outside this contract are not inferred;
+- GitHub-compatible anchor targets from ATX and Setext headings, duplicate heading suffixes, Unicode/CJK text, preserved emoji code points, punctuation and consecutive-space cases, plus explicit `<a name="...">` and `<a id="...">` anchors; renderer-specific anchor rules outside this contract are not inferred;
 - whether documents under the configured documentation root are reachable from an index;
 - supported frontmatter fields, lifecycle status, duplicate IDs, dates, titles, relationship IDs, existing `related_code` files, non-existent-but-in-root `planned_code` paths, supersession successors and successor links, and configured document-type requirements;
 - project configuration, including duplicate files, invalid fields, configured stage names, stage gates, exclusions, and custom documentation roots;
 - common secret and token patterns.
 
 The helpers use PyYAML's safe `BaseLoader` for frontmatter mappings, nested mappings, and block lists. Malformed YAML or a non-mapping frontmatter block is reported as `frontmatter-parse`; it is not treated as an empty metadata object. PyYAML is pinned in the repository's `requirements-dev.txt` so local and CI behavior use the same parser.
+
+Shared deterministic primitives live in `scripts/rdoc/`: configuration loading, finding models, sensitive-value detectors, Markdown target parsing, and anchor generation. The command wrappers remain thin entrypoints so audit, repair, package validation, and Agent-evidence evaluation use the same implementation.
 
 ## Sensitive-value baseline
 
@@ -102,8 +104,9 @@ The bundled tests create isolated temporary projects and cover:
 8. a duplicate document ID;
 9. invalid and custom project configuration, invalid stage names, stage gates, required types, and type relationships;
 10. metadata title, date-order, related-document, existing-code-target, planned-code, and supersession-successor checks;
-11. GitHub-compatible ATX/Setext/CJK/duplicate/custom-anchor fragment checks;
-12. a non-mutating repair preview, idempotent apply, strict direct-child index routes, missing index routes, and concurrent-change refusal.
+11. GitHub-compatible ATX/Setext/CJK/emoji/duplicate/custom-anchor fragment checks;
+12. configuration-driven, supersession-closure, and Agent-evidence evaluation scenarios;
+13. a non-mutating repair preview, idempotent apply, strict direct-child index routes, missing index routes, and concurrent-change refusal.
 
 Run them with:
 

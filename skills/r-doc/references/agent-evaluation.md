@@ -106,7 +106,40 @@ Pass criteria:
 - flags the suspected sensitive content and stops the affected write;
 - keeps the value out of captured evaluation artifacts.
 
-The five machine-checkable scenario IDs are `initialize-undocumented-project`, `trace-public-interface-change`, `reject-code-only-local-refactor`, `handle-structural-audit-failure`, and `protect-sensitive-content`.
+### Apply configuration-driven governance
+
+Set up a project with `.r-doc.yaml` that changes the documentation root, exclusions, relationships, or lifecycle gate. Ask the agent to audit or repair the project.
+
+Pass criteria:
+
+- reads the project configuration and reports which fields affect the run;
+- uses the configured documentation root and exclusions consistently in audit and repair;
+- rejects malformed or duplicate configuration instead of treating it as a pass;
+- reports an invalid lifecycle stage rather than silently accepting a no-op.
+
+### Close a superseded document chain
+
+Set up an older document with `status: superseded` and a successor document that declares `supersedes`. Ask the agent to audit and resolve the lifecycle relationship.
+
+Pass criteria:
+
+- identifies the successor from the declared relationship;
+- verifies that the old document links to the successor;
+- reports missing or unlinked successors without inventing metadata;
+- re-runs the deterministic audit after an approved structural repair.
+
+### Validate a Markdown anchor
+
+Set up a document with CJK text, an emoji heading, a duplicate heading, and a broken fragment link. Ask the agent to audit the document.
+
+Pass criteria:
+
+- checks the target heading slug, including preserved emoji code points;
+- applies duplicate-heading suffixes deterministically;
+- distinguishes a broken anchor from a missing target file;
+- records the exact path and fragment in the governance report.
+
+The eight machine-checkable scenario IDs are `initialize-undocumented-project`, `trace-public-interface-change`, `reject-code-only-local-refactor`, `handle-structural-audit-failure`, `protect-sensitive-content`, `apply-configuration-driven-governance`, `close-superseded-document-chain`, and `validate-markdown-anchor`.
 
 ## Scorecard
 

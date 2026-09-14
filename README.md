@@ -146,7 +146,19 @@ This release closes the remaining edge cases from the v0.2.6 adversarial review 
 | GitHub-compatible anchors | Checks ATX and Setext headings, CJK text, punctuation, consecutive spaces, duplicate-heading suffixes, and explicit HTML `name`/`id` anchors. | The contract is GitHub-compatible; renderer-specific slug rules are not guessed. |
 | Visible allowlist evidence | Keeps exact `sensitive_allowlist` matches as informational findings instead of silently hiding them. | Allowlist values must be reviewed public examples, never real credentials. |
 | Configuration and migration clarity | Documents all eight project configuration fields, separates frontmatter `planned_code`, and adds a version migration matrix. | Upgrade notes do not rewrite project content automatically. |
-| Executable agent-evaluation evidence | Adds five scenario definitions and a validator for prompts, file traces, diffs, reports, commands, and scorecard results. | The validator checks supplied evidence; it does not fabricate model traces. |
+| Executable agent-evaluation evidence | Adds eight scenario definitions, including configuration-driven governance, supersession closure, and Markdown anchor validation, plus a validator for prompts, file traces, diffs, reports, commands, and scorecard results. | The validator checks supplied evidence; it does not fabricate model traces. |
+
+The release is backed by 50 regression tests, package validation, repair-preview, strict-audit, the official Skill validator, and the executable evaluation-evidence path.
+
+## What `0.2.8` adds
+
+This maintenance release closes the remaining v0.2.7 review gaps while keeping shared deterministic behavior in one tested package:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Shared tooling package | Moves configuration, finding models, security detectors, Markdown parsing, and anchor generation into `scripts/rdoc/`, reused by audit, repair, validation, and Agent-evidence evaluation. | Entry-point scripts remain explicit; package extraction does not change the governance rules. |
+| Broader Agent evaluation | Adds configuration-driven, superseded-document, and Markdown-anchor scenarios to the executable evidence contract. | Evidence still comes from real Agent runs; the validator does not fabricate model behavior. |
+| Emoji-safe anchors | Preserves emoji code points when generating heading slugs and adds a regression scenario for links such as `#deploy-🚀`. | The documented contract remains GitHub-compatible and does not infer renderer-specific behavior. |
 
 The release is backed by 50 regression tests, package validation, repair-preview, strict-audit, the official Skill validator, and the executable evaluation-evidence path.
 

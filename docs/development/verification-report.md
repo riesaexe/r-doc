@@ -25,8 +25,8 @@ validation:
 | Skill 包结构、入口、链接和脚本语法 | `python skills/r-doc/scripts/validate_skill.py skills/r-doc` | PASS |
 | 安全结构修复预览 | `python skills/r-doc/scripts/repair_docs.py --root .` | PASS，无待写入修复 |
 | 项目文档结构、索引、链接、元数据和敏感值 | `python skills/r-doc/scripts/audit_docs.py --root . --strict` | PASS，0 errors / 0 warnings；公开 AWS 文档示例保留为 3 条 informational allowlist 记录 |
-| 临时项目行为场景 | `python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'` | PASS，50 tests；覆盖词法链接过滤、GitHub-compatible Markdown 锚点、Setext/CJK/HTML 自定义锚点、嵌套 frontmatter、解析错误、扩展敏感模式、项目白名单、中英文占位符、根目录 Markdown 排除、图片与引用定义、配置、双向导航、元数据关系、阶段门、重复 finding 去重和 Agent 评测证据校验 |
-| Agent 评测证据 CLI | `python skills/r-doc/scripts/evaluate_agent.py --input <evidence.json> --strict --json` | PASS，手工 QA 使用完整五场景证据得到 100%；工具只校验外部 Agent 证据，不伪造模型轨迹 |
+| 临时项目行为场景 | `python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'` | PASS，50 tests；覆盖词法链接过滤、GitHub-compatible Markdown 锚点、Setext/CJK/emoji/HTML 自定义锚点、嵌套 frontmatter、解析错误、扩展敏感模式、项目白名单、中英文占位符、根目录 Markdown 排除、图片与引用定义、配置、双向导航、元数据关系、阶段门、重复 finding 去重和 Agent 评测证据校验 |
+| Agent 评测证据 CLI | `python skills/r-doc/scripts/evaluate_agent.py --input <evidence.json> --strict --json` | PASS，证据契约覆盖八个场景；工具只校验外部 Agent 证据，不伪造模型轨迹 |
 | 官方 Skill creator 校验 | `PYTHONUTF8=1 python <skill-creator>/scripts/quick_validate.py skills/r-doc`（PowerShell 先设置 `$env:PYTHONUTF8='1'`） | PASS |
 | 本地 npx skills 发现 | `npx skills add . --list` | PASS，发现 1 个 r-doc |
 | 工作树空白错误 | `git diff --check` | PASS |
@@ -63,11 +63,13 @@ validation:
 - 未配置的 `--stage` 会报告 `invalid-stage` 并以失败退出；未使用的引用定义不会伪造文档可达性。
 - fenced code、行内代码和 HTML 注释中的链接语法不会被当作真实链接；Markdown fragment 会校验目标文档中的标题锚点。
 - 标题锚点按 GitHub-compatible 规则覆盖 ATX/Setext、CJK、标点、连续空格、重复标题后缀及 `<a name>`/`<a id>` 自定义锚点；其他渲染器专有 slug 不自动推断。
+- 标题 slug 保留 emoji 码点，并由回归场景验证 `#deploy-🚀` 这类 fragment。
 - 根目录 `README.md` 默认参与审计，`.r-doc.yaml` 的 `exclude` 同样可以排除根目录 Markdown，但不会排除 `AGENTS.md`。
 - `planned_code` 可以指向尚未创建但仍在项目根目录内的未来路径；`related_code` 仍必须指向现有文件。
 - `sensitive_allowlist` 可以为受支持检测器登记精确的官方示例值，命中会保留 informational finding，非法检测器配置会失败。
 - 测试按 `test_audit_docs.py`、`test_config_and_sensitive.py`、`test_repair_docs.py` 拆分，便于按责任域定位回归。
-- `evals/cases.json` 与 `evaluate_agent.py` 将 Agent 行为评测的证据结构、场景完整性和可比评分变成可执行检查；仍需由真实 Agent 产生 prompt、读取清单、diff 和报告。
+- `scripts/rdoc/` 统一提供配置、finding、安全检测、Markdown 解析和锚点生成；审计、修复、包校验和 Agent 评测不再从 `audit_docs.py` 交叉导入共享逻辑。
+- `evals/cases.json` 与 `evaluate_agent.py` 将 Agent 行为评测的证据结构、八个场景完整性和可比评分变成可执行检查；仍需由真实 Agent 产生 prompt、读取清单、diff 和报告。
 
 ## 限制
 

@@ -2,6 +2,13 @@
 
 本文件记录 r-doc 的用户可见变化。
 
+## [0.2.8] - 2026-09-15
+
+- 将配置加载、finding 模型、敏感值检测、Markdown 目标解析和标题锚点生成下沉到 `scripts/rdoc/` 共享包，由审计、修复、包校验和 Agent 评测统一复用，降低单文件职责和导入耦合。
+- 将 Agent 评测场景从 5 个扩展到 8 个，新增配置驱动治理、superseded 文档闭环和 Markdown 锚点校验场景，并同步更新证据契约。
+- 修正标题 slug 对 emoji 的处理，保留 emoji 码点并增加 GitHub-compatible 锚点回归测试。
+- 保持 50 个回归测试通过，并同步更新验证、迁移和公开说明。
+
 ## [0.2.7] - 2026-09-15
 
 - 将 Markdown 锚点校验扩展为 GitHub-compatible 的 ATX/Setext 标题、CJK/连续空格/标点边界、重复标题后缀和显式 HTML `name`/`id` 锚点，并加入对应回归测试。

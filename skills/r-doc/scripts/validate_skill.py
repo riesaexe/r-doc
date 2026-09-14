@@ -6,7 +6,7 @@ import re
 import sys
 from pathlib import Path
 
-from audit_docs import (
+from rdoc import (
     FrontmatterParseError,
     SECRET_PATTERNS,
     _anchor_slug,
