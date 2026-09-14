@@ -1,6 +1,6 @@
 ---
 name: r-doc
-description: 创建、审计和维护项目根目录的 AGENTS.md 与 docs/ 文档知识库，确保开发计划、设计、接口、测试、发布和部署变化有准确、可索引的文档；适用于初始化、开发变更、审查和发布前治理，不替代业务代码实现。
+description: "Project documentation governance: automatically initialize, index, audit, and maintain AGENTS.md, docs/, and planning, requirements, design, API, testing, release, and deployment documents. Use when users ask to manage project documentation, check documentation consistency, update AGENTS.md, or trace change impact; not a replacement for business-code implementation."
 metadata:
   version: "0.1.0"
 ---

@@ -1,8 +1,8 @@
 interface:
   display_name: "r-doc"
-  short_description: "维护项目 AGENTS.md 与 docs 文档体系"
+  short_description: "Automated project documentation governance"
   icon_small: "./assets/r-doc.svg"
   icon_large: "./assets/r-doc.svg"
-  default_prompt: "Use $r-doc to audit and maintain the project documentation structure."
+  default_prompt: "Use $r-doc to automatically initialize, audit, and maintain the project's AGENTS.md and docs/ knowledge base."
 policy:
   allow_implicit_invocation: true

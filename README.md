@@ -1,116 +1,122 @@
+<p align="right"><a href="README.zh-CN.md">中文</a></p>
+
 <p align="center">
-  <img src="skills/r-doc/assets/r-doc.svg" alt="r-doc 图标" width="128" height="128">
+  <img src="skills/r-doc/assets/r-doc.svg" alt="r-doc icon" width="128" height="128">
 </p>
 
 <h1 align="center">r-doc</h1>
 
 <p align="center">
-  <strong>让文档像代码一样，拥有规范、版本、追踪和治理门槛。</strong><br>
-  面向 AI 代理与人类维护者，把开发过程中的知识变成可验证、可维护、可持续演进的工程资产。
+  <strong>Make documentation work like code—with standards, versioning, traceability, and governance gates.</strong><br>
+  A documentation-governance skill for AI agents and human maintainers that turns project knowledge into verifiable, maintainable, continuously evolving engineering assets.
 </p>
 
 <p align="center">
   <a href="https://github.com/riesaexe/r-doc">GitHub</a>
   ·
-  <a href="https://github.com/riesaexe/r-doc/releases/latest">最新版本</a>
+  <a href="https://github.com/riesaexe/r-doc/releases/latest">Latest release</a>
   ·
   <a href="https://github.com/riesaexe/r-doc/blob/main/LICENSE">MIT License</a>
 </p>
 
 <p align="center">
-  <code>规范先行</code>
+  <code>Standards first</code>
   ·
-  <code>变更可追踪</code>
+  <code>Traceable changes</code>
   ·
-  <code>事实可验证</code>
+  <code>Verifiable facts</code>
   ·
-  <code>风险显式化</code>
+  <code>Visible risk</code>
+</p>
+
+<p align="center">
+  <a href="https://skills.sh/riesaexe/r-doc">
+    <img src="https://skills.sh/b/riesaexe/r-doc" alt="r-doc on skills.sh">
+  </a>
 </p>
 
 ---
 
-## 核心理念
+## Get started in 30 seconds
 
-文档不是代码之外的附属物，而是项目的工程资产。需求决定做什么，设计决定怎么做，接口和测试说明如何验证，发布与部署决定如何交付；这些知识如果没有统一入口、明确状态和变更记录，就无法真正支撑团队和 AI 代理协作。
-
-r-doc 不是一次性的文档生成器，而是开发过程中的文档治理层：在初始化、开发变更、代码审查和发布检查中，自动建立入口、维护索引、追踪文档影响，并在发现缺失、过时、重复、冲突或断链时给出明确反馈。
-
-> 先建立规范，再推动变更；先记录事实，再做判断；发现冲突，暂停确认。
-
-## 为什么是 r-doc
-
-| 治理原则       | r-doc 的做法                                                                                                  |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| 规范先行       | 用 `AGENTS.md` 作为项目入口，用 `docs/README.md` 和主题索引组织知识，并用状态、元数据和生命周期约束文档质量。 |
-| 变更可追踪     | 当代码、配置、接口、流程、部署或架构发生变化时，识别受影响的计划、设计、测试、发布和运维文档。                |
-| 单一事实来源   | 保留已有事实，发现代码与文档或文档之间的冲突；不擅自用“期望规范”覆盖当前实现。                                |
-| 风险显式化     | 主动报告缺失、过时、重复、冲突、断链和疑似敏感信息；高风险情况暂停并请求确认。                                |
-| 最小上下文加载 | 按 `AGENTS.md` → `docs/README.md` → 主题索引 → 目标文档的顺序按需读取，减少上下文浪费和误解。                 |
-
-## 从计划到发布的治理闭环
-
-| 开发阶段   | 自动管理与治理重点                                         | 交付结果                                           |
-| ---------- | ---------------------------------------------------------- | -------------------------------------------------- |
-| 计划与需求 | 建立计划、需求和范围的文档入口，明确当前阶段与完成门槛。   | 团队知道要做什么，也知道什么还不能宣布完成。       |
-| 设计与实现 | 记录设计、架构决策、接口、配置和关键约束，分析变更影响。   | 决策有依据，变更有上下文，知识不会只停留在对话里。 |
-| 测试与审查 | 检查实现、测试、文档和索引是否一致，暴露缺口与冲突。       | 问题在交付前可见，而不是上线后才追溯。             |
-| 发布与部署 | 同步发布说明、迁移步骤、部署流程和已知限制，复核文档门槛。 | 发布不仅有版本号，也有可复查的事实和责任边界。     |
-
-## 与一次性文档生成的区别
-
-| 一次性生成               | r-doc 治理                                   |
-| ------------------------ | -------------------------------------------- |
-| 生成一篇看起来完整的文档 | 维护一套可导航、可索引、可审查的知识库       |
-| 任务结束，文档随即失效   | 每次开发变更都检查文档影响和同步关系         |
-| 文件存在就视为完成       | 同时检查索引、链接、状态、关联关系和阶段门槛 |
-| 遇到冲突时直接覆盖或猜测 | 保留事实、报告冲突、提出待确认决策           |
-| 让 AI 读取全部上下文     | 通过索引加载完成当前任务所需的最小上下文     |
-
-## 适合什么时候使用
-
-- 开始一个新项目，需要建立文档入口；
-- 需求、设计或架构发生变化；
-- 新增或修改公共接口、配置、数据格式或部署流程；
-- 代码审查、合并或发布前需要确认文档是否同步；
-- 项目文档难以查找、互相矛盾或已经过时。
-
-r-doc 管理的是开发过程中的文档与知识，不替代业务代码实现；默认只维护文档、索引、元数据和文档注释。
-
-## 安装
-
-从本项目的公开 GitHub 仓库安装 r-doc：
+Install r-doc globally:
 
 ```bash
 npx skills add riesaexe/r-doc --skill r-doc -g -y
 ```
 
-只安装到当前项目时，去掉 -g：
+Then use natural language, or invoke `$r-doc` explicitly:
+
+| Goal                  | Example request                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------- |
+| Initialize governance | `$r-doc Initialize this project's AGENTS.md and docs/ structure.`                     |
+| Check change impact   | `$r-doc Check which documents need to be synchronized for this API change.`           |
+| Audit before release  | `$r-doc Audit the requirements, design, testing, and deployment docs before release.` |
+
+## Core philosophy
+
+Documentation is not an attachment to the codebase. It is an engineering asset. Requirements define what to build, design explains how to build it, APIs and tests define how to verify it, and release and deployment documents define how to deliver it. Without a shared entry point, explicit status, and change history, that knowledge cannot reliably support a team or an AI agent.
+
+r-doc is not a one-off document generator. It is a governance layer for the development process: during initialization, development changes, code review, and release checks, it automatically establishes entry points, maintains indexes, traces documentation impact, and reports missing, stale, duplicated, conflicting, or broken content.
+
+> Define the standard before the change. Record facts before making judgments. Surface conflicts before they become history.
+
+## Why r-doc
+
+| Governance principle   | How r-doc applies it                                                                                                                                                              |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Standards first        | Use `AGENTS.md` as the project entry point and `docs/README.md` plus topic indexes to organize knowledge. Use status, metadata, and lifecycle rules to keep documents actionable. |
+| Traceable changes      | When code, configuration, APIs, processes, deployment, or architecture changes, identify the affected planning, design, testing, release, and operations documents.               |
+| Single source of truth | Preserve existing facts, surface conflicts between code and docs or between documents, and never silently replace current behavior with an intended standard.                     |
+| Explicit risk          | Report missing, stale, duplicated, conflicting, broken, or suspiciously sensitive content. Pause and ask for confirmation when the risk is material.                              |
+| Minimal context        | Load `AGENTS.md` → `docs/README.md` → the relevant topic index → the target document, so agents use only the context needed for the task.                                         |
+
+## The governance loop from planning to release
+
+| Development stage         | Automated governance focus                                                                                             | Delivery outcome                                                                        |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Planning and requirements | Establish entry points for plans, requirements, and scope; make the current stage and completion gates explicit.       | The team knows what to build and what cannot yet be called complete.                    |
+| Design and implementation | Record design, architecture decisions, APIs, configuration, and constraints; analyze documentation impact.             | Decisions have context, and knowledge does not remain trapped in a chat.                |
+| Testing and review        | Check implementation, tests, docs, and indexes for consistency; expose gaps and conflicts.                             | Problems are visible before delivery instead of being reconstructed after launch.       |
+| Release and deployment    | Synchronize release notes, migration steps, deployment procedures, and known limitations; recheck documentation gates. | A release has more than a version number: it has reviewable facts and clear boundaries. |
+
+## How it differs from one-off document generation
+
+| One-off generation                               | r-doc governance                                                         |
+| ------------------------------------------------ | ------------------------------------------------------------------------ |
+| Generate a document that looks complete          | Maintain a navigable, indexed, reviewable knowledge base                 |
+| The document goes stale when the task ends       | Check documentation impact and synchronization on every relevant change  |
+| Treat file existence as completion               | Check indexes, links, status, relationships, and stage gates             |
+| Overwrite or guess when facts conflict           | Preserve facts, report conflicts, and propose decisions for confirmation |
+| Ask the AI to read the entire repository context | Use indexes to load the minimum context required for the task            |
+
+## When to use it
+
+- Starting a project and establishing its documentation entry points;
+- Changing requirements, design, architecture, public APIs, configuration, data formats, or deployment;
+- Reviewing or merging work that may affect project knowledge;
+- Auditing documentation before a release;
+- Finding missing, stale, duplicated, conflicting, or hard-to-navigate project documents.
+
+r-doc governs development documentation and knowledge. It does not replace business-code implementation; by default, it maintains documents, indexes, metadata, and documentation comments without changing business code.
+
+## Installation options
+
+Install only in the current project by removing `-g`:
 
 ```bash
 npx skills add riesaexe/r-doc --skill r-doc -y
 ```
 
-也可以指定目标代理：
+Target a specific agent:
 
 ```bash
 npx skills add riesaexe/r-doc --skill r-doc -a codex -y
 ```
 
-这里的 `riesaexe/r-doc` 是 GitHub 仓库来源，`--skill r-doc` 是仓库内的技能目录名；它们不是同一个参数。只有在安装其他仓库或你自己的 fork 时，才需要把仓库来源替换为对应的 `<owner>/<repo>`。
+Here, `riesaexe/r-doc` is the GitHub repository source and `--skill r-doc` selects the skill directory inside that repository. They are different arguments. Replace the repository source with `<owner>/<repo>` only when installing a different repository or your own fork.
 
-## 使用
-
-安装后，可以直接提出自然语言需求，也可以显式调用 r-doc：
-
-```text
-$r-doc 初始化这个项目的 AGENTS.md 和 docs/ 文档结构。
-
-$r-doc 检查这次 API 变更需要同步哪些文档。
-
-$r-doc 审查发布前的需求、设计、测试和部署文档是否一致。
-```
-
-## 管理的文档结构
+## Project structure
 
 ```text
 AGENTS.md
@@ -118,12 +124,12 @@ docs/
 └── README.md
 ```
 
-AGENTS.md 是项目级入口和导航；详细知识放在 docs/，每篇文档聚焦一个主题。复杂主题可以建立子目录，并使用 README.md 说明范围、阅读顺序和文档列表。
+`AGENTS.md` is the project entry point and navigation layer. Detailed knowledge lives in `docs/`, with each document focused on one topic. Complex topics can use subdirectories with a `README.md` that defines scope, reading order, and document links.
 
-## 安全与维护原则
+## Safety and maintenance principles
 
-- 保留已有项目知识，发现冲突时先报告；
-- 不把当前实现自动改写成期望规范；
-- 不写入密钥、令牌、密码或敏感个人信息；
-- 默认只维护文档、索引、元数据和文档注释，不修改业务代码；
-- 文档未同步时，不把当前开发阶段宣布为已完成。
+- Preserve existing project knowledge and report conflicts before changing facts;
+- Do not rewrite current implementation into an intended standard;
+- Never write secrets, tokens, passwords, or sensitive personal information;
+- Default to maintaining docs, indexes, metadata, and documentation comments, not business code;
+- Do not declare a development stage complete while its documentation remains unsynchronized.
