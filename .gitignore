@@ -1,0 +1,7 @@
+dist/
+coverage/
+.tmp/
+.codegraph/
+*.zip
+*.tgz
+*.tar.gz

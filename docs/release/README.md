@@ -1,0 +1,48 @@
+---
+id: REL-RDOC-001
+type: release
+status: active
+title: r-doc 发布指南
+created: 2026-09-14
+updated: 2026-09-14
+---
+
+# r-doc 发布指南
+
+## 发布对象
+
+发布对象是 skills/r-doc/ 目录本身，目标是让其他工具能够读取其中的 SKILL.md 和支持资源。C:/Users/RiESA/.agents/skills/r-doc/ 是本机安装位置，不是发布源。
+
+## 当前版本
+
+- 版本文件：[VERSION](../../VERSION)
+- 变更记录：[CHANGELOG.md](../../CHANGELOG.md)
+- 当前基线：0.1.0，初始开发版本
+
+## 发布步骤
+
+1. 在 skills/r-doc/ 中完成修改。
+2. 更新项目文档和 CHANGELOG.md。
+3. 更新 VERSION，以及 skills/r-doc/SKILL.md 的 metadata.version。
+4. 确认公开 GitHub 仓库结构和许可证。
+5. 按 [GitHub 与 npx skills 发布指南](github-and-npx.md) 和 [发布检查清单](release-checklist.md) 执行校验和临时项目 QA。
+6. 生成带版本号的发布包（如果目标平台需要），例如 r-doc-v0.1.0.zip；包内顶层目录固定为 r-doc/。
+7. 将验证通过的发布内容同步到全局安装目录。
+8. 验证全局副本的版本、文件树和入口文件。
+9. 发布后记录仓库地址、标签、实际包路径、校验结果和已知限制。
+
+## 版本规则
+
+- PATCH：文案修正、链接修正、非行为性模板修正；
+- MINOR：新增文档治理能力、模板或兼容场景，保持既有行为；
+- MAJOR：改变默认工作流、门槛、状态语义或破坏既有配置。
+
+未完成发布验证前，版本保持在 Unreleased，不把未经验证的副本称为正式发布。
+
+## SkillHub 流程
+
+SkillHub 不作为源文件仓库。GitHub 仓库公开并验证可通过 npx skills 安装后，再将 GitHub 仓库地址手动导入 SkillHub；平台导入结果单独检查，不反向修改项目源文件。
+
+## 当前限制
+
+发布包格式和自动同步脚本尚未绑定到某个外部工具或仓库平台。确认目标平台后，再增加对应的打包、校验和发布自动化，避免提前引入不可移植的流程。
