@@ -5,56 +5,56 @@ metadata:
   version: "0.1.0"
 ---
 
-# r-doc：项目文档治理
+# r-doc: Project documentation governance
 
-## 目标
+## Purpose
 
-把项目文档维护成一个可导航、可审查、低上下文成本的知识库：维护者或 AI 先读项目根目录的 `AGENTS.md`，再按索引只加载完成当前任务所需的最小文档集合。
+Maintain project documentation as a navigable, reviewable knowledge base with low context cost: have maintainers or AI agents read the project-root `AGENTS.md` first, then load only the minimum document set required for the current task through the indexes.
 
-这是项目级文档规范，不是业务代码实现规范。项目文档体系中的“最高优先级”不覆盖系统指令、用户当前要求或工具更高层级的规则。
+This is a project-level documentation standard, not a business-code implementation standard. The project's documentation hierarchy never overrides system instructions, the user's current request, or higher-level tool rules.
 
-## 何时使用
+## When to use
 
-在以下情况自动使用，或用户显式调用 `$r-doc` 时使用：
+Use this skill automatically in the following situations, or whenever the user explicitly invokes `$r-doc`:
 
-- 初始化项目、整理项目知识或补齐文档入口；
-- 处理计划、需求、设计、架构决策、接口、测试、发布、部署、规则或流程文档；
-- 代码、配置、接口、数据模型、流程、部署或架构发生变化；
-- 代码审查、合并前、发布前或维护阶段需要确认文档是否同步；
-- 用户要求检查文档缺失、过时、重复、冲突、断链或上下文加载顺序。
+- Initializing a project, organizing project knowledge, or completing missing documentation entry points;
+- Working with plans, requirements, design, architecture decisions, APIs, testing, releases, deployment, rules, or process documents;
+- Changing code, configuration, interfaces, data models, processes, deployment, or architecture;
+- Checking documentation synchronization during code review, before merging, before release, or during maintenance;
+- Finding missing, stale, duplicated, conflicting, broken, or incorrectly loaded documentation.
 
-纯粹的局部代码重构，且不影响对外行为、数据、配置、架构或项目规则时，不要无谓启动完整文档治理流程。
+Do not start the full documentation-governance workflow for a purely local code refactor that does not affect public behavior, data, configuration, architecture, or project rules.
 
-## 不可违反的约束
+## Non-negotiable constraints
 
-1. 以项目根目录为作用域。优先使用 Git 根目录；非 Git 项目使用用户明确的项目根目录。
-2. 项目根目录必须有 `AGENTS.md`，并建立 `docs/README.md`。复杂主题目录也使用固定名称 `README.md` 作为索引。
-3. `AGENTS.md` 只放项目概览、范围、快速开始、上下文加载顺序、关键目录、命令、强制规则、禁止事项、路线指引和 `docs/` 索引。详细知识必须链接到 `docs/`。
-4. 每篇主题文档只聚焦一个主题；主题混杂、难以定位或过长时拆分。不要为了凑目录创建空文档。
-5. 文档必须主动同步代码、配置、接口、流程、部署和决策变更；关键约束、踩坑和非显而易见决策必须落档。
-6. 不写入密钥、令牌、密码、个人敏感信息或可用于绕过安全控制的真实值。发现疑似敏感信息时停止写入并报告。
-7. 已有 `AGENTS.md`、`docs/` 或文档内容时采用非破坏性合并：保留事实和历史，不直接覆盖或删除；发现冲突先报告并提出唯一事实来源建议。
-8. 默认只修改文档、索引、模板、元数据和文档注释，不修改业务代码。读取代码和 Git diff 只用于判断文档影响。
-9. 不把“文件存在”当作“文档完成”。必须检查索引、链接、状态、关联关系和受影响内容的一致性。
+1. Scope work to the project root. Prefer the Git root; for non-Git projects, use the project root explicitly identified by the user.
+2. The project root must contain `AGENTS.md` and `docs/README.md`. Complex topic directories must also use a fixed `README.md` as their index.
+3. Keep `AGENTS.md` limited to the project overview, scope, quick start, context-loading order, key directories, commands, mandatory rules, prohibitions, task routes, and the `docs/` index. Link detailed knowledge from `docs/` instead.
+4. Keep each topic document focused on one subject. Split mixed, hard-to-locate, or overlong topics. Do not create empty documents just to fill a directory.
+5. Keep documentation synchronized with code, configuration, interfaces, processes, deployment, and decision changes. Record important constraints, pitfalls, and non-obvious decisions.
+6. Never write secrets, tokens, passwords, sensitive personal information, or real values that could bypass security controls. Stop writing and report suspected sensitive information.
+7. Merge non-destructively when `AGENTS.md`, `docs/`, or existing documents are present: preserve facts and history instead of overwriting or deleting them. Report conflicts and propose a single source of truth.
+8. By default, modify only documents, indexes, templates, metadata, and documentation comments. Read code and Git diffs only to determine documentation impact; do not modify business code.
+9. Do not treat file existence as documentation completion. Check indexes, links, status, relationships, and consistency of affected content.
 
-## 标准流程
+## Standard workflow
 
-根据任务规模选择轻量或完整流程，但高影响任务必须完成全部相关检查：
+Choose a lightweight or complete workflow according to the task, but complete every relevant check for high-impact work:
 
-1. 识别当前开发阶段、任务范围和可能受影响的文档类型。
-2. 读取项目根 `AGENTS.md`（如存在）、`docs/README.md`、相关子目录 `README.md`、项目级 `.r-doc.yaml` 配置，以及当前任务直接关联的文档。
-3. 检查项目结构、Git 状态/差异和相关代码；只读取判断文档影响所需的代码。
-4. 建立文档清单，标出缺失、过时、未索引、断链、状态失效、重复、冲突和疑似敏感信息。
-5. 先提出必要的澄清问题，再给出集中式修改计划；在计划获用户确认前，不执行文档写入、移动、归档或配置变更。
-6. 按计划创建或更新 `AGENTS.md`、索引、主题文档、元数据和项目配置。机械性的索引、链接和日期更新可在确认后自动完成。
-7. 验证上下文加载顺序、索引覆盖、链接、元数据、关联关系、阶段门槛和敏感信息。
-8. 输出治理报告：范围、发现的问题、已完成修改、阻塞项、非阻塞项、验证证据和当前阶段是否满足门槛。
+1. Identify the current development stage, task scope, and document types that may be affected.
+2. Read the project-root `AGENTS.md` if it exists, `docs/README.md`, relevant nested `README.md` indexes, project-level `.r-doc.yaml`, and documents directly related to the task.
+3. Inspect project structure, Git status/diff, and relevant code. Read only the code needed to determine documentation impact.
+4. Build a document inventory and mark missing, stale, unindexed, broken, status-invalid, duplicated, conflicting, or suspiciously sensitive content.
+5. Ask necessary clarification questions, then provide a focused modification plan. Do not write, move, archive, or configure documentation before the plan is confirmed.
+6. Create or update `AGENTS.md`, indexes, topic documents, metadata, and project configuration according to the plan. Mechanical index, link, and date updates may be automated after confirmation.
+7. Verify context-loading order, index coverage, links, metadata, relationships, stage gates, and sensitive-content checks.
+8. Produce a governance report covering scope, findings, completed updates, blockers, non-blockers, verification evidence, and whether the current stage gate is satisfied.
 
-详细阶段清单见 [references/lifecycle-checklists.md](references/lifecycle-checklists.md)，完整操作流程见 [references/workflow.md](references/workflow.md)。
+For stage checklists, read [references/lifecycle-checklists.md](references/lifecycle-checklists.md). For the complete operating workflow, read [references/workflow.md](references/workflow.md).
 
-## 文档结构与索引
+## Document structure and indexes
 
-默认结构如下；优先保留项目已有合理结构，只在缺失时补齐：
+Use this default structure and preserve a reasonable existing structure whenever possible:
 
 ```text
 AGENTS.md
@@ -62,41 +62,41 @@ docs/
 └── README.md
 ```
 
-需要时再建立 `requirements/`、`design/`、`decisions/`、`api/`、`testing/`、`releases/`、`operations/` 等主题目录。每个主题目录的 `README.md` 必须说明目录范围、文档列表、推荐阅读顺序，并链接父索引和具体文档。根 `AGENTS.md` 必须链接 `docs/README.md`。
+Add topic directories such as `requirements/`, `design/`, `decisions/`, `api/`, `testing/`, `releases/`, or `operations/` only when needed. Each topic directory's `README.md` must define its scope, list its documents, state the recommended reading order, and link to the parent index and specific documents. The root `AGENTS.md` must link to `docs/README.md`.
 
-推荐的上下文加载顺序是：
+The recommended context-loading order is:
 
 ```text
 AGENTS.md
 → docs/README.md
-→ 相关主题目录 README.md
-→ 目标文档
-→ 目标文档明确链接的补充文档
+→ relevant topic README.md
+→ target document
+→ supplementary documents explicitly linked by the target
 ```
 
-## 状态、关联和冲突
+## Status, relationships, and conflicts
 
-主题文档默认使用以下状态流转：
+Topic documents normally use this lifecycle:
 
 ```text
 draft → proposed → active → superseded → archived
 ```
 
-发现文档与代码、测试或其他文档不一致时，分别说明“期望行为”“当前行为”“冲突位置”和“待确认决策”，不要把现有实现自动改写为规范，也不要用最新文件覆盖其他事实。
+When documentation disagrees with code, tests, or other documents, state the intended behavior, current behavior, conflict location, and decision that requires confirmation. Do not automatically rewrite the implementation into the standard or let the newest file erase other facts.
 
-元数据规则见 [references/metadata-schema.md](references/metadata-schema.md)。项目覆盖规则见 [references/project-config.md](references/project-config.md)。
+For metadata rules, read [references/metadata-schema.md](references/metadata-schema.md). For project-level overrides, read [references/project-config.md](references/project-config.md).
 
-## 输出最低标准
+## Minimum report standard
 
-最终报告至少包含：
+Every final governance report must include:
 
 ```text
-当前阶段与检查范围
-发现的问题（缺失、过时、冲突、断链、敏感信息）
-已完成的文档更新
-仍待处理的阻塞项和非阻塞项
-验证方式与结果
-当前阶段文档门槛：满足 / 不满足
+Current stage and inspection scope
+Findings (missing, stale, conflicting, broken, or sensitive content)
+Completed documentation updates
+Remaining blockers and non-blockers
+Verification methods and results
+Current documentation stage gate: satisfied / not satisfied
 ```
 
-模板只在能减少重复劳动时使用；先读取 [references/templates/README.md](references/templates/README.md)，再按项目类型和当前任务选择模板，不要批量生成无内容的文件。
+Use templates only when they reduce repeated work. Read [references/templates/README.md](references/templates/README.md) first, then choose a template for the project type and current task. Do not generate batches of empty documents.
