@@ -58,7 +58,7 @@ python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 
 ## 仓库治理
 
-`main` 应保持分支保护：通过 pull request 合并、至少一个批准、dismiss stale reviews，并禁止 force-push 和删除。当前仓库已启用这组保护规则，且管理员也受规则约束；没有配置未经验证的 CI status check。
+`main` 应保持分支保护：普通贡献者通过 pull request 合并并至少获得一个批准，dismiss stale reviews，并禁止 force-push 和删除。当前仓库保留这组保护规则，但允许管理员绕过审批门槛执行签名发布；没有配置未经验证的 CI status check。
 
 发布提交应在 GitHub 显示为 `Verified`。这要求提交者的 GPG 或 SSH signing key 同时登记到 GitHub 账户。本机当前 GPG signing probe 已通过，但 GitHub 端的 `Verified` 状态仍须在下一次签名提交上实测。v0.2.15 的公开提交保持原样，不为补签而重写历史。
 
@@ -139,7 +139,7 @@ The output should list r-doc. Discovery is not the same as a public release.
 5. Create a GitHub Release with bilingual notes and any required package.
 6. Verify installation from the public repository URL with `npx skills`.
 
-The `main` branch is protected with pull-request review, one approval, stale-review dismissal, and no force-push or deletion. The local GPG signing probe passes; the release commit must still be checked for GitHub's `Verified` badge.
+The `main` branch remains protected for normal contributors with pull-request review, one approval, stale-review dismissal, and no force-push or deletion. Administrators may bypass the approval gate for a signed release; the local GPG signing probe passes, and the release commit must still be checked for GitHub's `Verified` badge.
 
 ### npx skills installation
 
