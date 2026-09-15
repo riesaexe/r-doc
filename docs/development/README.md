@@ -4,7 +4,7 @@ type: index
 status: active
 title: 开发文档索引
 created: 2026-09-14
-updated: 2026-09-14
+updated: 2026-09-15
 ---
 
 # 开发文档索引
@@ -20,3 +20,15 @@ updated: 2026-09-14
 3. [Agent benchmark 与性能基线](benchmarks.md)
 
 返回：[文档总索引](../README.md) · [项目入口](../../AGENTS.md)
+
+## English overview
+
+This directory records daily r-doc changes, deterministic verification, temporary-project QA, benchmark methodology, and source-copy synchronization.
+
+Recommended reading order:
+
+1. [Development and verification workflow](workflow.md)
+2. [Reproducible verification report](verification-report.md)
+3. [Agent benchmarks and performance baseline](benchmarks.md)
+
+Back to: [documentation index](../README.md) · [project entrypoint](../../AGENTS.md)

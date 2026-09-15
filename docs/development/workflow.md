@@ -4,7 +4,7 @@ type: guide
 status: active
 title: r-doc 开发与验证流程
 created: 2026-09-14
-updated: 2026-09-14
+updated: 2026-09-15
 related_code:
   - skills/r-doc/SKILL.md
 ---
@@ -49,3 +49,23 @@ python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 ## 变更记录
 
 行为变化、触发条件变化、文档状态规则变化和模板结构变化都需要在 CHANGELOG.md 的 Unreleased 或对应版本中记录。
+
+## English workflow
+
+1. Load `AGENTS.md` and `docs/README.md` first.
+2. Identify whether the change affects entrypoints, workflow, lifecycle, metadata, configuration, templates, public behavior, or release records.
+3. Edit the source under `skills/r-doc/`; do not develop directly in the global installation copy.
+4. If user-visible behavior changes, update this workflow or the relevant design/release document. Public project documentation and Release notes should be bilingual; runtime Skill instructions remain English-only to control context cost.
+
+Run the deterministic checks from the repository root:
+
+```bash
+python skills/r-doc/scripts/validate_skill.py skills/r-doc
+python skills/r-doc/scripts/repair_docs.py --root .
+python skills/r-doc/scripts/audit_docs.py --root . --strict
+python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
+```
+
+Verify frontmatter and placeholders, referenced resources, Markdown links, helper output, temporary-project scenarios, sensitive-value handling, and the source/global-copy version boundary. Synchronize the validated source only after the checks pass. Record behavior, trigger, status-rule, template, and release changes in `CHANGELOG.md`; each release section carries English notes and a Chinese summary.
+
+Back to: [development index](README.md) · [documentation index](../README.md)

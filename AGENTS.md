@@ -1,5 +1,9 @@
 # 自建 Skill 项目入口
 
+## English project note
+
+This repository publishes reusable Codex Skills. The public maintenance and release documentation is bilingual where practical. Runtime instructions under `skills/r-doc/` intentionally remain English-only to reduce agent context cost; `SKILL.zh-CN.md` is a human-reference pointer, not a second runtime rule set. The source under `skills/r-doc/` is the only development source; synchronize it to the global installation only after validation, and treat publishing as an explicitly authorized step.
+
 ## 项目概览与范围
 
 本项目维护可复用的 Codex Skill。当前主产品是 r-doc：用于在其他项目中建立和持续维护 AGENTS.md 与 docs/ 文档知识库。

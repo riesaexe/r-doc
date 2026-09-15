@@ -198,6 +198,23 @@ docs/
 - Default to maintaining docs, indexes, metadata, and documentation comments, not business code;
 - Do not declare a development stage complete while its documentation remains unsynchronized.
 
+## Language policy
+
+Public entrypoints, project docs, benchmark guides, and release notes are maintained in English and Chinese whenever practical. Runtime Skill instructions under `skills/r-doc/` remain English-only to keep agent context small; `SKILL.zh-CN.md` remains a human-reference pointer.
+
+## What `0.2.16` adds
+
+This release adds a bilingual public-document baseline and formalizes the next benchmark layer:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Bilingual release history | Adds Chinese summaries to every historical Release notes section while preserving the original English record. | The summaries explain user impact without rewriting historical facts. |
+| Bilingual maintenance guides | Adds English summaries to the release, development, architecture, and benchmark documentation surfaces. | Runtime Skill instructions remain English-only to control context cost. |
+| Conformance taxonomy | Labels the fixed-prompt records as a `Conformance Benchmark` / `skill-layer-ablation` and records the limitation of Agent-generated review. | It is not a natural activation or independent-effectiveness claim. |
+| Naturalistic protocol | Adds an independent final-state and action-trace grader without claiming real results before matched captures exist. | No score is generated from the conformance summary. |
+
+The `main` branch is protected with pull-request review, one approval, stale-review dismissal, and no force-push or deletion. The local GPG signing probe passes; the release commit must still be checked for GitHub's `Verified` badge.
+
 ## What `0.2.15` adds
 
 This release makes the empirical benchmark output auditable and directly comparable:
@@ -208,8 +225,9 @@ This release makes the empirical benchmark output auditable and directly compara
 | Paired condition analysis | Keeps profile metrics condition-aware and emits matched `agent + model + run_id` deltas with mean, median, standard deviation, 95% Student-t intervals, and separate trend/statistical/strong-evidence readiness. | Three pairs only establish a trend; use at least five pairs for the statistical gate and ten for a stronger claim. |
 | Read policy metrics | Separates required, allowed, and forbidden reads so legitimate dependency reads do not inflate `unnecessary_reads`. | Case files must declare the allowed set and keep it disjoint from forbidden reads. |
 | Audit sample reporting | Raises the performance harness default to ten iterations and records interpolated p95, maximum, and low-sample metadata. | Wall-clock values remain local trend data, not a CI threshold or complexity guarantee. |
+| Benchmark taxonomy | Labels the checked-in runs as a `Conformance Benchmark` and `skill-layer-ablation`, with machine-readable prompt, activation-ground-truth, and grader provenance. | The fixed prompt discloses activation, reads, and commands; review dimensions are agent-generated, so these results are not naturalistic effectiveness scores. |
 
-The checked-in benchmark summary now contains three valid matched local Codex `gpt-5.5` pairs. It is trend-ready but not statistical-ready: the observed mean task-success delta is `0.0pp`, unnecessary-read delta is `-0.67`, and the 95% intervals remain wide at `n=3`. This is real evidence for observing behavior, not a claim that r-doc already improves success reliably.
+The checked-in benchmark summary now contains three valid matched local Codex `gpt-5.5` pairs for the skill-layer ablation. It is trend-ready but not statistical-ready: the observed mean task-success delta is `0.0pp`, unnecessary-read delta is `-0.67`, and the 95% intervals remain wide at `n=3`. The activation result is protocol compliance against disclosed case answers, and task success includes agent-generated review; neither is a naturalistic effectiveness claim. The independent second layer is specified in [`benchmarks/naturalistic/`](benchmarks/naturalistic/), with no real result claimed yet.
 
 ## What `0.2.13` adds
 

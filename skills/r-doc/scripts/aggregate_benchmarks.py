@@ -12,10 +12,23 @@ from rdoc.security import SECRET_PATTERNS, is_safe_example
 from evaluate_agent import evaluate, load_cases
 
 
-RUN_SCHEMA_VERSION = 1
-SUMMARY_SCHEMA_VERSION = 3
+RUN_SCHEMA_VERSION = 2
+SUMMARY_SCHEMA_VERSION = 4
 TRACE_SCHEMA_VERSION = 2
 RUN_CONDITIONS = {"with-r-doc", "baseline-no-r-doc"}
+BENCHMARK_KINDS = {"skill-layer-ablation", "naturalistic-effectiveness"}
+PROMPT_CONTRACTS = {"fixed-protocol", "naturalistic-user-task"}
+GRADER_KINDS = {"agent-self-review", "independent-grader"}
+ACTIVATION_GROUND_TRUTHS = {"case-contract", "independent-task-spec"}
+REVIEW_PROVENANCE = {"agent-generated", "independent-grader"}
+CONFORMANCE_METADATA = {
+    "benchmark_kind": "skill-layer-ablation",
+    "benchmark_name": "Conformance Benchmark",
+    "prompt_contract": "fixed-protocol",
+    "activation_ground_truth": "case-contract",
+    "grader_kind": "agent-self-review",
+    "review_provenance": "agent-generated",
+}
 TRACE_EVENTS = {
     "trace_start",
     "scenario_start",
@@ -82,6 +95,11 @@ REQUIRED_MANIFEST_FIELDS = (
     "profile",
     "run_id",
     "condition",
+    "benchmark_kind",
+    "prompt_contract",
+    "activation_ground_truth",
+    "grader_kind",
+    "review_provenance",
     "agent",
     "model",
     "skill_version",
@@ -134,6 +152,22 @@ def _validate_manifest(
         errors.append(f"{run_dir}: run.json identity does not match its directory")
     if manifest.get("condition") not in RUN_CONDITIONS:
         errors.append(f"{run_dir}: condition must be with-r-doc or baseline-no-r-doc")
+    if manifest.get("benchmark_kind") not in BENCHMARK_KINDS:
+        errors.append(f"{run_dir}: benchmark_kind is unsupported")
+    if manifest.get("prompt_contract") not in PROMPT_CONTRACTS:
+        errors.append(f"{run_dir}: prompt_contract is unsupported")
+    if manifest.get("activation_ground_truth") not in ACTIVATION_GROUND_TRUTHS:
+        errors.append(f"{run_dir}: activation_ground_truth is unsupported")
+    if manifest.get("grader_kind") not in GRADER_KINDS:
+        errors.append(f"{run_dir}: grader_kind is unsupported")
+    if manifest.get("review_provenance") not in REVIEW_PROVENANCE:
+        errors.append(f"{run_dir}: review_provenance is unsupported")
+    if manifest.get("benchmark_kind") == "skill-layer-ablation":
+        for field, expected in CONFORMANCE_METADATA.items():
+            if field == "benchmark_name":
+                continue
+            if manifest.get(field) != expected:
+                errors.append(f"{run_dir}: {field} must be {expected!r} for skill-layer-ablation")
     for field in ("agent", "model", "captured_at", "source"):
         if not _non_empty(manifest.get(field)):
             errors.append(f"{run_dir}: run.json {field} must be non-empty")
@@ -726,6 +760,11 @@ def aggregate(cases: dict[str, Any], benchmarks_root: Path) -> tuple[dict[str, A
             {
                 "schema_version": SUMMARY_SCHEMA_VERSION,
                 "evaluation_skill_version": cases.get("skill_version"),
+                **CONFORMANCE_METADATA,
+                "metric_semantics": {
+                    "activation_accuracy": "Activation protocol compliance against the disclosed case contract; not natural activation accuracy.",
+                    "task_success": "Machine checks plus agent-generated review; not independently graded task success.",
+                },
                 "status": "pending",
                 "profiles": {},
                 "paired_comparisons": [],
@@ -787,6 +826,11 @@ def aggregate(cases: dict[str, Any], benchmarks_root: Path) -> tuple[dict[str, A
                 "profile": profile,
                 "run_id": run_id,
                 "condition": manifest.get("condition"),
+                "benchmark_kind": manifest.get("benchmark_kind"),
+                "prompt_contract": manifest.get("prompt_contract"),
+                "activation_ground_truth": manifest.get("activation_ground_truth"),
+                "grader_kind": manifest.get("grader_kind"),
+                "review_provenance": manifest.get("review_provenance"),
                 "agent": manifest.get("agent"),
                 "model": manifest.get("model"),
                 "captured_at": manifest.get("captured_at"),
@@ -815,6 +859,11 @@ def aggregate(cases: dict[str, Any], benchmarks_root: Path) -> tuple[dict[str, A
     summary = {
         "schema_version": SUMMARY_SCHEMA_VERSION,
         "evaluation_skill_version": cases.get("skill_version"),
+        **CONFORMANCE_METADATA,
+        "metric_semantics": {
+            "activation_accuracy": "Activation protocol compliance against the disclosed case contract; not natural activation accuracy.",
+            "task_success": "Machine checks plus agent-generated review; not independently graded task success.",
+        },
         "status": status,
         "profiles": _profile_summary(records),
         "paired_comparisons": _paired_comparisons(records),
@@ -824,9 +873,10 @@ def aggregate(cases: dict[str, Any], benchmarks_root: Path) -> tuple[dict[str, A
             "No real agent benchmark runs have been captured yet."
             if not records and not errors
             else (
+                "This is a skill-layer ablation: the fixed protocol discloses scenario activation, reads, and commands, while the baseline keeps the same deterministic helpers but omits r-doc Skill instructions. "
                 "Metrics are derived from real captured evidence and structurally validated traces. "
                 "unnecessary_reads counts unique files outside each case's allowed read set; "
-                "forbidden_reads counts unique files in its forbidden set."
+                "forbidden_reads counts unique files in its forbidden set. task_success includes agent-generated review and is not an independent effectiveness score."
             )
         ),
     }
