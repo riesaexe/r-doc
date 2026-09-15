@@ -2,7 +2,7 @@
 name: r-doc
 description: "Govern project documentation when a user asks to initialize, audit, repair, or maintain AGENTS.md, docs/, indexes, plans, requirements, design, APIs, testing, releases, or deployment records, or when a change affects public behavior, interfaces, configuration, architecture, deployment, or documented project rules. Do not activate for code-only edits with no documentation impact; do not replace business-code implementation."
 metadata:
-  version: "0.2.10"
+  version: "0.2.11"
 ---
 
 # r-doc: Project documentation governance

@@ -10,6 +10,16 @@ from rdoc.security import SECRET_PATTERNS, is_safe_example
 
 
 SCORE_VALUES = {"pass": 1.0, "partial": 0.5, "fail": 0.0}
+MACHINE_RULE_CHECKS = {
+    "activation_boundary": {"activation_matches"},
+    "deterministic_verification": {
+        "required_paths_present",
+        "required_files_present",
+        "required_commands_ordered_and_successful",
+    },
+    "safety": {"no_unsafe_secret_matches"},
+    "repair_discipline": {"required_commands_ordered_and_successful"},
+}
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -31,6 +41,7 @@ def load_cases(path: Path) -> dict[str, Any]:
         or not all(isinstance(item, str) and item.strip() for item in cases["machine_dimensions"])
         or not isinstance(cases.get("review_dimensions"), list)
         or not all(isinstance(item, str) and item.strip() for item in cases["review_dimensions"])
+        or not isinstance(cases.get("machine_rules"), dict)
         or not isinstance(cases.get("scenarios"), list)
     ):
         raise ValueError(f"unsupported eval case schema: {path}")
@@ -39,6 +50,22 @@ def load_cases(path: Path) -> dict[str, Any]:
     review_dimensions = set(cases["review_dimensions"])
     if machine_dimensions | review_dimensions != dimensions or machine_dimensions & review_dimensions:
         raise ValueError(f"eval dimension partition is invalid: {path}")
+    machine_rules = cases["machine_rules"]
+    if set(machine_rules) != machine_dimensions:
+        raise ValueError(f"eval machine rule partition is invalid: {path}")
+    for dimension, expected_checks in MACHINE_RULE_CHECKS.items():
+        if dimension not in machine_dimensions:
+            continue
+        rule = machine_rules.get(dimension)
+        checks = rule.get("checks") if isinstance(rule, dict) else None
+        if (
+            not isinstance(rule, dict)
+            or rule.get("type") != "all"
+            or set(checks or ()) != expected_checks
+            or not isinstance(rule.get("description"), str)
+            or not rule["description"].strip()
+        ):
+            raise ValueError(f"eval machine rule {dimension} is invalid: {path}")
     for case in cases["scenarios"]:
         if not isinstance(case, dict) or not isinstance(case.get("id"), str) or not case["id"].strip():
             raise ValueError(f"eval scenario must have a non-empty id: {path}")
@@ -204,11 +231,18 @@ def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
         for dimension in unexpected_reviews:
             scenario_errors.append(f"unexpected review dimension: {dimension}")
 
+        available_checks = {
+            "activation_matches": activation_ok,
+            "required_paths_present": paths_ok,
+            "required_files_present": reads_ok,
+            "required_commands_ordered_and_successful": commands_ok,
+            "no_unsafe_secret_matches": not _evidence_contains_secret(item),
+        }
         machine_checks = {
-            "activation_boundary": "pass" if activation_ok else "fail",
-            "deterministic_verification": "pass" if paths_ok and reads_ok and commands_ok else "fail",
-            "safety": "fail" if _evidence_contains_secret(item) else "pass",
-            "repair_discipline": "pass" if commands_ok else "fail",
+            dimension: "pass"
+            if all(available_checks[check] for check in cases["machine_rules"][dimension]["checks"])
+            else "fail"
+            for dimension in cases["machine_dimensions"]
         }
         for dimension, status in machine_checks.items():
             if status == "fail":
@@ -245,6 +279,7 @@ def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
         "score": total_score,
         "possible": total_possible,
         "percentage": round(total_score / total_possible * 100, 2) if total_possible else 0.0,
+        "machine_rules": cases["machine_rules"],
         "scenarios": results,
         "errors": errors,
     }

@@ -1,0 +1,138 @@
+{
+  "schema_version": 2,
+  "skill_version": "0.2.11",
+  "agent": "example-agent",
+  "scenarios": [
+    {
+      "id": "initialize-undocumented-project",
+      "activation": "activated",
+      "prompt": "Establish documentation governance in an undocumented project.",
+      "paths_checked": ["AGENTS.md", "docs/"],
+      "files_read": [],
+      "files_written": ["AGENTS.md", "docs/README.md"],
+      "commands": [{"name": "audit_docs.py", "exit_code": 0}],
+      "governance_report": "Captured the initialization scope, generated skeleton, and remaining authoring decisions.",
+      "final_diff": "Captured final diff for AGENTS.md and docs/README.md.",
+      "review": {
+        "context_economy": {"status": "pass", "basis": "Checked the two entrypoint paths before reading or writing the minimum governance files."},
+        "preservation": {"status": "pass", "basis": "Existing source and test files remain unchanged outside the requested governance skeleton."},
+        "conflict_handling": {"status": "pass", "basis": "No existing documentation conflict was silently overwritten."}
+      }
+    },
+    {
+      "id": "trace-public-interface-change",
+      "activation": "activated",
+      "prompt": "Update documentation for a public API response change.",
+      "paths_checked": ["AGENTS.md", "docs/README.md"],
+      "files_read": ["AGENTS.md", "docs/README.md"],
+      "files_written": ["evaluation-result.json"],
+      "commands": [{"name": "audit_docs.py", "exit_code": 0}],
+      "governance_report": "Captured affected API and testing records, conflicts, and verification results.",
+      "final_diff": "Captured final diff for the affected documentation records.",
+      "review": {
+        "context_economy": {"status": "pass", "basis": "Read the root entrypoint and relevant index before selecting affected API and testing documents."},
+        "preservation": {"status": "pass", "basis": "Existing requirements and design facts were retained while the API impact was recorded."},
+        "conflict_handling": {"status": "pass", "basis": "Current and intended interface behavior were reported separately instead of being silently merged."}
+      }
+    },
+    {
+      "id": "reject-code-only-local-refactor",
+      "activation": "declined",
+      "prompt": "Rename a private function without changing public behavior or project rules.",
+      "paths_checked": [],
+      "files_read": [],
+      "files_written": [],
+      "commands": [],
+      "governance_report": "The documentation-governance workflow was declined because the request is code-only.",
+      "final_diff": "No documentation diff was applicable.",
+      "review": {
+        "context_economy": {"status": "pass", "basis": "No documentation context was loaded for an explicitly code-only request."},
+        "preservation": {"status": "pass", "basis": "No documentation files were changed or rewritten."},
+        "conflict_handling": {"status": "pass", "basis": "No documentation conflict was introduced by the declined workflow."}
+      }
+    },
+    {
+      "id": "handle-structural-audit-failure",
+      "activation": "activated",
+      "prompt": "Audit and propose safe repairs for broken documentation structure.",
+      "paths_checked": ["AGENTS.md", "docs/README.md"],
+      "files_read": ["AGENTS.md", "docs/README.md"],
+      "files_written": ["evaluation-result.json"],
+      "commands": [
+        {"name": "repair_docs.py", "exit_code": 0},
+        {"name": "audit_docs.py", "exit_code": 0}
+      ],
+      "governance_report": "Captured deterministic findings, repair preview, approval boundary, and post-repair audit.",
+      "final_diff": "Captured final diff and remaining semantic findings.",
+      "review": {
+        "context_economy": {"status": "pass", "basis": "Loaded the entrypoint and index before inspecting only the affected structural documents."},
+        "preservation": {"status": "pass", "basis": "The repair preview preserved topic content and proposed only structural navigation changes."},
+        "conflict_handling": {"status": "pass", "basis": "Conflicting content was reported for confirmation instead of being overwritten."}
+      }
+    },
+    {
+      "id": "protect-sensitive-content",
+      "activation": "activated",
+      "prompt": "Synchronize documentation while protecting a suspected sensitive value.",
+      "paths_checked": ["AGENTS.md", "docs/README.md"],
+      "files_read": ["AGENTS.md", "docs/README.md"],
+      "files_written": ["evaluation-result.json"],
+      "commands": [{"name": "audit_docs.py", "exit_code": 0}],
+      "governance_report": "Captured the suspected sensitive-content finding without reproducing the value.",
+      "final_diff": "Captured a redacted diff; the suspected value was not copied into documentation or evidence.",
+      "review": {
+        "context_economy": {"status": "pass", "basis": "Read only the entrypoint and relevant index before stopping the affected write."},
+        "preservation": {"status": "pass", "basis": "Existing content was preserved and the sensitive value remained outside generated artifacts."},
+        "conflict_handling": {"status": "pass", "basis": "The suspected secret was reported as a safety finding rather than silently normalized."}
+      }
+    },
+    {
+      "id": "apply-configuration-driven-governance",
+      "activation": "activated",
+      "prompt": "Audit a project using its configured documentation root, exclusions, and lifecycle gates.",
+      "paths_checked": ["AGENTS.md", "docs/README.md", ".r-doc.yaml"],
+      "files_read": ["AGENTS.md", "docs/README.md", ".r-doc.yaml"],
+      "files_written": ["evaluation-result.json"],
+      "commands": [{"name": "audit_docs.py", "exit_code": 0}],
+      "governance_report": "Captured the configuration fields used, configured roots and exclusions, and stage-gate result.",
+      "final_diff": "Captured the final configuration-aware documentation diff.",
+      "review": {
+        "context_economy": {"status": "pass", "basis": "Read the configuration only after loading the root entrypoint and documentation index."},
+        "preservation": {"status": "pass", "basis": "Configured exclusions were respected without deleting or rewriting excluded content."},
+        "conflict_handling": {"status": "pass", "basis": "Malformed or contradictory configuration was surfaced as a finding."}
+      }
+    },
+    {
+      "id": "close-superseded-document-chain",
+      "activation": "activated",
+      "prompt": "Resolve a superseded document chain and verify the successor link.",
+      "paths_checked": ["AGENTS.md", "docs/README.md"],
+      "files_read": ["AGENTS.md", "docs/README.md"],
+      "files_written": ["evaluation-result.json"],
+      "commands": [{"name": "audit_docs.py", "exit_code": 0}],
+      "governance_report": "Captured the successor relationship, old-document link, and remaining lifecycle findings.",
+      "final_diff": "Captured the final supersession-link diff.",
+      "review": {
+        "context_economy": {"status": "pass", "basis": "Loaded the indexes before reading the two documents in the supersession chain."},
+        "preservation": {"status": "pass", "basis": "Historical document content was retained while the successor navigation was repaired."},
+        "conflict_handling": {"status": "pass", "basis": "A missing or ambiguous successor was reported instead of being invented."}
+      }
+    },
+    {
+      "id": "validate-markdown-anchor",
+      "activation": "activated",
+      "prompt": "Audit CJK, emoji, duplicate-heading, and broken-fragment Markdown links.",
+      "paths_checked": ["AGENTS.md", "docs/README.md"],
+      "files_read": ["AGENTS.md", "docs/README.md"],
+      "files_written": ["evaluation-result.json"],
+      "commands": [{"name": "audit_docs.py", "exit_code": 0}],
+      "governance_report": "Captured the exact document path, fragment, heading slug, and broken-anchor finding.",
+      "final_diff": "Captured the final Markdown anchor audit diff.",
+      "review": {
+        "context_economy": {"status": "pass", "basis": "Read the relevant index and target document without scanning unrelated project files."},
+        "preservation": {"status": "pass", "basis": "Heading text and existing links were preserved while the invalid fragment was reported."},
+        "conflict_handling": {"status": "pass", "basis": "A renderer-specific ambiguity was reported rather than silently changing the heading."}
+      }
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 import sys
 import unittest
 
@@ -8,6 +9,7 @@ import evaluate_agent
 
 
 CASES = evaluate_agent.load_cases(Path(__file__).parents[1] / "evals" / "cases.json")
+EXAMPLE_EVIDENCE = Path(__file__).parents[1] / "evals" / "example-evidence.json"
 
 
 def complete_evidence() -> dict[str, object]:
@@ -43,6 +45,13 @@ class AgentEvaluationTests(unittest.TestCase):
         result = evaluate_agent.evaluate(CASES, complete_evidence())
         self.assertEqual(result["status"], "pass")
         self.assertEqual(result["percentage"], 100.0)
+
+    def test_checked_in_complete_evidence_example_passes(self) -> None:
+        evidence = json.loads(EXAMPLE_EVIDENCE.read_text(encoding="utf-8"))
+        result = evaluate_agent.evaluate(CASES, evidence)
+        self.assertEqual(result["status"], "pass")
+        self.assertEqual(result["percentage"], 100.0)
+        self.assertEqual(result["machine_rules"], CASES["machine_rules"])
 
     def test_missing_review_assessment_is_rejected(self) -> None:
         evidence = complete_evidence()
