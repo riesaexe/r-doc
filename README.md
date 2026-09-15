@@ -198,9 +198,9 @@ docs/
 - Default to maintaining docs, indexes, metadata, and documentation comments, not business code;
 - Do not declare a development stage complete while its documentation remains unsynchronized.
 
-## What `0.2.10` adds (unreleased)
+## What `0.2.10` adds
 
-This unreleased maintenance update makes Agent evaluation evidence more observable and less self-reported:
+This maintenance update makes Agent evaluation evidence more observable and less self-reported:
 
 | Improvement | What it does | Safety boundary |
 | --- | --- | --- |
@@ -209,7 +209,7 @@ This unreleased maintenance update makes Agent evaluation evidence more observab
 | Evidence-derived scorecard | Derives activation, deterministic verification, safety, and repair discipline from captured evidence; human review dimensions require a written basis. | The runner still does not claim to infer semantic preservation or conflict quality automatically. |
 | Shared-module regression tests | Adds focused tests for Markdown, path, and security primitives. | Module tests complement, rather than replace, end-to-end audit tests. |
 
-This local candidate is backed by 59 regression tests. It has not been pushed or published.
+This release is backed by 59 regression tests.
 
 ## What `0.2.9` adds
 
