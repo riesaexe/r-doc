@@ -198,7 +198,7 @@ docs/
 - Default to maintaining docs, indexes, metadata, and documentation comments, not business code;
 - Do not declare a development stage complete while its documentation remains unsynchronized.
 
-## What `0.2.11` adds (unreleased)
+## What `0.2.11` adds
 
 This maintenance update makes Agent evaluation evidence directly runnable and makes machine scoring rules explicit:
 
@@ -208,7 +208,7 @@ This maintenance update makes Agent evaluation evidence directly runnable and ma
 | Declarative machine rules | Records each machine dimension's input checks and pass conditions in `evals/cases.json`, and validates the rule contract before scoring. | Rule descriptions do not claim semantic correctness beyond the listed observable checks. |
 | Example regression test | Runs the complete evidence example through the evaluator as part of the test suite. | Documentation examples cannot silently drift from the executable schema. |
 
-This local candidate is backed by the existing regression suite plus a validator test for the complete evidence example. It has not been pushed or published.
+This release is backed by the existing regression suite plus a validator test for the complete evidence example and is published from the validated `v0.2.11` tag.
 
 ## What `0.2.10` adds
 
