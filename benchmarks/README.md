@@ -9,21 +9,25 @@ benchmarks/
 ├── README.md
 ├── summary.json
 ├── performance-baseline.json
-├── codex-gpt-5.6/
+├── codex-gpt-5.5/
 │   └── run-001/
 │       ├── run.json
 │       ├── trace.jsonl
 │       ├── evidence.json
-│       └── result.json
+│       ├── result.json
+│       ├── final-response.md
+│       └── codex-events.jsonl
 └── baseline-no-r-doc/
     └── run-001/
         ├── run.json
         ├── trace.jsonl
         ├── evidence.json
-        └── result.json
+        ├── result.json
+        ├── final-response.md
+        └── codex-events.jsonl
 ```
 
-The repository currently contains no real Agent run. `summary.json` therefore stays `pending`; it must not be read as a benchmark score.
+If no valid real Agent run has been captured, `summary.json` stays `pending`; it must not be read as a benchmark score.
 
 ## Capturing a real run
 
@@ -32,12 +36,12 @@ Each `run.json` must contain:
 ```json
 {
   "schema_version": 1,
-  "profile": "codex-gpt-5.6",
+  "profile": "codex-gpt-5.5",
   "run_id": "run-001",
   "condition": "with-r-doc",
   "agent": "Codex",
-  "model": "gpt-5.6",
-  "skill_version": "0.2.14",
+  "model": "gpt-5.5",
+  "skill_version": "0.2.15",
   "captured_at": "2026-09-15T00:00:00Z",
   "source": "manual-real-agent-run",
   "trace_path": "trace.jsonl"
@@ -48,18 +52,25 @@ Each `run.json` must contain:
 
 ### Trace JSONL contract
 
-The trace is a normalized JSONL record, not an arbitrary marker. Every line is a JSON object with `schema_version: 1` and a contiguous zero-based `sequence`. The first line is a `trace_start` event whose `run_id`, `profile`, `condition`, `agent`, `model`, and `skill_version` must match `run.json`; the last line is `trace_end`.
+The trace is a normalized JSONL record, not an arbitrary marker. Every line is a JSON object with `schema_version: 2` and a contiguous zero-based `sequence`. The first line is a `trace_start` event whose `run_id`, `profile`, `condition`, `agent`, `model`, and `skill_version` must match `run.json`; the last line is `trace_end`.
 
-Between those boundary events, each case is represented exactly once by `scenario_start` and `scenario_end`. Action events must stay inside their active scenario and use one of these forms:
+Between those boundary events, each case is represented exactly once by `scenario_start` and `scenario_end`. Each scenario must also contain exactly one `prompt`, `activation_decision`, `skill_selected`, `governance_report`, `final_response`, and `diff_snapshot`, plus one `review` event for every review dimension. Action events must stay inside their active scenario.
 
 ```json
-{"schema_version":1,"sequence":2,"event":"path_checked","scenario_id":"trace-public-interface-change","path":"docs/README.md"}
-{"schema_version":1,"sequence":3,"event":"file_read","scenario_id":"trace-public-interface-change","path":"docs/README.md"}
-{"schema_version":1,"sequence":4,"event":"command","scenario_id":"trace-public-interface-change","name":"audit_docs.py","exit_code":0}
-{"schema_version":1,"sequence":5,"event":"file_written","scenario_id":"trace-public-interface-change","path":"docs/api.md"}
+{"schema_version":2,"sequence":2,"event":"prompt","scenario_id":"trace-public-interface-change","text":"..."}
+{"schema_version":2,"sequence":3,"event":"activation_decision","scenario_id":"trace-public-interface-change","decision":"activated"}
+{"schema_version":2,"sequence":4,"event":"skill_selected","scenario_id":"trace-public-interface-change","skill":"r-doc"}
+{"schema_version":2,"sequence":5,"event":"path_checked","scenario_id":"trace-public-interface-change","path":"docs/README.md"}
+{"schema_version":2,"sequence":6,"event":"file_read","scenario_id":"trace-public-interface-change","path":"docs/README.md"}
+{"schema_version":2,"sequence":7,"event":"command","scenario_id":"trace-public-interface-change","name":"audit_docs.py","exit_code":0}
+{"schema_version":2,"sequence":8,"event":"file_written","scenario_id":"trace-public-interface-change","path":"docs/api.md"}
+{"schema_version":2,"sequence":9,"event":"governance_report","scenario_id":"trace-public-interface-change","text":"..."}
+{"schema_version":2,"sequence":10,"event":"final_response","scenario_id":"trace-public-interface-change","text":"..."}
+{"schema_version":2,"sequence":11,"event":"diff_snapshot","scenario_id":"trace-public-interface-change","text":"..."}
+{"schema_version":2,"sequence":12,"event":"review","scenario_id":"trace-public-interface-change","dimension":"context_economy","status":"pass","basis":"..."}
 ```
 
-The aggregator derives `paths_checked`, `files_read`, `commands`, and `files_written` from these events. It rejects malformed JSONL, missing or unknown scenarios, broken sequencing, manifest/header mismatches, secret-like trace values, and any difference between derived evidence and `evidence.json`. File lists are compared as sets; command labels and exit codes are compared in order. The derived per-scenario values are retained as `runs[*].trace_derived` in `summary.json` for audit inspection.
+The event field set is closed by event type, so arbitrary fields such as a trace `note` are rejected. The aggregator derives activation, skill selection, prompt, reports, final response, diff, reviews, paths, reads, commands, and writes from these events and cross-checks them against `evidence.json`. It rejects malformed JSONL, missing or unknown scenarios, broken sequencing, manifest/header mismatches, secret-like trace values, and any difference between derived evidence and `evidence.json`. The derived per-scenario values are retained as `runs[*].trace_derived` in `summary.json` for audit inspection. This remains a structural consistency check rather than cryptographic provenance; `codex-events.jsonl` preserves a sanitized raw CLI capture for manual review.
 
 ## Validation and aggregation
 
@@ -93,7 +104,13 @@ The reported metrics mean:
 
 `required_files_read` must be a subset of `allowed_files_read`, and the allowed and forbidden sets may not overlap. This prevents a legitimate read such as `docs/api.md` or `docs/testing.md` from being mislabeled as unnecessary merely because it was not a minimum required read.
 
-`summary.json` keeps profile metrics nested under `conditions` and adds `paired_comparisons`. A paired comparison matches the same `agent`, `model`, and `run_id` across both conditions, then reports per-condition averages, with-r-doc minus baseline deltas, per-metric mean/median/standard deviation, and whether at least three matched pairs are available. Only runs whose manifest and trace both pass validation enter these aggregates; invalid runs remain visible in `runs` with their errors. Compare at least three pairs before drawing a conclusion; `summary.json` is a historical record, not a replacement for inspecting traces and individual results.
+Forbidden reads are always reported in the per-scenario metrics. Ordinary evaluation lowers a passing `context_economy` review to `partial`; `evaluate_agent.py --strict` and the aggregator's strict evaluation fail the run, so a run that reads `.env` or `secrets.md` cannot still count as a clean benchmark result.
+
+`summary.json` keeps profile metrics nested under `conditions` and adds `paired_comparisons`. A paired comparison matches the same `agent`, `model`, and `run_id` across both conditions, then reports per-condition averages, with-r-doc minus baseline deltas, per-metric mean/median/standard deviation, and 95% Student-t intervals. `trend_readiness` requires three pairs, `statistical_readiness` requires five, and `strong_evidence_readiness` requires ten. Only runs whose manifest, strict evaluator, and trace gates pass validation enter these aggregates; invalid runs remain visible in `runs` with their errors.
+
+Capture a real Codex run with `python benchmarks/capture_codex.py --profile codex-gpt-5.5 --run-id run-001 --condition with-r-doc --model gpt-5.5`, then capture the matched baseline under the `baseline-no-r-doc` profile with the same run ID: `python benchmarks/capture_codex.py --profile baseline-no-r-doc --run-id run-001 --condition baseline-no-r-doc --model gpt-5.5`. The capture tool stores agent-produced evidence and trace plus a sanitized raw CLI event stream; it does not synthesize evidence from the case definitions.
+
+Failed real captures are preserved under `benchmarks/invalid-captures/` for audit and prompt debugging, but their directories are intentionally outside the official `*/run-*/evidence.json` discovery pattern and never enter profile or paired statistics.
 
 ## Audit performance baseline
 
@@ -107,6 +124,6 @@ python skills/r-doc/scripts/benchmark_audit.py \
   --output benchmarks/performance-baseline.json
 ```
 
-The stored wall-clock values are local trend data with Python and platform metadata. The default is now ten measured iterations; the report includes a linearly interpolated empirical p95, `max_seconds`, and a low-sample flag. With fewer than ten samples the p95 remains a noisy estimate, so the maximum is retained for transparent inspection. These values are not a CI pass/fail threshold; rerun them on representative machines before making scale claims. The earlier three-sample 100→1000 snapshot grew about 12.8x, while the refreshed ten-sample median is about 9.4x and its p95 about 10.1x. The spread reinforces that scale behavior needs repeated, representative measurements; any mild super-linear interpretation remains an observation, not a complexity guarantee.
+The stored wall-clock values are local trend data with Python and platform metadata. The default is now ten measured iterations; the report includes a linearly interpolated empirical p95, `max_seconds`, and a low-sample flag. With fewer than ten samples the p95 remains a noisy estimate, so the maximum is retained for transparent inspection. These values are not a CI pass/fail threshold; rerun them on representative machines before making scale claims. The refreshed local snapshot has 100→1000 median growth of about 12.2x and p95 growth of about 14.5x; 1000→5000 median growth is about 4.1x. The spread reinforces that scale behavior needs repeated, representative measurements; any mild super-linear interpretation remains an observation, not a complexity guarantee.
 
 返回：[开发文档索引](../docs/development/README.md) · [Agent 评测契约](../skills/r-doc/references/agent-evaluation.md)

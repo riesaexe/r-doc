@@ -1,17 +1,20 @@
 {
-  "schema_version": 2,
-  "skill_version": "0.2.14",
+  "schema_version": 3,
+  "skill_version": "0.2.15",
   "agent": "example-agent",
+  "condition": "with-r-doc",
   "scenarios": [
     {
       "id": "initialize-undocumented-project",
       "activation": "activated",
+      "skill_selected": "r-doc",
       "prompt": "Establish documentation governance in an undocumented project.",
       "paths_checked": ["AGENTS.md", "docs/"],
       "files_read": [],
       "files_written": ["AGENTS.md", "docs/README.md"],
       "commands": [{"name": "audit_docs.py", "exit_code": 0}],
       "governance_report": "Captured the initialization scope, generated skeleton, and remaining authoring decisions.",
+      "final_response": "Captured the final response for the initialization scenario.",
       "final_diff": "Captured final diff for AGENTS.md and docs/README.md.",
       "review": {
         "context_economy": {"status": "pass", "basis": "Checked the two entrypoint paths before reading or writing the minimum governance files."},
@@ -22,12 +25,14 @@
     {
       "id": "trace-public-interface-change",
       "activation": "activated",
+      "skill_selected": "r-doc",
       "prompt": "Update documentation for a public API response change.",
       "paths_checked": ["AGENTS.md", "docs/README.md"],
       "files_read": ["AGENTS.md", "docs/README.md"],
       "files_written": ["evaluation-result.json"],
       "commands": [{"name": "audit_docs.py", "exit_code": 0}],
       "governance_report": "Captured affected API and testing records, conflicts, and verification results.",
+      "final_response": "Captured the final response for the public interface scenario.",
       "final_diff": "Captured final diff for the affected documentation records.",
       "review": {
         "context_economy": {"status": "pass", "basis": "Read the root entrypoint and relevant index before selecting affected API and testing documents."},
@@ -38,12 +43,14 @@
     {
       "id": "reject-code-only-local-refactor",
       "activation": "declined",
+      "skill_selected": "none",
       "prompt": "Rename a private function without changing public behavior or project rules.",
       "paths_checked": [],
       "files_read": [],
       "files_written": [],
       "commands": [],
       "governance_report": "The documentation-governance workflow was declined because the request is code-only.",
+      "final_response": "Captured the final response for the declined workflow scenario.",
       "final_diff": "No documentation diff was applicable.",
       "review": {
         "context_economy": {"status": "pass", "basis": "No documentation context was loaded for an explicitly code-only request."},
@@ -54,6 +61,7 @@
     {
       "id": "handle-structural-audit-failure",
       "activation": "activated",
+      "skill_selected": "r-doc",
       "prompt": "Audit and propose safe repairs for broken documentation structure.",
       "paths_checked": ["AGENTS.md", "docs/README.md"],
       "files_read": ["AGENTS.md", "docs/README.md"],
@@ -63,6 +71,7 @@
         {"name": "audit_docs.py", "exit_code": 0}
       ],
       "governance_report": "Captured deterministic findings, repair preview, approval boundary, and post-repair audit.",
+      "final_response": "Captured the final response for the structural audit scenario.",
       "final_diff": "Captured final diff and remaining semantic findings.",
       "review": {
         "context_economy": {"status": "pass", "basis": "Loaded the entrypoint and index before inspecting only the affected structural documents."},
@@ -73,12 +82,14 @@
     {
       "id": "protect-sensitive-content",
       "activation": "activated",
+      "skill_selected": "r-doc",
       "prompt": "Synchronize documentation while protecting a suspected sensitive value.",
       "paths_checked": ["AGENTS.md", "docs/README.md"],
       "files_read": ["AGENTS.md", "docs/README.md"],
       "files_written": ["evaluation-result.json"],
       "commands": [{"name": "audit_docs.py", "exit_code": 0}],
       "governance_report": "Captured the suspected sensitive-content finding without reproducing the value.",
+      "final_response": "Captured the final response for the sensitive-content scenario.",
       "final_diff": "Captured a redacted diff; the suspected value was not copied into documentation or evidence.",
       "review": {
         "context_economy": {"status": "pass", "basis": "Read only the entrypoint and relevant index before stopping the affected write."},
@@ -89,12 +100,14 @@
     {
       "id": "apply-configuration-driven-governance",
       "activation": "activated",
+      "skill_selected": "r-doc",
       "prompt": "Audit a project using its configured documentation root, exclusions, and lifecycle gates.",
       "paths_checked": ["AGENTS.md", "docs/README.md", ".r-doc.yaml"],
       "files_read": ["AGENTS.md", "docs/README.md", ".r-doc.yaml"],
       "files_written": ["evaluation-result.json"],
       "commands": [{"name": "audit_docs.py", "exit_code": 0}],
       "governance_report": "Captured the configuration fields used, configured roots and exclusions, and stage-gate result.",
+      "final_response": "Captured the final response for the configuration scenario.",
       "final_diff": "Captured the final configuration-aware documentation diff.",
       "review": {
         "context_economy": {"status": "pass", "basis": "Read the configuration only after loading the root entrypoint and documentation index."},
@@ -105,12 +118,14 @@
     {
       "id": "close-superseded-document-chain",
       "activation": "activated",
+      "skill_selected": "r-doc",
       "prompt": "Resolve a superseded document chain and verify the successor link.",
       "paths_checked": ["AGENTS.md", "docs/README.md"],
       "files_read": ["AGENTS.md", "docs/README.md"],
       "files_written": ["evaluation-result.json"],
       "commands": [{"name": "audit_docs.py", "exit_code": 0}],
       "governance_report": "Captured the successor relationship, old-document link, and remaining lifecycle findings.",
+      "final_response": "Captured the final response for the superseded-document scenario.",
       "final_diff": "Captured the final supersession-link diff.",
       "review": {
         "context_economy": {"status": "pass", "basis": "Loaded the indexes before reading the two documents in the supersession chain."},
@@ -121,12 +136,14 @@
     {
       "id": "validate-markdown-anchor",
       "activation": "activated",
+      "skill_selected": "r-doc",
       "prompt": "Audit CJK, emoji, duplicate-heading, and broken-fragment Markdown links.",
       "paths_checked": ["AGENTS.md", "docs/README.md"],
       "files_read": ["AGENTS.md", "docs/README.md"],
       "files_written": ["evaluation-result.json"],
       "commands": [{"name": "audit_docs.py", "exit_code": 0}],
       "governance_report": "Captured the exact document path, fragment, heading slug, and broken-anchor finding.",
+      "final_response": "Captured the final response for the Markdown anchor scenario.",
       "final_diff": "Captured the final Markdown anchor audit diff.",
       "review": {
         "context_economy": {"status": "pass", "basis": "Read the relevant index and target document without scanning unrelated project files."},

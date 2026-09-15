@@ -82,7 +82,7 @@ The deterministic checks currently cover:
 
 ## Empirical and scale benchmarks
 
-The Agent-evaluation schema is not a benchmark result. Store real runs with a structured trace under the repository's `benchmarks/<profile>/run-<number>/` layout and use `aggregate_benchmarks.py` to regenerate `result.json` and `summary.json`; keep `with-r-doc` and `baseline-no-r-doc` conditions separate and capture at least three matched runs per condition. The aggregator derives and cross-checks paths, reads, commands, and writes from the trace. A missing or unpaired run remains `pending` or statistically not ready rather than becoming a zero or passing score.
+The Agent-evaluation schema is not a benchmark result. Store real runs with a schema-versioned trace under the repository's `benchmarks/<profile>/run-<number>/` layout and use `aggregate_benchmarks.py` to regenerate `result.json` and `summary.json`; keep `with-r-doc` and `baseline-no-r-doc` conditions separate and use the fixed fixture/prompt for every matched run. The aggregator derives and cross-checks prompt, activation, selected skill, reports, final response, diff, review, paths, reads, commands, and writes from the trace. Three matched pairs are trend-ready, five are statistical-ready, and ten are strong-evidence-ready; confidence intervals remain descriptive at small n. A missing or unpaired run remains `pending` or statistically not ready rather than becoming a zero or passing score.
 
 Use `benchmark_audit.py` for the separate deterministic scale baseline:
 
@@ -90,7 +90,7 @@ Use `benchmark_audit.py` for the separate deterministic scale baseline:
 python scripts/benchmark_audit.py --sizes 100,1000,5000 --iterations 10 --warmup 0 --output ../../benchmarks/performance-baseline.json
 ~~~
 
-The recorded median, linearly interpolated p95, and maximum wall-clock values are machine-specific trend data. With fewer than ten samples p95 is a low-sample estimate; use the retained maximum to inspect the upper tail. These values are useful for discovering scale risks, but are not a universal CI threshold. The earlier three-sample 100→1000 snapshot was about 12.8x, while the refreshed ten-sample median is about 9.4x and p95 about 10.1x. This variance means any mild super-linear interpretation may reflect relationship/index work or platform noise, not a promised asymptotic complexity.
+The recorded median, linearly interpolated p95, and maximum wall-clock values are machine-specific trend data. With fewer than ten samples p95 is a low-sample estimate; use the retained maximum to inspect the upper tail. These values are useful for discovering scale risks, but are not a universal CI threshold. The refreshed local snapshot has 100→1000 median growth of about 12.2x and p95 growth of about 14.5x, while 1000→5000 median growth is about 4.1x. This variance means any mild super-linear interpretation may reflect relationship/index work or platform noise, not a promised asymptotic complexity.
 
 ## Validate the skill package
 

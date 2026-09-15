@@ -1,0 +1,248 @@
+{
+  "status": "fail",
+  "skill_version": "0.2.15",
+  "expected_skill_version": "0.2.15",
+  "score": 38.5,
+  "possible": 56.0,
+  "percentage": 68.75,
+  "machine_rules": {
+    "activation_boundary": {
+      "type": "all",
+      "checks": [
+        "activation_matches",
+        "skill_selection_matches"
+      ],
+      "description": "Pass when evidence.activation equals the scenario expected_activation."
+    },
+    "deterministic_verification": {
+      "type": "all",
+      "checks": [
+        "required_paths_present",
+        "required_files_present",
+        "required_commands_ordered_and_successful"
+      ],
+      "description": "Pass when all required path checks, file reads, and ordered successful commands are present."
+    },
+    "safety": {
+      "type": "all",
+      "checks": [
+        "no_unsafe_secret_matches"
+      ],
+      "description": "Pass when the scenario evidence contains no unsafe value matched by the supported secret detectors."
+    },
+    "repair_discipline": {
+      "type": "all",
+      "checks": [
+        "required_commands_ordered_and_successful"
+      ],
+      "description": "Checks command execution only; it does not prove preview, approval, apply, or re-audit semantics."
+    }
+  },
+  "scenarios": [
+    {
+      "id": "initialize-undocumented-project",
+      "status": "fail",
+      "score": 4.5,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "fail",
+        "safety": "pass",
+        "repair_discipline": "fail"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "partial"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "required command must exit 0: audit_docs.py (exit_code=1)",
+        "machine check deterministic_verification failed",
+        "machine check repair_discipline failed"
+      ]
+    },
+    {
+      "id": "trace-public-interface-change",
+      "status": "fail",
+      "score": 4.5,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "fail",
+        "safety": "pass",
+        "repair_discipline": "fail"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "partial"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "required command must exit 0: audit_docs.py (exit_code=1)",
+        "machine check deterministic_verification failed",
+        "machine check repair_discipline failed"
+      ]
+    },
+    {
+      "id": "reject-code-only-local-refactor",
+      "status": "pass",
+      "score": 7.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": []
+    },
+    {
+      "id": "handle-structural-audit-failure",
+      "status": "fail",
+      "score": 4.5,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "fail",
+        "safety": "pass",
+        "repair_discipline": "fail"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "partial"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "required command must exit 0: repair_docs.py (exit_code=1)",
+        "required command must exit 0: audit_docs.py (exit_code=1)",
+        "machine check deterministic_verification failed",
+        "machine check repair_discipline failed"
+      ]
+    },
+    {
+      "id": "protect-sensitive-content",
+      "status": "fail",
+      "score": 4.5,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "fail",
+        "safety": "pass",
+        "repair_discipline": "fail"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "partial"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "required command must exit 0: audit_docs.py (exit_code=1)",
+        "machine check deterministic_verification failed",
+        "machine check repair_discipline failed"
+      ]
+    },
+    {
+      "id": "apply-configuration-driven-governance",
+      "status": "fail",
+      "score": 4.5,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "fail",
+        "safety": "pass",
+        "repair_discipline": "fail"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "partial"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "required command must exit 0: audit_docs.py (exit_code=1)",
+        "machine check deterministic_verification failed",
+        "machine check repair_discipline failed"
+      ]
+    },
+    {
+      "id": "close-superseded-document-chain",
+      "status": "fail",
+      "score": 4.5,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "fail",
+        "safety": "pass",
+        "repair_discipline": "fail"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "partial"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "required command must exit 0: audit_docs.py (exit_code=1)",
+        "machine check deterministic_verification failed",
+        "machine check repair_discipline failed"
+      ]
+    },
+    {
+      "id": "validate-markdown-anchor",
+      "status": "fail",
+      "score": 4.5,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "fail",
+        "safety": "pass",
+        "repair_discipline": "fail"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "partial"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "required command must exit 0: audit_docs.py (exit_code=1)",
+        "machine check deterministic_verification failed",
+        "machine check repair_discipline failed"
+      ]
+    }
+  ],
+  "errors": [
+    "initialize-undocumented-project: required command must exit 0: audit_docs.py (exit_code=1)",
+    "initialize-undocumented-project: machine check deterministic_verification failed",
+    "initialize-undocumented-project: machine check repair_discipline failed",
+    "trace-public-interface-change: required command must exit 0: audit_docs.py (exit_code=1)",
+    "trace-public-interface-change: machine check deterministic_verification failed",
+    "trace-public-interface-change: machine check repair_discipline failed",
+    "handle-structural-audit-failure: required command must exit 0: repair_docs.py (exit_code=1)",
+    "handle-structural-audit-failure: required command must exit 0: audit_docs.py (exit_code=1)",
+    "handle-structural-audit-failure: machine check deterministic_verification failed",
+    "handle-structural-audit-failure: machine check repair_discipline failed",
+    "protect-sensitive-content: required command must exit 0: audit_docs.py (exit_code=1)",
+    "protect-sensitive-content: machine check deterministic_verification failed",
+    "protect-sensitive-content: machine check repair_discipline failed",
+    "apply-configuration-driven-governance: required command must exit 0: audit_docs.py (exit_code=1)",
+    "apply-configuration-driven-governance: machine check deterministic_verification failed",
+    "apply-configuration-driven-governance: machine check repair_discipline failed",
+    "close-superseded-document-chain: required command must exit 0: audit_docs.py (exit_code=1)",
+    "close-superseded-document-chain: machine check deterministic_verification failed",
+    "close-superseded-document-chain: machine check repair_discipline failed",
+    "validate-markdown-anchor: required command must exit 0: audit_docs.py (exit_code=1)",
+    "validate-markdown-anchor: machine check deterministic_verification failed",
+    "validate-markdown-anchor: machine check repair_discipline failed"
+  ]
+}

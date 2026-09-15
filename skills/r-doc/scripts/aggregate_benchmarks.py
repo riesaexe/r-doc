@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import statistics
 import sys
 from pathlib import Path
@@ -12,18 +13,61 @@ from evaluate_agent import evaluate, load_cases
 
 
 RUN_SCHEMA_VERSION = 1
-SUMMARY_SCHEMA_VERSION = 2
-TRACE_SCHEMA_VERSION = 1
+SUMMARY_SCHEMA_VERSION = 3
+TRACE_SCHEMA_VERSION = 2
 RUN_CONDITIONS = {"with-r-doc", "baseline-no-r-doc"}
 TRACE_EVENTS = {
     "trace_start",
     "scenario_start",
+    "prompt",
+    "activation_decision",
+    "skill_selected",
     "path_checked",
     "file_read",
     "command",
     "file_written",
+    "governance_report",
+    "final_response",
+    "diff_snapshot",
+    "review",
     "scenario_end",
     "trace_end",
+}
+TRACE_HEADER_FIELDS = {"run_id", "profile", "condition", "agent", "model", "skill_version"}
+TRACE_COMMON_FIELDS = {"schema_version", "sequence", "event"}
+TRACE_EVENT_FIELDS = {
+    "trace_start": TRACE_COMMON_FIELDS | TRACE_HEADER_FIELDS,
+    "scenario_start": TRACE_COMMON_FIELDS | {"scenario_id"},
+    "prompt": TRACE_COMMON_FIELDS | {"scenario_id", "text"},
+    "activation_decision": TRACE_COMMON_FIELDS | {"scenario_id", "decision"},
+    "skill_selected": TRACE_COMMON_FIELDS | {"scenario_id", "skill"},
+    "path_checked": TRACE_COMMON_FIELDS | {"scenario_id", "path"},
+    "file_read": TRACE_COMMON_FIELDS | {"scenario_id", "path"},
+    "command": TRACE_COMMON_FIELDS | {"scenario_id", "name", "command", "exit_code"},
+    "file_written": TRACE_COMMON_FIELDS | {"scenario_id", "path"},
+    "governance_report": TRACE_COMMON_FIELDS | {"scenario_id", "text"},
+    "final_response": TRACE_COMMON_FIELDS | {"scenario_id", "text"},
+    "diff_snapshot": TRACE_COMMON_FIELDS | {"scenario_id", "text"},
+    "review": TRACE_COMMON_FIELDS | {"scenario_id", "dimension", "status", "basis"},
+    "scenario_end": TRACE_COMMON_FIELDS | {"scenario_id"},
+    "trace_end": TRACE_COMMON_FIELDS,
+}
+TRACE_REQUIRED_FIELDS = {
+    "trace_start": TRACE_COMMON_FIELDS | TRACE_HEADER_FIELDS,
+    "scenario_start": TRACE_COMMON_FIELDS | {"scenario_id"},
+    "prompt": TRACE_COMMON_FIELDS | {"scenario_id", "text"},
+    "activation_decision": TRACE_COMMON_FIELDS | {"scenario_id", "decision"},
+    "skill_selected": TRACE_COMMON_FIELDS | {"scenario_id", "skill"},
+    "path_checked": TRACE_COMMON_FIELDS | {"scenario_id", "path"},
+    "file_read": TRACE_COMMON_FIELDS | {"scenario_id", "path"},
+    "command": TRACE_COMMON_FIELDS | {"scenario_id", "exit_code"},
+    "file_written": TRACE_COMMON_FIELDS | {"scenario_id", "path"},
+    "governance_report": TRACE_COMMON_FIELDS | {"scenario_id", "text"},
+    "final_response": TRACE_COMMON_FIELDS | {"scenario_id", "text"},
+    "diff_snapshot": TRACE_COMMON_FIELDS | {"scenario_id", "text"},
+    "review": TRACE_COMMON_FIELDS | {"scenario_id", "dimension", "status", "basis"},
+    "scenario_end": TRACE_COMMON_FIELDS | {"scenario_id"},
+    "trace_end": TRACE_COMMON_FIELDS,
 }
 METRIC_NAMES = (
     "activation_accuracy",
@@ -161,10 +205,17 @@ def _validate_trace(
     }
     derived: dict[str, dict[str, Any]] = {
         identifier: {
+            "activation": None,
+            "skill_selected": None,
+            "prompt": None,
             "paths_checked": [],
             "files_read": [],
             "files_written": [],
             "commands": [],
+            "governance_report": None,
+            "final_response": None,
+            "final_diff": None,
+            "review": {},
         }
         for identifier in expected_ids
     }
@@ -188,6 +239,20 @@ def _validate_trace(
         if event_name not in TRACE_EVENTS:
             errors.append(f"{trace_path}: trace event {expected_sequence} has unsupported event type: {event_name}")
             continue
+        allowed_fields = TRACE_EVENT_FIELDS[event_name]
+        required_fields = TRACE_REQUIRED_FIELDS[event_name]
+        unknown_fields = sorted(set(event) - allowed_fields)
+        if unknown_fields:
+            errors.append(
+                f"{trace_path}: {event_name} event {expected_sequence} has unsupported fields: "
+                + ", ".join(unknown_fields)
+            )
+        missing_fields = sorted(required_fields - set(event))
+        if missing_fields:
+            errors.append(
+                f"{trace_path}: {event_name} event {expected_sequence} is missing fields: "
+                + ", ".join(missing_fields)
+            )
         if event_name == "trace_start":
             for field in header_fields:
                 if event.get(field) != manifest.get(field):
@@ -249,10 +314,57 @@ def _validate_trace(
                 derived[scenario_id]["commands"].append(
                     {
                         key: event[key]
-                        for key in ("name", "command", "exit_code")
-                        if key in event
+                    for key in ("name", "command", "exit_code")
+                    if key in event
                     }
                 )
+        elif event_name in {"prompt", "governance_report", "final_response", "diff_snapshot"}:
+            text = event.get("text")
+            if not _non_empty(text):
+                errors.append(f"{trace_path}: {event_name} event {expected_sequence} requires non-empty text")
+            elif scenario_id in derived:
+                field = {
+                    "prompt": "prompt",
+                    "governance_report": "governance_report",
+                    "final_response": "final_response",
+                    "diff_snapshot": "final_diff",
+                }[event_name]
+                if derived[scenario_id][field] is not None:
+                    errors.append(f"{trace_path}: {scenario_id} has duplicate {event_name} events")
+                else:
+                    derived[scenario_id][field] = text
+        elif event_name == "activation_decision":
+            decision = event.get("decision")
+            if decision not in {"activated", "declined"}:
+                errors.append(
+                    f"{trace_path}: activation_decision event {expected_sequence} has invalid decision"
+                )
+            elif scenario_id in derived:
+                if derived[scenario_id]["activation"] is not None:
+                    errors.append(f"{trace_path}: {scenario_id} has duplicate activation_decision events")
+                else:
+                    derived[scenario_id]["activation"] = decision
+        elif event_name == "skill_selected":
+            skill = event.get("skill")
+            if not _non_empty(skill):
+                errors.append(f"{trace_path}: skill_selected event {expected_sequence} requires a non-empty skill")
+            elif scenario_id in derived:
+                if derived[scenario_id]["skill_selected"] is not None:
+                    errors.append(f"{trace_path}: {scenario_id} has duplicate skill_selected events")
+                else:
+                    derived[scenario_id]["skill_selected"] = skill
+        elif event_name == "review":
+            dimension = event.get("dimension")
+            status = event.get("status")
+            basis = event.get("basis")
+            if not _non_empty(dimension) or status not in {"pass", "partial", "fail"} or not _non_empty(basis):
+                errors.append(f"{trace_path}: review event {expected_sequence} is invalid")
+            elif scenario_id in derived:
+                review = derived[scenario_id]["review"]
+                if dimension in review:
+                    errors.append(f"{trace_path}: {scenario_id} has duplicate review dimension: {dimension}")
+                else:
+                    review[dimension] = {"status": status, "basis": basis}
 
     if active_scenario is not None:
         errors.append(f"{trace_path}: scenario is missing scenario_end: {active_scenario}")
@@ -267,6 +379,42 @@ def _validate_trace(
     if _trace_contains_secret(events):
         errors.append(f"{trace_path}: trace contains a possible sensitive value")
 
+    expected_review_dimensions = {
+        str(dimension)
+        for dimension in cases.get("review_dimensions", [])
+        if _non_empty(dimension)
+    }
+    condition_skill = {"with-r-doc": "r-doc", "baseline-no-r-doc": "none"}.get(manifest.get("condition"))
+    expected_activation_by_id = {
+        str(case.get("id")): case.get("expected_activation")
+        for case in cases.get("scenarios", [])
+        if isinstance(case, dict) and _non_empty(case.get("id"))
+    }
+    for identifier in sorted(expected_ids):
+        scenario = derived[identifier]
+        for field in (
+            "prompt",
+            "activation",
+            "skill_selected",
+            "governance_report",
+            "final_response",
+            "final_diff",
+        ):
+            if scenario[field] is None:
+                errors.append(f"{trace_path}: {identifier} is missing trace-derived field: {field}")
+        expected_skill = (
+            condition_skill
+            if expected_activation_by_id.get(identifier) == "activated"
+            else "none"
+        )
+        if expected_skill is not None and scenario["skill_selected"] != expected_skill:
+            errors.append(
+                f"{trace_path}: {identifier} skill_selected must be {expected_skill!r} for condition "
+                f"{manifest.get('condition')!r}"
+            )
+        if set(scenario["review"]) != expected_review_dimensions:
+            errors.append(f"{trace_path}: {identifier} review dimensions do not match cases")
+
     evidence_by_id = {
         str(item.get("id")): item
         for item in evidence.get("scenarios", [])
@@ -276,6 +424,16 @@ def _validate_trace(
         item = evidence_by_id.get(identifier)
         if not isinstance(item, dict):
             continue
+        for field in (
+            "activation",
+            "skill_selected",
+            "prompt",
+            "governance_report",
+            "final_response",
+            "final_diff",
+        ):
+            if item.get(field) != derived[identifier][field]:
+                errors.append(f"{trace_path}: trace/evidence mismatch for {identifier} {field}")
         for field in ("paths_checked", "files_read", "files_written"):
             evidence_values = item.get(field)
             if not isinstance(evidence_values, list) or not all(isinstance(value, str) for value in evidence_values):
@@ -299,6 +457,9 @@ def _validate_trace(
             ]
             if evidence_signature != trace_signature or len(evidence_signature) != len(evidence_commands):
                 errors.append(f"{trace_path}: trace/evidence mismatch for {identifier} commands")
+        evidence_review = item.get("review")
+        if evidence_review != derived[identifier]["review"]:
+            errors.append(f"{trace_path}: trace/evidence mismatch for {identifier} review")
 
     return errors, {
         "event_count": len(events),
@@ -397,7 +558,9 @@ def _validated_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return [
         record
         for record in records
-        if record.get("manifest_validation") == "pass" and record.get("trace_validation") == "pass"
+        if record.get("manifest_validation") == "pass"
+        and record.get("trace_validation") == "pass"
+        and record.get("status") in {"pass", "partial"}
     ]
 
 
@@ -425,13 +588,63 @@ def _profile_summary(records: list[dict[str, Any]]) -> dict[str, dict[str, Any]]
     return summaries
 
 
-def _delta_statistics(values: list[float]) -> dict[str, float]:
+T_CRITICAL_95 = {
+    1: 12.706,
+    2: 4.303,
+    3: 3.182,
+    4: 2.776,
+    5: 2.571,
+    6: 2.447,
+    7: 2.365,
+    8: 2.306,
+    9: 2.262,
+    10: 2.228,
+    11: 2.201,
+    12: 2.179,
+    13: 2.160,
+    14: 2.145,
+    15: 2.131,
+    16: 2.120,
+    17: 2.110,
+    18: 2.101,
+    19: 2.093,
+    20: 2.086,
+    21: 2.080,
+    22: 2.074,
+    23: 2.069,
+    24: 2.064,
+    25: 2.060,
+    26: 2.056,
+    27: 2.052,
+    28: 2.048,
+    29: 2.045,
+    30: 2.042,
+}
+
+
+def _delta_statistics(values: list[float]) -> dict[str, float | None | str]:
+    count = len(values)
+    mean = statistics.mean(values)
+    stdev = statistics.stdev(values) if count > 1 else 0.0
+    if count > 1:
+        critical = T_CRITICAL_95.get(count - 1, 1.96)
+        half_width = critical * stdev / math.sqrt(count)
+        ci95_low: float | None = round(mean - half_width, 2)
+        ci95_high: float | None = round(mean + half_width, 2)
+        ci95_method = "student-t-95"
+    else:
+        ci95_low = None
+        ci95_high = None
+        ci95_method = "unavailable-below-two-pairs"
     return {
         "mean": round(statistics.mean(values), 2),
         "median": round(statistics.median(values), 2),
-        "stdev": round(statistics.stdev(values), 2) if len(values) > 1 else 0.0,
+        "stdev": round(stdev, 2),
         "min": round(min(values), 2),
         "max": round(max(values), 2),
+        "ci95_low": ci95_low,
+        "ci95_high": ci95_high,
+        "ci95_method": ci95_method,
     }
 
 
@@ -480,7 +693,14 @@ def _paired_comparisons(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "with-r-doc": len(with_runs) - len(paired_ids),
                 "baseline-no-r-doc": len(baseline_runs) - len(paired_ids),
             },
-            "statistical_readiness": len(paired_ids) >= 3,
+            "trend_readiness": len(paired_ids) >= 3,
+            "statistical_readiness": len(paired_ids) >= 5,
+            "strong_evidence_readiness": len(paired_ids) >= 10,
+            "sample_size_guidance": {
+                "trend_min_pairs": 3,
+                "statistical_min_pairs": 5,
+                "strong_evidence_min_pairs": 10,
+            },
             "conditions": condition_items,
             "delta": {
                 metric: round(statistics.mean(values), 2) if values else None
@@ -536,7 +756,7 @@ def aggregate(cases: dict[str, Any], benchmarks_root: Path) -> tuple[dict[str, A
                 str(cases.get("skill_version", "")),
             )
             errors.extend(manifest_errors)
-            result = evaluate(cases, evidence)
+            result = evaluate(cases, evidence, enforce_forbidden_reads=True)
         except (OSError, ValueError, json.JSONDecodeError) as error:
             errors.append(f"{run_dir}: {error}")
             continue
@@ -614,6 +834,10 @@ def aggregate(cases: dict[str, Any], benchmarks_root: Path) -> tuple[dict[str, A
 
 
 def main() -> int:
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
     project_root = Path(__file__).parents[3]
     parser = argparse.ArgumentParser(description="Aggregate validated r-doc agent benchmark runs.")
     parser.add_argument("--root", type=Path, default=project_root / "benchmarks")

@@ -1,6 +1,6 @@
 {
-  "schema_version": 2,
-  "skill_version": "0.2.14",
+  "schema_version": 3,
+  "skill_version": "0.2.15",
   "dimensions": [
     "activation_boundary",
     "context_economy",
@@ -24,7 +24,7 @@
   "machine_rules": {
     "activation_boundary": {
       "type": "all",
-      "checks": ["activation_matches"],
+      "checks": ["activation_matches", "skill_selection_matches"],
       "description": "Pass when evidence.activation equals the scenario expected_activation."
     },
     "deterministic_verification": {

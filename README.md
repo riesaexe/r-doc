@@ -198,18 +198,18 @@ docs/
 - Default to maintaining docs, indexes, metadata, and documentation comments, not business code;
 - Do not declare a development stage complete while its documentation remains unsynchronized.
 
-## What `0.2.14` adds
+## What `0.2.15` adds
 
 This release makes the empirical benchmark output auditable and directly comparable:
 
 | Improvement | What it does | Safety boundary |
 | --- | --- | --- |
-| Structured trace gate | Parses JSONL, binds trace metadata to `run.json`, derives action evidence, and cross-checks paths, reads, commands, and writes against `evidence.json`. | A trace placeholder or evidence-only run cannot pass the benchmark gate; this checks structure and consistency, not cryptographic provenance. |
-| Paired condition analysis | Keeps profile metrics condition-aware and emits matched `agent + model + run_id` deltas with mean, median, standard deviation, and readiness. | Unpaired runs are reported as not statistically ready; at least three matched pairs are recommended. |
+| Structured trace gate | Parses JSONL, binds trace metadata to `run.json`, derives prompt, activation, selected skill, reports, final response, diff, review, paths, reads, commands, and writes, and cross-checks every field against `evidence.json`. | A trace placeholder, undeclared event field, or evidence-only run cannot pass the benchmark gate; this checks structure and consistency, not cryptographic provenance. |
+| Paired condition analysis | Keeps profile metrics condition-aware and emits matched `agent + model + run_id` deltas with mean, median, standard deviation, 95% Student-t intervals, and separate trend/statistical/strong-evidence readiness. | Three pairs only establish a trend; use at least five pairs for the statistical gate and ten for a stronger claim. |
 | Read policy metrics | Separates required, allowed, and forbidden reads so legitimate dependency reads do not inflate `unnecessary_reads`. | Case files must declare the allowed set and keep it disjoint from forbidden reads. |
 | Audit sample reporting | Raises the performance harness default to ten iterations and records interpolated p95, maximum, and low-sample metadata. | Wall-clock values remain local trend data, not a CI threshold or complexity guarantee. |
 
-The benchmark summary remains `pending` until real Codex and no-r-doc runs are captured; no synthetic score is claimed.
+The checked-in benchmark summary now contains three valid matched local Codex `gpt-5.5` pairs. It is trend-ready but not statistical-ready: the observed mean task-success delta is `0.0pp`, unnecessary-read delta is `-0.67`, and the 95% intervals remain wide at `n=3`. This is real evidence for observing behavior, not a claim that r-doc already improves success reliably.
 
 ## What `0.2.13` adds
 

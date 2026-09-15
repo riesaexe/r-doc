@@ -198,18 +198,18 @@ AGENTS.md 是项目级入口和导航；详细知识放在 docs/，每篇文档�
 - 默认只维护文档、索引、元数据和文档注释，不修改业务代码；
 - 文档未同步时，不把当前开发阶段宣布为已完成。
 
-## `0.2.14` 新增了什么
+## `0.2.15` 新增了什么
 
 这一版让实证 benchmark 的输出可审计、可直接比较：
 
 | 改进 | 作用 | 安全边界 |
 | --- | --- | --- |
-| 结构化 trace 门禁 | 解析 JSONL，将 trace 元数据绑定到 `run.json`，从 action 事件派生证据，并与 `evidence.json` 的路径、读取、命令和写入交叉校验。 | 一行占位 trace 或只有 evidence 的运行不能通过 benchmark 门禁；检查的是结构和一致性，不是密码学来源证明。 |
-| 配对 condition 分析 | 保持 profile 指标按 condition 分层，并按 `agent + model + run_id` 输出配对 delta、均值、中位数、标准差和统计就绪度。 | 未配对运行会明确标记为未达到统计就绪；建议至少三组配对。 |
+| 结构化 trace 门禁 | 解析 JSONL，将 trace 元数据绑定到 `run.json`，从 action、prompt、activation、skill、报告、最终响应、diff 和 review 事件派生证据，并与 `evidence.json` 交叉校验。 | 一行占位 trace、夹带未声明字段或只有 evidence 的运行不能通过 benchmark 门禁；检查的是结构和一致性，不是密码学来源证明。 |
+| 配对 condition 分析 | 保持 profile 指标按 condition 分层，并按 `agent + model + run_id` 输出配对 delta、均值、中位数、标准差、95% Student-t 区间和三档就绪度。 | 三组配对只能观察趋势，至少五组才达到统计门槛，十组才适合更强结论。 |
 | 读取策略指标 | 区分 required、allowed、forbidden reads，避免合理的依赖读取被计入 `unnecessary_reads`。 | cases 必须声明 allowed 集合，并保证它与 forbidden 不重叠。 |
 | 审计样本报告 | 将性能夹具默认迭代提高到 10 次，并记录插值 p95、最大值和低样本元数据。 | 墙钟时间仍是本机趋势数据，不是 CI 门槛或复杂度保证。 |
 
-benchmark 汇总在捕获真实 Codex 与无 r-doc 运行前仍保持 `pending`，不会宣称合成分数。
+当前提交的 benchmark 汇总已经包含 3 组通过门禁的本机 Codex `gpt-5.5` 配对运行。它只达到趋势就绪，还没有达到统计就绪：观测到的 task success 平均 delta 为 `0.0pp`，unnecessary reads delta 为 `-0.67`，`n=3` 时 95% 区间仍然很宽。这是真实行为观测数据，不是 r-doc 已稳定提升成功率的结论。
 
 ## `0.2.13` 新增了什么
 

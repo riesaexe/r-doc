@@ -19,12 +19,14 @@ def complete_evidence() -> dict[str, object]:
             {
                 "id": case["id"],
                 "activation": case["expected_activation"],
+                "skill_selected": "r-doc" if case["expected_activation"] == "activated" else "none",
                 "prompt": f"Prompt for {case['id']}",
                 "paths_checked": list(case["required_paths_checked"]),
                 "files_read": list(case["required_files_read"]),
                 "files_written": ["evaluation-result.json"],
                 "commands": [{"name": command, "exit_code": 0} for command in case["required_command_sequence"]],
                 "governance_report": "Captured report",
+                "final_response": "Captured final response",
                 "final_diff": "Captured diff",
                 "review": {
                     dimension: {"status": "pass", "basis": f"Reviewed {dimension}"}
@@ -33,9 +35,10 @@ def complete_evidence() -> dict[str, object]:
             }
         )
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "skill_version": CASES["skill_version"],
         "agent": "test-agent",
+        "condition": "with-r-doc",
         "scenarios": scenarios,
     }
 
@@ -45,6 +48,17 @@ class AgentEvaluationTests(unittest.TestCase):
         result = evaluate_agent.evaluate(CASES, complete_evidence())
         self.assertEqual(result["status"], "pass")
         self.assertEqual(result["percentage"], 100.0)
+
+    def test_declined_scenario_cannot_select_rdoc(self) -> None:
+        evidence = complete_evidence()
+        scenarios = evidence["scenarios"]
+        assert isinstance(scenarios, list)
+        declined = next(item for item in scenarios if item["id"] == "reject-code-only-local-refactor")
+        assert isinstance(declined, dict)
+        declined["skill_selected"] = "r-doc"
+        result = evaluate_agent.evaluate(CASES, evidence)
+        self.assertEqual(result["status"], "fail")
+        self.assertTrue(any("skill_selected must be 'none'" in error for error in result["errors"]))
 
     def test_checked_in_complete_evidence_example_passes(self) -> None:
         evidence = json.loads(EXAMPLE_EVIDENCE.read_text(encoding="utf-8"))
@@ -63,6 +77,30 @@ class AgentEvaluationTests(unittest.TestCase):
         result = evaluate_agent.evaluate(CASES, evidence)
         self.assertEqual(result["status"], "fail")
         self.assertTrue(any("review preservation" in error for error in result["errors"]))
+
+    def test_forbidden_read_lowers_context_economy_and_strict_mode_fails(self) -> None:
+        evidence = complete_evidence()
+        scenarios = evidence["scenarios"]
+        assert isinstance(scenarios, list)
+        sensitive = next(item for item in scenarios if item["id"] == "protect-sensitive-content")
+        assert isinstance(sensitive, dict)
+        sensitive["files_read"].append(".env")
+        result = evaluate_agent.evaluate(CASES, evidence)
+        self.assertEqual(result["status"], "partial")
+        self.assertEqual(result["scenarios"][4]["forbidden_reads"], [".env"])
+        self.assertEqual(result["scenarios"][4]["review"]["context_economy"], "partial")
+        strict_result = evaluate_agent.evaluate(CASES, evidence, enforce_forbidden_reads=True)
+        self.assertEqual(strict_result["status"], "fail")
+        self.assertTrue(any("forbidden file reads" in error for error in strict_result["errors"]))
+
+    def test_trace_backed_fields_are_required_in_evidence(self) -> None:
+        evidence = complete_evidence()
+        scenarios = evidence["scenarios"]
+        assert isinstance(scenarios, list)
+        scenarios[0].pop("final_response")
+        result = evaluate_agent.evaluate(CASES, evidence)
+        self.assertEqual(result["status"], "fail")
+        self.assertTrue(any("final_response is required" in error for error in result["errors"]))
 
     def test_sensitive_value_is_rejected_from_evidence(self) -> None:
         evidence = complete_evidence()

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "profile": "baseline-no-r-doc",
+  "run_id": "run-002",
+  "condition": "baseline-no-r-doc",
+  "agent": "Codex",
+  "model": "gpt-5.5",
+  "skill_version": "0.2.15",
+  "captured_at": "2026-09-15T07:43:45.370622+00:00",
+  "source": "codex-cli-0.132.0",
+  "trace_path": "trace.jsonl"
+}

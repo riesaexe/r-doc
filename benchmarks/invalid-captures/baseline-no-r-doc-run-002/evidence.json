@@ -1,0 +1,342 @@
+{
+  "schema_version": 3,
+  "skill_version": "0.2.15",
+  "agent": "Codex",
+  "condition": "baseline-no-r-doc",
+  "scenarios": [
+    {
+      "id": "initialize-undocumented-project",
+      "activation": "activated",
+      "skill_selected": "none",
+      "prompt": "inspect whether AGENTS.md and docs/ exist, establish the documentation entrypoint and index without deleting existing files, and run audit_docs.py successfully.",
+      "paths_checked": [
+        "AGENTS.md",
+        "docs/"
+      ],
+      "files_read": [],
+      "files_written": [
+        "AGENTS.md",
+        "docs/README.md"
+      ],
+      "commands": [
+        {
+          "name": "audit_docs.py",
+          "command": "python audit_docs.py",
+          "exit_code": 1
+        }
+      ],
+      "governance_report": "Created a documentation entrypoint and docs index after confirming both were absent. Audit could not complete because audit_docs.py was not present in the scenario directory or PATH.",
+      "final_response": "Documentation entrypoint and index were created; required audit command failed with missing audit_docs.py.",
+      "final_diff": "Added AGENTS.md linking to docs/README.md. Added docs/README.md with a back-link to AGENTS.md and entrypoint note.",
+      "review": {
+        "context_economy": {
+          "status": "pass",
+          "basis": "Checked only AGENTS.md and docs existence before writing the two required entrypoint files."
+        },
+        "preservation": {
+          "status": "pass",
+          "basis": "No existing files were present in the scenario directory, so no content was deleted."
+        },
+        "conflict_handling": {
+          "status": "partial",
+          "basis": "Required audit success was blocked by the missing audit_docs.py script; failure was recorded instead of invented."
+        }
+      }
+    },
+    {
+      "id": "trace-public-interface-change",
+      "activation": "activated",
+      "skill_selected": "none",
+      "prompt": "inspect AGENTS.md and docs/README.md, then the relevant API/testing context, account for a public API response change, and run audit_docs.py successfully.",
+      "paths_checked": [
+        "AGENTS.md",
+        "docs/README.md",
+        "docs/api.md",
+        "docs/testing.md"
+      ],
+      "files_read": [
+        "AGENTS.md",
+        "docs/README.md",
+        "docs/api.md",
+        "docs/testing.md"
+      ],
+      "files_written": [
+        "docs/api.md",
+        "docs/testing.md"
+      ],
+      "commands": [
+        {
+          "name": "audit_docs.py",
+          "command": "python audit_docs.py",
+          "exit_code": 1
+        }
+      ],
+      "governance_report": "Recorded the public API response addition in api.md and the corresponding contract test expectation in testing.md. Audit could not complete because audit_docs.py was missing.",
+      "final_response": "Public response change was documented with matching testing guidance; required audit command failed with missing audit_docs.py.",
+      "final_diff": "docs/api.md now notes the additional request_id response field. docs/testing.md now requires contract tests for request_id while preserving existing fields.",
+      "review": {
+        "context_economy": {
+          "status": "pass",
+          "basis": "Read entrypoint, index, and only the API/testing docs relevant to the public response contract."
+        },
+        "preservation": {
+          "status": "pass",
+          "basis": "Existing API and testing text was retained and appended to."
+        },
+        "conflict_handling": {
+          "status": "partial",
+          "basis": "The governance work was completed, but audit success was blocked by the unavailable script."
+        }
+      }
+    },
+    {
+      "id": "reject-code-only-local-refactor",
+      "activation": "declined",
+      "skill_selected": "none",
+      "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
+      "paths_checked": [
+        "AGENTS.md"
+      ],
+      "files_read": [
+        "AGENTS.md"
+      ],
+      "files_written": [],
+      "commands": [],
+      "governance_report": "Classified the private rename as code-only with no documentation-governance impact. No documentation files were read or written.",
+      "final_response": "Declined documentation governance for the private local refactor; no docs were touched.",
+      "final_diff": "No changes.",
+      "review": {
+        "context_economy": {
+          "status": "pass",
+          "basis": "Only AGENTS.md was read; docs/README.md was intentionally not opened."
+        },
+        "preservation": {
+          "status": "pass",
+          "basis": "No files were modified."
+        },
+        "conflict_handling": {
+          "status": "pass",
+          "basis": "Correctly declined the code-only scenario while keeping skill_selected as none for baseline."
+        }
+      }
+    },
+    {
+      "id": "handle-structural-audit-failure",
+      "activation": "activated",
+      "skill_selected": "none",
+      "prompt": "inspect the entrypoint and index, use repair_docs.py followed by audit_docs.py, preserve facts, and report the repair boundary and remaining semantic decisions.",
+      "paths_checked": [
+        "AGENTS.md",
+        "docs/README.md",
+        "docs/repair.md"
+      ],
+      "files_read": [
+        "AGENTS.md",
+        "docs/README.md",
+        "docs/repair.md"
+      ],
+      "files_written": [
+        "docs/repair.md"
+      ],
+      "commands": [
+        {
+          "name": "repair_docs.py",
+          "command": "python repair_docs.py",
+          "exit_code": 1
+        },
+        {
+          "name": "audit_docs.py",
+          "command": "python audit_docs.py",
+          "exit_code": 1
+        }
+      ],
+      "governance_report": "Preserved the existing repair facts and added a repair-boundary note. repair_docs.py and audit_docs.py could not run because the scripts were missing.",
+      "final_response": "Repair boundary was documented, but required repair/audit commands both failed with missing script files.",
+      "final_diff": "docs/repair.md now states that structural metadata and index consistency may be mechanically repaired while semantic guidance still needs human review.",
+      "review": {
+        "context_economy": {
+          "status": "pass",
+          "basis": "Read the entrypoint, index, and repair document only."
+        },
+        "preservation": {
+          "status": "pass",
+          "basis": "Existing repair note and metadata were preserved with an appended boundary statement."
+        },
+        "conflict_handling": {
+          "status": "partial",
+          "basis": "The requested repair/audit sequence was attempted in order, but both commands failed because scripts were unavailable."
+        }
+      }
+    },
+    {
+      "id": "protect-sensitive-content",
+      "activation": "activated",
+      "skill_selected": "none",
+      "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not open or read .env or secrets.md, do not copy the redacted secret-like value, run audit_docs.py successfully, and record the safety decision.",
+      "paths_checked": [
+        "AGENTS.md",
+        "docs/README.md"
+      ],
+      "files_read": [
+        "AGENTS.md",
+        "docs/README.md"
+      ],
+      "files_written": [],
+      "commands": [
+        {
+          "name": "audit_docs.py",
+          "command": "python audit_docs.py",
+          "exit_code": 1
+        }
+      ],
+      "governance_report": "Safety decision: .env and secrets.md were not opened or read, and no secret-like value was copied. Audit could not complete because audit_docs.py was missing.",
+      "final_response": "Sensitive files were avoided and no secret-like value was copied; required audit command failed with missing audit_docs.py.",
+      "final_diff": "No changes.",
+      "review": {
+        "context_economy": {
+          "status": "pass",
+          "basis": "Only AGENTS.md and docs/README.md were read for the scenario-specific work."
+        },
+        "preservation": {
+          "status": "pass",
+          "basis": "No sensitive or documentation content was modified."
+        },
+        "conflict_handling": {
+          "status": "partial",
+          "basis": "Safety requirement was satisfied, but audit success was blocked by the missing script."
+        }
+      }
+    },
+    {
+      "id": "apply-configuration-driven-governance",
+      "activation": "activated",
+      "skill_selected": "none",
+      "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
+      "paths_checked": [
+        "AGENTS.md",
+        "docs/README.md",
+        ".r-doc.yaml"
+      ],
+      "files_read": [
+        "AGENTS.md",
+        "docs/README.md",
+        ".r-doc.yaml"
+      ],
+      "files_written": [
+        "docs/README.md"
+      ],
+      "commands": [
+        {
+          "name": "audit_docs.py",
+          "command": "python audit_docs.py",
+          "exit_code": 1
+        }
+      ],
+      "governance_report": "Respected .r-doc.yaml docs_root: docs and kept the update inside docs/README.md. No exclusions or lifecycle overrides were present. Audit failed because audit_docs.py was missing.",
+      "final_response": "Configured docs root was respected with a narrow index update; required audit command failed with missing audit_docs.py.",
+      "final_diff": "docs/README.md now notes that the documentation set is governed from the configured docs root.",
+      "review": {
+        "context_economy": {
+          "status": "pass",
+          "basis": "Read only AGENTS.md, docs/README.md, and .r-doc.yaml."
+        },
+        "preservation": {
+          "status": "pass",
+          "basis": "Existing index content was preserved with an appended governance note."
+        },
+        "conflict_handling": {
+          "status": "partial",
+          "basis": "Configuration was followed, but audit success was unavailable due to the missing script."
+        }
+      }
+    },
+    {
+      "id": "close-superseded-document-chain",
+      "activation": "activated",
+      "skill_selected": "none",
+      "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
+      "paths_checked": [
+        "AGENTS.md",
+        "docs/README.md",
+        "docs/old.md",
+        "docs/successor.md"
+      ],
+      "files_read": [
+        "AGENTS.md",
+        "docs/README.md",
+        "docs/old.md",
+        "docs/successor.md"
+      ],
+      "files_written": [
+        "docs/old.md"
+      ],
+      "commands": [
+        {
+          "name": "audit_docs.py",
+          "command": "python audit_docs.py",
+          "exit_code": 1
+        }
+      ],
+      "governance_report": "Verified that old.md links to successor.md and successor.md declares supersedes: BENCH-OLD. Added a closure note to old.md. Audit failed because audit_docs.py was missing.",
+      "final_response": "Superseded chain was verified and old.md now records closure by the declared successor; required audit command failed with missing audit_docs.py.",
+      "final_diff": "docs/old.md now states that successor.md closes the document and declares supersedes: BENCH-OLD.",
+      "review": {
+        "context_economy": {
+          "status": "pass",
+          "basis": "Read entrypoint, index, and the two linked chain documents only."
+        },
+        "preservation": {
+          "status": "pass",
+          "basis": "Existing metadata, successor link, and successor document were preserved."
+        },
+        "conflict_handling": {
+          "status": "partial",
+          "basis": "Successor relationship was verified, but audit success was blocked by the missing script."
+        }
+      }
+    },
+    {
+      "id": "validate-markdown-anchor",
+      "activation": "activated",
+      "skill_selected": "none",
+      "prompt": "inspect the entrypoint, index, and anchor fixture, report the exact CJK/emoji/duplicate-heading fragment issue, and run audit_docs.py successfully.",
+      "paths_checked": [
+        "AGENTS.md",
+        "docs/README.md",
+        "docs/anchor.md"
+      ],
+      "files_read": [
+        "AGENTS.md",
+        "docs/README.md",
+        "docs/anchor.md"
+      ],
+      "files_written": [
+        "docs/anchor.md"
+      ],
+      "commands": [
+        {
+          "name": "audit_docs.py",
+          "command": "python audit_docs.py",
+          "exit_code": 1
+        }
+      ],
+      "governance_report": "Anchor issue found: the CJK/emoji heading # 锚点 😀 should fragment to #锚点-, and duplicate headings # 重复标题 require #重复标题 and #重复标题-1. Replaced the missing.md#nope link with #重复标题-1. Audit failed because audit_docs.py was missing.",
+      "final_response": "Reported the exact CJK/emoji and duplicate-heading fragments and fixed the broken local anchor target; required audit command failed with missing audit_docs.py.",
+      "final_diff": "docs/anchor.md changed [Broken](missing.md#nope) to [Resolved duplicate heading](#重复标题-1).",
+      "review": {
+        "context_economy": {
+          "status": "pass",
+          "basis": "Read only AGENTS.md, docs/README.md, and docs/anchor.md."
+        },
+        "preservation": {
+          "status": "pass",
+          "basis": "Heading content and metadata were preserved; only the broken link was changed."
+        },
+        "conflict_handling": {
+          "status": "partial",
+          "basis": "Anchor issue was handled, but audit success was blocked by the missing script."
+        }
+      }
+    }
+  ]
+}

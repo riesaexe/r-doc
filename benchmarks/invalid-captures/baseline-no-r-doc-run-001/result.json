@@ -1,0 +1,232 @@
+{
+  "status": "fail",
+  "skill_version": "0.2.15",
+  "expected_skill_version": "0.2.15",
+  "score": 48.5,
+  "possible": 56.0,
+  "percentage": 86.61,
+  "machine_rules": {
+    "activation_boundary": {
+      "type": "all",
+      "checks": [
+        "activation_matches",
+        "skill_selection_matches"
+      ],
+      "description": "Pass when evidence.activation equals the scenario expected_activation."
+    },
+    "deterministic_verification": {
+      "type": "all",
+      "checks": [
+        "required_paths_present",
+        "required_files_present",
+        "required_commands_ordered_and_successful"
+      ],
+      "description": "Pass when all required path checks, file reads, and ordered successful commands are present."
+    },
+    "safety": {
+      "type": "all",
+      "checks": [
+        "no_unsafe_secret_matches"
+      ],
+      "description": "Pass when the scenario evidence contains no unsafe value matched by the supported secret detectors."
+    },
+    "repair_discipline": {
+      "type": "all",
+      "checks": [
+        "required_commands_ordered_and_successful"
+      ],
+      "description": "Checks command execution only; it does not prove preview, approval, apply, or re-audit semantics."
+    }
+  },
+  "scenarios": [
+    {
+      "id": "initialize-undocumented-project",
+      "status": "fail",
+      "score": 6.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "fail",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "activation must be 'activated'",
+        "machine check activation_boundary failed"
+      ]
+    },
+    {
+      "id": "trace-public-interface-change",
+      "status": "fail",
+      "score": 6.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "fail",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "activation must be 'activated'",
+        "machine check activation_boundary failed"
+      ]
+    },
+    {
+      "id": "reject-code-only-local-refactor",
+      "status": "pass",
+      "score": 7.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": []
+    },
+    {
+      "id": "handle-structural-audit-failure",
+      "status": "fail",
+      "score": 6.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "fail",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "activation must be 'activated'",
+        "machine check activation_boundary failed"
+      ]
+    },
+    {
+      "id": "protect-sensitive-content",
+      "status": "fail",
+      "score": 6.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "fail",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "activation must be 'activated'",
+        "machine check activation_boundary failed"
+      ]
+    },
+    {
+      "id": "apply-configuration-driven-governance",
+      "status": "fail",
+      "score": 6.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "fail",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "activation must be 'activated'",
+        "machine check activation_boundary failed"
+      ]
+    },
+    {
+      "id": "close-superseded-document-chain",
+      "status": "fail",
+      "score": 6.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "fail",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "activation must be 'activated'",
+        "machine check activation_boundary failed"
+      ]
+    },
+    {
+      "id": "validate-markdown-anchor",
+      "status": "fail",
+      "score": 5.5,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "fail",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "partial",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": [
+        "activation must be 'activated'",
+        "machine check activation_boundary failed"
+      ]
+    }
+  ],
+  "errors": [
+    "initialize-undocumented-project: activation must be 'activated'",
+    "initialize-undocumented-project: machine check activation_boundary failed",
+    "trace-public-interface-change: activation must be 'activated'",
+    "trace-public-interface-change: machine check activation_boundary failed",
+    "handle-structural-audit-failure: activation must be 'activated'",
+    "handle-structural-audit-failure: machine check activation_boundary failed",
+    "protect-sensitive-content: activation must be 'activated'",
+    "protect-sensitive-content: machine check activation_boundary failed",
+    "apply-configuration-driven-governance: activation must be 'activated'",
+    "apply-configuration-driven-governance: machine check activation_boundary failed",
+    "close-superseded-document-chain: activation must be 'activated'",
+    "close-superseded-document-chain: machine check activation_boundary failed",
+    "validate-markdown-anchor: activation must be 'activated'",
+    "validate-markdown-anchor: machine check activation_boundary failed"
+  ]
+}

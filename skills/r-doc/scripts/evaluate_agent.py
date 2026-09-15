@@ -12,7 +12,7 @@ from rdoc.security import SECRET_PATTERNS, is_safe_example
 
 SCORE_VALUES = {"pass": 1.0, "partial": 0.5, "fail": 0.0}
 MACHINE_RULE_BINDINGS = {
-    "activation_boundary": ("activation_matches",),
+    "activation_boundary": ("activation_matches", "skill_selection_matches"),
     "deterministic_verification": (
         "required_paths_present",
         "required_files_present",
@@ -28,6 +28,10 @@ MachineCheck = Callable[[dict[str, bool]], bool]
 
 def _activation_matches(values: dict[str, bool]) -> bool:
     return values["activation_ok"]
+
+
+def _skill_selection_matches(values: dict[str, bool]) -> bool:
+    return values["skill_selected_ok"]
 
 
 def _required_paths_present(values: dict[str, bool]) -> bool:
@@ -48,6 +52,7 @@ def _no_unsafe_secret_matches(values: dict[str, bool]) -> bool:
 
 MACHINE_CHECK_IMPLEMENTATIONS: dict[str, MachineCheck] = {
     "activation_matches": _activation_matches,
+    "skill_selection_matches": _skill_selection_matches,
     "required_paths_present": _required_paths_present,
     "required_files_present": _required_files_present,
     "required_commands_ordered_and_successful": _required_commands_ordered_and_successful,
@@ -94,7 +99,7 @@ def _validate_machine_rule_contract(machine_rules: object, path: Path) -> None:
 def load_cases(path: Path) -> dict[str, Any]:
     cases = load_json(path)
     if (
-        cases.get("schema_version") != 2
+        cases.get("schema_version") != 3
         or not isinstance(cases.get("skill_version"), str)
         or not cases["skill_version"].strip()
         or not isinstance(cases.get("dimensions"), list)
@@ -160,7 +165,12 @@ def _evidence_contains_secret(evidence: dict[str, Any]) -> bool:
     return False
 
 
-def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
+def evaluate(
+    cases: dict[str, Any],
+    evidence: dict[str, Any],
+    *,
+    enforce_forbidden_reads: bool = False,
+) -> dict[str, Any]:
     dimensions = [item for item in cases["dimensions"] if isinstance(item, str)]
     review_dimensions = [item for item in cases["review_dimensions"] if isinstance(item, str)]
     errors: list[str] = []
@@ -169,10 +179,14 @@ def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
         errors.append("eval cases skill_version is required")
     elif evidence.get("skill_version") != expected_skill_version:
         errors.append(f"evidence skill_version must match cases: {expected_skill_version}")
-    if evidence.get("schema_version") != 2:
-        errors.append("evidence schema_version must be 2")
+    if evidence.get("schema_version") != 3:
+        errors.append("evidence schema_version must be 3")
     if not _non_empty_text(evidence.get("agent")):
         errors.append("evidence agent is required")
+    condition = evidence.get("condition")
+    if condition not in {"with-r-doc", "baseline-no-r-doc"}:
+        errors.append("evidence condition must be with-r-doc or baseline-no-r-doc")
+    condition_skill = "r-doc" if condition == "with-r-doc" else "none"
     raw_scenarios = evidence.get("scenarios")
     if not isinstance(raw_scenarios, list):
         errors.append("evidence scenarios must be a list")
@@ -207,7 +221,11 @@ def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
         if item.get("activation") != case.get("expected_activation"):
             scenario_errors.append(f"activation must be {case.get('expected_activation')!r}")
         activation_ok = item.get("activation") == case.get("expected_activation")
-        for field in ("prompt", "governance_report", "final_diff"):
+        expected_skill = condition_skill if case.get("expected_activation") == "activated" else "none"
+        skill_selected_ok = item.get("skill_selected") == expected_skill
+        if not skill_selected_ok:
+            scenario_errors.append(f"skill_selected must be {expected_skill!r}")
+        for field in ("prompt", "governance_report", "final_response", "final_diff"):
             if not _non_empty_text(item.get(field)):
                 scenario_errors.append(f"{field} is required")
         list_fields_valid: dict[str, bool] = {}
@@ -222,6 +240,11 @@ def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
                 paths_ok = False
         reads_ok = list_fields_valid["files_read"]
         read_paths = set(item.get("files_read", [])) if reads_ok else set()
+        forbidden_reads = sorted(read_paths & set(case.get("forbidden_files_read", [])))
+        if forbidden_reads and enforce_forbidden_reads:
+            scenario_errors.append(
+                "forbidden file reads are not allowed: " + ", ".join(forbidden_reads)
+            )
         for required in case.get("required_files_read", []):
             if required not in read_paths:
                 scenario_errors.append(f"required read evidence is missing: {required}")
@@ -296,6 +319,7 @@ def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
 
         check_values = {
             "activation_ok": activation_ok,
+            "skill_selected_ok": skill_selected_ok,
             "paths_ok": paths_ok,
             "reads_ok": reads_ok,
             "commands_ok": commands_ok,
@@ -315,6 +339,9 @@ def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
             if status == "fail":
                 scenario_errors.append(f"machine check {dimension} failed")
 
+        if forbidden_reads and review_scores.get("context_economy") == "pass":
+            review_scores["context_economy"] = "partial"
+
         scenario_score = 0.0
         for dimension in dimensions:
             value = machine_checks.get(dimension, review_scores.get(dimension))
@@ -331,6 +358,7 @@ def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
                 "possible": len(dimensions),
                 "machine_checks": machine_checks,
                 "review": review_scores,
+                "forbidden_reads": forbidden_reads,
                 "errors": scenario_errors,
             }
         )
@@ -353,6 +381,10 @@ def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
 
 
 def main() -> int:
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
     parser = argparse.ArgumentParser(description="Validate evidence from an r-doc agent behavior evaluation.")
     parser.add_argument("--input", required=True, type=Path, help="JSON evidence captured from an agent run")
     parser.add_argument("--cases", type=Path, default=Path(__file__).parents[1] / "evals" / "cases.json")
@@ -360,7 +392,11 @@ def main() -> int:
     parser.add_argument("--json", action="store_true", help="emit machine-readable JSON")
     args = parser.parse_args()
     try:
-        result = evaluate(load_cases(args.cases), load_json(args.input))
+        result = evaluate(
+            load_cases(args.cases),
+            load_json(args.input),
+            enforce_forbidden_reads=args.strict,
+        )
     except (OSError, ValueError, json.JSONDecodeError) as error:
         result = {"status": "fail", "score": 0.0, "possible": 0.0, "percentage": 0.0, "scenarios": [], "errors": [str(error)]}
     strict_failure = any(result["status"] == "fail" or item["status"] != "pass" for item in result["scenarios"])

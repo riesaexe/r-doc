@@ -1,120 +1,127 @@
 # Changelog
 
-本文件记录 r-doc 的用户可见变化。
+This file records user-visible changes to r-doc.
+
+## [0.2.15] - 2026-09-15
+
+- Upgraded the evidence schema to version 3 and required the trace to independently record `prompt`, `activation_decision`, `skill_selected`, `governance_report`, `final_response`, `diff_snapshot`, and human review; the aggregator derives and cross-validates these fields from the trace.
+- Upgraded the trace schema to version 2 and rejected undeclared fields by event type; forbidden reads now lower `context_economy` in normal evaluation and fail under `--strict` and benchmark aggregation gates.
+- Added trend, statistical, and strong-evidence sample thresholds for paired deltas, with 95% Student-t confidence intervals; added real Codex benchmark capture records and run instructions.
+- Clarified the boundary between `condition` and Skill selection: the baseline still judges activation by scenario, and code-only scenarios select no r-doc Skill under either condition; failed real captures remain available for audit but are excluded from aggregation, and Windows CLI output is forced to UTF-8 for CJK and emoji traces.
 
 ## [0.2.14] - 2026-09-15
 
-- 将真实 Agent benchmark 的 trace 升级为带运行元数据绑定、场景生命周期和 action 事件的结构化 JSONL，并从 trace 交叉验证 paths、读取、命令和写入证据。
-- 为 benchmark 聚合增加按 `agent + model + run_id` 配对的 `with-r-doc`/`baseline-no-r-doc` 差值、均值、中位数、标准差和统计就绪度；profile 汇总不再混合 condition。
-- 将 context economy 的读取策略拆分为 required、allowed 和 forbidden 集合，分别报告 unnecessary、forbidden 和缺失 required reads。
-- 将审计性能基线默认迭代次数提高到 10，并同时记录线性插值 p95、最大值和低样本提示。
+- Upgraded real Agent benchmark traces to structured JSONL with run-metadata binding, scenario lifecycle, and action events, and cross-validated path, read, command, and write evidence from the trace.
+- Added paired `with-r-doc`/`baseline-no-r-doc` deltas keyed by `agent + model + run_id`, together with mean, median, standard deviation, and statistical readiness; profile summaries no longer mix conditions.
+- Split context-economy read policy into required, allowed, and forbidden sets, reporting unnecessary, forbidden, and missing-required reads separately.
+- Raised the default audit performance baseline to 10 iterations and recorded linearly interpolated p95, maximum values, and low-sample notices.
 
 ## [0.2.13] - 2026-09-15
 
-- 为 GitHub 公开入口建立中英文成对的安全修复、实际案例和常见避坑参考文档；中文 README 不再跳转到英文文档。
-- 为英文 canonical references 增加中文版本回链，并将中文 Skill 参考入口改为语言一致的文档路由。
-- 增加公开文档语言路由回归测试，防止 README 的语言链接再次漂移。
+- Added paired Chinese and English security-fix, practical-example, and common-pitfall reference documents for the GitHub public entrypoints; the Chinese README no longer routes users to English guides.
+- Added Chinese backlinks for canonical English references and changed the Chinese Skill reference entrypoint to language-consistent document routes.
+- Added public-document language-routing regression tests to prevent README links from drifting again.
 
 ## [0.2.12] - 2026-09-15
 
-- 增加真实 Agent benchmark 的目录契约、运行证据聚合器和基线说明；没有把示例证据冒充真实结果。
-- 将 `machine_rules` 的规则标识、代码注册表和 cases.json 做双向一致性校验，防止规则名称漂移。
-- 增加 100、1000、5000 个 Markdown 文档规模的审计性能基线工具和首份本机测量记录。
+- Added the real Agent benchmark directory contract, run-evidence aggregator, and baseline notes without presenting example evidence as real results.
+- Added bidirectional consistency checks for `machine_rules` identifiers, the code registry, and `cases.json` to prevent rule-name drift.
+- Added an audit performance baseline tool for 100, 1,000, and 5,000 Markdown documents, together with the first local measurement record.
 
 ## [0.2.11] - 2026-09-15
 
-- 提供完整、可直接通过评测器校验的 Agent 证据示例，避免文档片段与实际 schema 脱节。
-- 将机器维度推导规则写入 `evals/cases.json` 的 `machine_rules`，并由评测器校验和输出，明确每个维度的输入与通过条件。
-- 增加完整证据样例的回归测试，防止示例再次滞后于代码。
+- Added a complete Agent evidence example that can pass the evaluator directly, preventing documentation fragments from drifting away from the actual schema.
+- Moved machine-dimension derivation rules into `machine_rules` in `evals/cases.json`; the evaluator now checks and reports them, making each dimension's inputs and pass conditions explicit.
+- Added regression coverage for the complete evidence example so it cannot fall behind the implementation again.
 
 ## [0.2.10] - 2026-09-15
 
-- 将 Agent 评测证据中的 `paths_checked` 与 `files_read` 分离，避免把不存在路径的检查误记为内容读取。
-- 将必需命令改为有序成功序列，验证命令名称、整数退出码和声明顺序。
-- 将评分拆分为由证据推导的机器检查和带依据的人工复核，减少无依据的自报评分。
-- 增加 `rdoc` 共享模块级回归测试，本版本包含 59 个回归测试。
+- Separated `paths_checked` from `files_read` in Agent evaluation evidence so checking a nonexistent path is not misreported as reading its contents.
+- Changed required commands to an ordered success sequence and validated command names, integer exit codes, and declared order.
+- Split scoring into evidence-derived machine checks and evidence-backed human review, reducing unsupported self-reported scores.
+- Added regression tests for the shared `rdoc` modules; this version contains 59 regression tests.
 
 ## [0.2.9] - 2026-09-15
 
-- 移除 `rdoc` 包顶层 eager re-export，审计、修复和包校验工具改用直接子模块导入，降低包初始化耦合。
-- 为 Agent 评测 cases/evidence 增加并强制校验 `skill_version`，确保跨版本结果可准确标注和比较。
-- 补充 0.2.9 迁移矩阵和验证文档，回归测试增至 51 个。
+- Removed the top-level eager re-export from the `rdoc` package; audit, repair, and package-validation tools now import direct submodules, reducing package-initialization coupling.
+- Added and enforced `skill_version` validation for Agent evaluation cases and evidence so cross-version results can be labeled and compared accurately.
+- Added the 0.2.9 migration matrix and verification documentation; the regression suite grew to 51 tests.
 
 ## [0.2.8] - 2026-09-15
 
-- 将配置加载、finding 模型、敏感值检测、Markdown 目标解析和标题锚点生成下沉到 `scripts/rdoc/` 共享包，由审计、修复、包校验和 Agent 评测统一复用，降低单文件职责和导入耦合。
-- 将 Agent 评测场景从 5 个扩展到 8 个，新增配置驱动治理、superseded 文档闭环和 Markdown 锚点校验场景，并同步更新证据契约。
-- 修正标题 slug 对 emoji 的处理，保留 emoji 码点并增加 GitHub-compatible 锚点回归测试。
-- 保持 50 个回归测试通过，并同步更新验证、迁移和公开说明。
+- Moved configuration loading, finding models, sensitive-value detection, Markdown target parsing, and heading-anchor generation into the shared `scripts/rdoc/` package for reuse by audit, repair, package validation, and Agent evaluation, reducing single-file responsibilities and import coupling.
+- Expanded Agent evaluation from 5 to 8 scenarios, adding configuration-driven governance, superseded-document closure, and Markdown-anchor validation scenarios, with the evidence contract updated accordingly.
+- Corrected emoji handling in heading slugs, preserving emoji code points and adding GitHub-compatible anchor regression tests.
+- Kept all 50 regression tests passing and updated the verification, migration, and public documentation.
 
 ## [0.2.7] - 2026-09-15
 
-- 将 Markdown 锚点校验扩展为 GitHub-compatible 的 ATX/Setext 标题、CJK/连续空格/标点边界、重复标题后缀和显式 HTML `name`/`id` 锚点，并加入对应回归测试。
-- 让 `sensitive_allowlist` 的命中保留为 informational finding，补充八个项目配置字段的完整矩阵、`planned_code` 的 frontmatter 归属说明和根目录 `exclude` 测试证据。
-- 增加跨版本迁移总览和可执行的 Agent 评测证据校验器，明确快速补丁版本可能新增审计发现的升级策略。
-- 将临时项目回归测试扩展到 50 个，并通过 Skill 包、官方 Skill Creator、修复预览和严格审计门禁。
+- Expanded Markdown-anchor validation to GitHub-compatible ATX and Setext headings, CJK text, consecutive-space and punctuation boundaries, duplicate-heading suffixes, and explicit HTML `name`/`id` anchors, with matching regression tests.
+- Kept `sensitive_allowlist` matches as informational findings and added a complete matrix for eight project-configuration fields, frontmatter ownership guidance for `planned_code`, and root-level `exclude` test evidence.
+- Added a cross-version migration overview and executable Agent-evidence validator, documenting the upgrade strategy for patch releases that may add audit findings.
+- Expanded temporary-project regression tests to 50 and passed the Skill-package, official Skill Creator, repair-preview, and strict-audit gates.
 
 ## [0.2.6] - 2026-09-15
 
-- 让 Markdown 链接解析忽略 fenced code、行内代码和 HTML 注释，同时继续扫描 fenced code 中的敏感值；新增 Markdown fragment/anchor 存在性校验。
-- 增加 `sensitive_allowlist` 项目配置，为各检测器提供经过审查的精确示例值扩展通道；补充 Google `AIza` 风格 API key 基线检测。
-- 明确根目录 Markdown 的 `exclude` 交互：`README.md` 默认纳管，配置排除同样适用于根目录文件，`AGENTS.md` 始终作为入口检查。
-- 增加 `planned_code` 元数据字段，用于记录尚未创建但必须留在项目根目录内的计划代码路径，并保留 `related_code` 的现有文件约束。
-- 将临时项目测试拆分为审计核心、配置/敏感值和修复器三个聚焦模块，保持 45 个回归场景可独立定位。
+- Made Markdown link parsing ignore fenced code, inline code, and HTML comments while continuing to scan sensitive values in fenced code; added Markdown fragment and anchor-existence validation.
+- Added the `sensitive_allowlist` project configuration as a reviewed exact-example extension point for each detector, together with baseline detection for Google `AIza`-style API keys.
+- Clarified root-level Markdown `exclude` behavior: `README.md` is included by default, configured exclusions also apply to root Markdown files, and `AGENTS.md` is always checked as an entrypoint.
+- Added the `planned_code` metadata field for planned code paths that do not yet exist but must remain inside the project root, while preserving the existing-file requirement for `related_code`.
+- Split temporary-project tests into focused audit-core, configuration/sensitive-value, and repairer modules while keeping 45 independently locatable regression scenarios.
 
 ## [0.2.5] - 2026-09-14
 
-- 将项目根目录中直接维护的 Markdown 文件纳入断链和敏感值审计，覆盖 README、贡献指南和安全说明等高风险入口；文档元数据和索引覆盖仍限定在配置的 `docs_root`。
-- 让图片链接参与目标存在性检查，但不把图片或未使用的引用定义计入文档导航图；同时要求嵌套索引与直接父/子索引双向可达。
-- 对 `status: superseded` 增加替代文档关系和正文回链校验，对 `related_code` 增加现有文件校验，并让未配置的 `--stage` 直接失败。
-- 为官方公开 AWS 示例值 `AKIAIOSFODNN7EXAMPLE` 增加精确白名单，保留对其他代码块内容的敏感值扫描，避免以“示例代码”为由形成泄漏盲区。
+- Included directly maintained Markdown files in the project root in broken-link and sensitive-value audits, covering high-risk entrypoints such as README, contribution guides, and security notes; document metadata and index coverage remain limited to the configured `docs_root`.
+- Made image links participate in target-existence checks without adding images or unused reference definitions to the documentation graph; nested indexes and their direct parent/child indexes must also be reachable in both directions.
+- Added replacement-document relationships and body backlinks for `status: superseded`, existing-file validation for `related_code`, and immediate failure for an unconfigured `--stage`.
+- Added an exact allowlist entry for the official public AWS example `AKIAIOSFODNN7EXAMPLE` while retaining sensitive-value scanning for other code-block content, avoiding a leakage blind spot under the label of “example code.”
 
 ## [0.2.4] - 2026-09-14
 
-- 对相同路径、Finding 类型、消息和行号的重复审计结果去重，降低符号链接或不可读文件被多个检查阶段重复读取时的输出噪声。
-- 增加 0.2.3 存量项目迁移说明，明确双向导航规则、修复预览和严格复核步骤。
-- 在验证文档中补充配置、导航、链接、元数据关系和敏感内容的确定性检查覆盖矩阵，并同步 27 个回归测试的验证证据。
+- Deduplicated repeated audit findings with the same path, finding type, message, and line number, reducing noise when symlinks or unreadable files are read by multiple check phases.
+- Added migration guidance for existing 0.2.3 projects, covering bidirectional navigation, repair previews, and strict review steps.
+- Added a deterministic coverage matrix for configuration, navigation, links, metadata relationships, and sensitive content to the verification documentation, together with evidence for 27 regression tests.
 
 ## [0.2.3] - 2026-09-14
 
-- 让 `.r-doc.yaml`、`docs/r-doc.yaml` 或 `r-doc.yaml` 真正驱动文档根目录、排除范围、必需文档类型、关系要求和阶段门；重复或非法配置会成为审计错误。
-- 将入口与索引的双向导航、嵌套索引回链和索引覆盖变成确定性审计规则，修复器会复用同一配置并以单个原子更新补齐导航。
-- 支持引用式 Markdown 链接和带括号的链接目标，并通过解析后的路径检查项目根目录边界，覆盖符号链接逃逸风险。
-- 校验 `related_docs`、`supersedes`、`review_after`、`related_code`、标题与首个 H1、创建/更新时间顺序，以及配置声明的文档类型关系。
-- 将临时项目回归场景从 18 个扩展到 26 个，覆盖配置、导航、链接解析、元数据关系和阶段门。
+- Made `.r-doc.yaml`, `docs/r-doc.yaml`, and `r-doc.yaml` drive the documentation root, exclusions, required document types, relationship requirements, and stage gates; duplicate or invalid configuration now becomes an audit error.
+- Turned bidirectional entrypoint/index navigation, nested-index backlinks, and index coverage into deterministic audit rules; the repairer reuses the same configuration and fills navigation with one atomic update.
+- Added support for reference-style Markdown links and parenthesized link targets, and checked resolved paths against the project-root boundary, including symlink-escape risks.
+- Validated `related_docs`, `supersedes`, `review_after`, `related_code`, the title and first H1, creation/update ordering, and configured document-type relationships.
+- Expanded temporary-project regression scenarios from 18 to 26, covering configuration, navigation, link parsing, metadata relationships, and stage gates.
 
 ## [0.2.2] - 2026-09-14
 
-- 扩展通用密码占位符白名单，覆盖 `你的密码`、`请输入你的密码`、`示例口令`、`待填写` 等中文形式，并增加真实中文口令的回归测试。
-- 在仓库自身的验证记录中加入嵌套映射和列表 frontmatter，形成解析能力的 dogfood 证据。
+- Expanded the generic password-placeholder allowlist to include Chinese forms such as `你的密码`, `请输入你的密码`, `示例口令`, and `待填写`, and added regression coverage for real Chinese passwords.
+- Added nested mappings and lists in frontmatter to the repository's own verification record as dogfood evidence for parser support.
 
 ## [0.2.1] - 2026-09-14
 
-- 使用 PyYAML 安全解析 frontmatter，支持嵌套映射和列表；格式错误会明确报告，不再静默丢弃字段。
-- 移除审计函数中无效的 `strict` 分支，由命令行入口统一处理警告门槛。
-- 将敏感信息基线扩展到 JWT、OpenAI API key、带凭据的数据库连接串和通用密码赋值，并记录覆盖范围与已知限制。
-- 增加 frontmatter、解析失败和新增敏感模式的回归测试。
-- 将 GitHub Actions 扩展到 Ubuntu/Windows 与 Python 3.10–3.13 矩阵，固定 PyYAML 开发依赖。
+- Used PyYAML safe parsing for frontmatter, supporting nested mappings and lists; malformed YAML is reported explicitly instead of silently dropping fields.
+- Removed the ineffective `strict` branch from audit functions, leaving warning thresholds to the command-line entrypoint.
+- Expanded the sensitive-information baseline to JWTs, OpenAI API keys, credentialed database connection strings, and generic password assignments, while documenting coverage and known limitations.
+- Added regression tests for frontmatter, parse failures, and new sensitive patterns.
+- Expanded GitHub Actions to an Ubuntu/Windows and Python 3.10–3.13 matrix, with the PyYAML development dependency pinned.
 
 ## [0.2.0] - 2026-09-14
 
-- 优化 `SKILL.md` 的发现描述和 OpenAI UI 短描述，加入项目文档治理、文档一致性和变更追踪触发词。
-- 在 README 首屏增加 skills.sh 徽章、快速安装区和常用请求入口表。
-- 将英文 README 作为默认全球入口，并保留 `README.zh-CN.md` 中文镜像与语言切换链接。
-- 将运行时 `SKILL.md` 翻译为英文，并保留 `SKILL.zh-CN.md` 中文说明镜像，便于全球用户发现和使用。
-- 重写 README 的核心理念、差异化卖点和开发生命周期治理说明。
-- 修正 GitHub 与 `npx skills` 安装示例，明确仓库来源 `riesaexe/r-doc` 与技能名 `r-doc` 的区别。
-- 将运行时 references 和模板统一为英文，并把 `SKILL.zh-CN.md` 收敛为面向人类维护者的中文指针，避免第二套运行时规则漂移。
-- 增加 `audit_docs.py`、`validate_skill.py`、临时项目单元测试和 GitHub Actions 质量门槛，降低验证对模型自觉性的依赖。
-- 增加 `AGENTS.md` 模板、实际使用示例和故障排查入口，覆盖核心产物与新手上手路径。
-- 收紧隐式触发边界，明确纯代码且无文档影响的局部修改不启动完整治理流程。
-- 移除项目内部文档中的个人机器路径，统一使用可移植路径表达。
-- 增加默认只读的 `repair_docs.py` 安全修复模式；显式 `--apply` 才会补齐入口、索引和缺失链接，并拒绝覆盖、删除或基于猜测解决冲突。
-- 增加初始化、接口变更、发布审计和主题目录的实际案例，以及集中式常见踩坑和防护指南。
+- Improved the `SKILL.md` discovery description and OpenAI UI short description with project-documentation governance, document-consistency, and change-tracking trigger terms.
+- Added a skills.sh badge, quick-install section, and common-request entry table above the fold in the README.
+- Made the English README the default global entrypoint while retaining `README.zh-CN.md` as the Chinese mirror with a language switch link.
+- Translated the runtime `SKILL.md` into English while retaining `SKILL.zh-CN.md` as a Chinese explanatory mirror for global discovery and use.
+- Rewrote the README's core principles, differentiators, and development-lifecycle governance guidance.
+- Corrected GitHub and `npx skills` installation examples, clarifying the distinction between the repository source `riesaexe/r-doc` and the Skill name `r-doc`.
+- Standardized runtime references and templates on English, and narrowed `SKILL.zh-CN.md` to a Chinese pointer for human maintainers to avoid a second drifting set of runtime rules.
+- Added `audit_docs.py`, `validate_skill.py`, temporary-project unit tests, and GitHub Actions quality gates, reducing reliance on model self-discipline for verification.
+- Added an `AGENTS.md` template, practical usage examples, and troubleshooting entrypoints covering core artifacts and the getting-started path.
+- Tightened implicit activation boundaries so a purely code-only local change with no documentation impact does not start the full governance workflow.
+- Removed personal machine paths from project documentation and replaced them with portable path expressions.
+- Added a read-only-by-default safe-repair mode to `repair_docs.py`; only explicit `--apply` fills entrypoints, indexes, and missing links, while refusing to overwrite, delete, or resolve conflicts by guesswork.
+- Added practical examples for initialization, interface changes, release audits, and topic directories, together with a centralized pitfalls and safeguards guide.
 
 ## [0.1.0] - 2026-09-14
 
-- 建立 r-doc Skill 初始源副本。
-- 增加项目级 AGENTS.md 与 docs/ 文档治理规范。
-- 增加生命周期清单、元数据规则、项目配置说明和核心模板。
-- 完成全局安装副本的初始验证。
+- Established the initial r-doc Skill source copy.
+- Added project-level `AGENTS.md` and documentation-governance conventions under `docs/`.
+- Added lifecycle checklists, metadata rules, project-configuration guidance, and core templates.
+- Completed the initial verification of the global installation copy.

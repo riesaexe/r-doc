@@ -20,9 +20,10 @@ CASES_PATH = Path(__file__).parents[1] / "evals" / "cases.json"
 
 
 def trace_for_evidence(manifest: dict[str, object], evidence: dict[str, object]) -> str:
+    schema_version = 2
     events: list[dict[str, object]] = [
         {
-            "schema_version": 1,
+            "schema_version": schema_version,
             "sequence": 0,
             "event": "trace_start",
             "run_id": manifest["run_id"],
@@ -39,22 +40,50 @@ def trace_for_evidence(manifest: dict[str, object], evidence: dict[str, object])
     for scenario in scenarios:
         assert isinstance(scenario, dict)
         identifier = scenario["id"]
-        events.append({"schema_version": 1, "sequence": sequence, "event": "scenario_start", "scenario_id": identifier})
+        events.append({"schema_version": schema_version, "sequence": sequence, "event": "scenario_start", "scenario_id": identifier})
+        sequence += 1
+        events.append(
+            {"schema_version": schema_version, "sequence": sequence, "event": "prompt", "scenario_id": identifier, "text": scenario["prompt"]}
+        )
+        sequence += 1
+        events.append(
+            {
+                "schema_version": schema_version,
+                "sequence": sequence,
+                "event": "activation_decision",
+                "scenario_id": identifier,
+                "decision": scenario["activation"],
+            }
+        )
+        sequence += 1
+        events.append(
+            {
+                "schema_version": schema_version,
+                "sequence": sequence,
+                "event": "skill_selected",
+                "scenario_id": identifier,
+                "skill": (
+                    "r-doc"
+                    if manifest["condition"] == "with-r-doc" and scenario["activation"] == "activated"
+                    else "none"
+                ),
+            }
+        )
         sequence += 1
         for path in scenario["paths_checked"]:
             events.append(
-                {"schema_version": 1, "sequence": sequence, "event": "path_checked", "scenario_id": identifier, "path": path}
+                {"schema_version": schema_version, "sequence": sequence, "event": "path_checked", "scenario_id": identifier, "path": path}
             )
             sequence += 1
         for path in scenario["files_read"]:
             events.append(
-                {"schema_version": 1, "sequence": sequence, "event": "file_read", "scenario_id": identifier, "path": path}
+                {"schema_version": schema_version, "sequence": sequence, "event": "file_read", "scenario_id": identifier, "path": path}
             )
             sequence += 1
         for command in scenario["commands"]:
             assert isinstance(command, dict)
             event: dict[str, object] = {
-                "schema_version": 1,
+                "schema_version": schema_version,
                 "sequence": sequence,
                 "event": "command",
                 "scenario_id": identifier,
@@ -67,12 +96,40 @@ def trace_for_evidence(manifest: dict[str, object], evidence: dict[str, object])
             sequence += 1
         for path in scenario["files_written"]:
             events.append(
-                {"schema_version": 1, "sequence": sequence, "event": "file_written", "scenario_id": identifier, "path": path}
+                {"schema_version": schema_version, "sequence": sequence, "event": "file_written", "scenario_id": identifier, "path": path}
             )
             sequence += 1
-        events.append({"schema_version": 1, "sequence": sequence, "event": "scenario_end", "scenario_id": identifier})
+        for event_name, field in (
+            ("governance_report", "governance_report"),
+            ("final_response", "final_response"),
+            ("diff_snapshot", "final_diff"),
+        ):
+            events.append(
+                {
+                    "schema_version": schema_version,
+                    "sequence": sequence,
+                    "event": event_name,
+                    "scenario_id": identifier,
+                    "text": scenario[field],
+                }
+            )
+            sequence += 1
+        for dimension, assessment in scenario["review"].items():
+            events.append(
+                {
+                    "schema_version": schema_version,
+                    "sequence": sequence,
+                    "event": "review",
+                    "scenario_id": identifier,
+                    "dimension": dimension,
+                    "status": assessment["status"],
+                    "basis": assessment["basis"],
+                }
+            )
+            sequence += 1
+        events.append({"schema_version": schema_version, "sequence": sequence, "event": "scenario_end", "scenario_id": identifier})
         sequence += 1
-    events.append({"schema_version": 1, "sequence": sequence, "event": "trace_end"})
+    events.append({"schema_version": schema_version, "sequence": sequence, "event": "trace_end"})
     return "\n".join(json.dumps(event, ensure_ascii=False) for event in events) + "\n"
 
 
@@ -87,6 +144,16 @@ def write_run(
     run_dir.mkdir(parents=True)
     if evidence is None:
         evidence = complete_evidence()
+    else:
+        evidence = json.loads(json.dumps(evidence))
+    evidence["condition"] = condition
+    scenarios = evidence["scenarios"]
+    assert isinstance(scenarios, list)
+    for scenario in scenarios:
+        assert isinstance(scenario, dict)
+        scenario["skill_selected"] = (
+            "r-doc" if condition == "with-r-doc" and scenario["activation"] == "activated" else "none"
+        )
     manifest = {
         "schema_version": 1,
         "profile": profile,
@@ -167,6 +234,52 @@ class BenchmarkToolTests(unittest.TestCase):
             self.assertEqual(summary["profiles"], {})
             self.assertEqual(summary["paired_comparisons"], [])
 
+    def test_failed_evaluator_run_is_retained_but_excluded_from_aggregates(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            evidence = complete_evidence()
+            scenarios = evidence["scenarios"]
+            assert isinstance(scenarios, list)
+            review = scenarios[0]["review"]
+            assert isinstance(review, dict)
+            context = review["context_economy"]
+            assert isinstance(context, dict)
+            context["status"] = "fail"
+            write_run(root, evidence=evidence)
+            summary, _ = aggregate_benchmarks.aggregate(CASES, root)
+            self.assertEqual(summary["status"], "fail")
+            self.assertEqual(summary["profiles"], {})
+            self.assertEqual(summary["paired_comparisons"], [])
+            self.assertEqual(summary["runs"][0]["trace_validation"], "pass")
+            self.assertEqual(summary["runs"][0]["status"], "fail")
+
+    def test_trace_rejects_undeclared_event_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            run_dir = write_run(root)
+            lines = (run_dir / "trace.jsonl").read_text(encoding="utf-8").splitlines()
+            event = json.loads(lines[0])
+            event["note"] = "not part of the trace contract"
+            lines[0] = json.dumps(event)
+            (run_dir / "trace.jsonl").write_text("\n".join(lines) + "\n", encoding="utf-8")
+            summary, _ = aggregate_benchmarks.aggregate(CASES, root)
+            self.assertEqual(summary["status"], "fail")
+            self.assertTrue(any("unsupported fields: note" in error for error in summary["errors"]))
+
+    def test_trace_proves_text_and_review_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            run_dir = write_run(root)
+            lines = (run_dir / "trace.jsonl").read_text(encoding="utf-8").splitlines()
+            final_response_index = next(index for index, line in enumerate(lines) if '"event": "final_response"' in line)
+            event = json.loads(lines[final_response_index])
+            event["text"] = "trace response differs from evidence"
+            lines[final_response_index] = json.dumps(event)
+            (run_dir / "trace.jsonl").write_text("\n".join(lines) + "\n", encoding="utf-8")
+            summary, _ = aggregate_benchmarks.aggregate(CASES, root)
+            self.assertEqual(summary["status"], "fail")
+            self.assertTrue(any("trace/evidence mismatch" in error and "final_response" in error for error in summary["errors"]))
+
     def test_malformed_trace_json_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -211,7 +324,36 @@ class BenchmarkToolTests(unittest.TestCase):
             self.assertEqual(comparison["paired_run_count"], 1)
             self.assertEqual(comparison["conditions"]["with-r-doc"]["unnecessary_reads_average"], 0.0)
             self.assertEqual(comparison["delta"]["unnecessary_reads"], -1.0)
+            self.assertFalse(comparison["trend_readiness"])
             self.assertFalse(comparison["statistical_readiness"])
+
+    def test_paired_statistics_report_readiness_and_confidence_interval(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for index in range(1, 6):
+                run_id = f"run-{index:03d}"
+                with_evidence = complete_evidence()
+                baseline_evidence = complete_evidence()
+                with_scenarios = with_evidence["scenarios"]
+                baseline_scenarios = baseline_evidence["scenarios"]
+                assert isinstance(with_scenarios, list)
+                assert isinstance(baseline_scenarios, list)
+                with_interface = next(item for item in with_scenarios if item["id"] == "trace-public-interface-change")
+                baseline_interface = next(item for item in baseline_scenarios if item["id"] == "trace-public-interface-change")
+                assert isinstance(with_interface, dict)
+                assert isinstance(baseline_interface, dict)
+                baseline_interface["files_read"].append("docs/unrelated.md")
+                write_run(root, run_id=run_id, condition="with-r-doc", evidence=with_evidence)
+                write_run(root, profile="baseline-no-r-doc", run_id=run_id, condition="baseline-no-r-doc", evidence=baseline_evidence)
+            summary, _ = aggregate_benchmarks.aggregate(CASES, root)
+            comparison = summary["paired_comparisons"][0]
+            self.assertTrue(comparison["trend_readiness"])
+            self.assertTrue(comparison["statistical_readiness"])
+            self.assertFalse(comparison["strong_evidence_readiness"])
+            stats = comparison["delta_statistics"]["unnecessary_reads"]
+            self.assertEqual(stats["ci95_low"], -1.0)
+            self.assertEqual(stats["ci95_high"], -1.0)
+            self.assertEqual(stats["ci95_method"], "student-t-95")
 
     def test_small_audit_performance_fixture_is_clean(self) -> None:
         result = benchmark_audit.measure_size(3, iterations=1, warmup=0)

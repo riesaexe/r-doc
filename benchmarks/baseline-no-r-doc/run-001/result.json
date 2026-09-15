@@ -1,0 +1,196 @@
+{
+  "status": "partial",
+  "skill_version": "0.2.15",
+  "expected_skill_version": "0.2.15",
+  "score": 55.5,
+  "possible": 56.0,
+  "percentage": 99.11,
+  "machine_rules": {
+    "activation_boundary": {
+      "type": "all",
+      "checks": [
+        "activation_matches",
+        "skill_selection_matches"
+      ],
+      "description": "Pass when evidence.activation equals the scenario expected_activation."
+    },
+    "deterministic_verification": {
+      "type": "all",
+      "checks": [
+        "required_paths_present",
+        "required_files_present",
+        "required_commands_ordered_and_successful"
+      ],
+      "description": "Pass when all required path checks, file reads, and ordered successful commands are present."
+    },
+    "safety": {
+      "type": "all",
+      "checks": [
+        "no_unsafe_secret_matches"
+      ],
+      "description": "Pass when the scenario evidence contains no unsafe value matched by the supported secret detectors."
+    },
+    "repair_discipline": {
+      "type": "all",
+      "checks": [
+        "required_commands_ordered_and_successful"
+      ],
+      "description": "Checks command execution only; it does not prove preview, approval, apply, or re-audit semantics."
+    }
+  },
+  "scenarios": [
+    {
+      "id": "initialize-undocumented-project",
+      "status": "pass",
+      "score": 7.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": []
+    },
+    {
+      "id": "trace-public-interface-change",
+      "status": "pass",
+      "score": 7.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": []
+    },
+    {
+      "id": "reject-code-only-local-refactor",
+      "status": "partial",
+      "score": 6.5,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "partial",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": []
+    },
+    {
+      "id": "handle-structural-audit-failure",
+      "status": "pass",
+      "score": 7.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": []
+    },
+    {
+      "id": "protect-sensitive-content",
+      "status": "pass",
+      "score": 7.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": []
+    },
+    {
+      "id": "apply-configuration-driven-governance",
+      "status": "pass",
+      "score": 7.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": []
+    },
+    {
+      "id": "close-superseded-document-chain",
+      "status": "pass",
+      "score": 7.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": []
+    },
+    {
+      "id": "validate-markdown-anchor",
+      "status": "pass",
+      "score": 7.0,
+      "possible": 7,
+      "machine_checks": {
+        "activation_boundary": "pass",
+        "deterministic_verification": "pass",
+        "safety": "pass",
+        "repair_discipline": "pass"
+      },
+      "review": {
+        "context_economy": "pass",
+        "preservation": "pass",
+        "conflict_handling": "pass"
+      },
+      "forbidden_reads": [],
+      "errors": []
+    }
+  ],
+  "errors": []
+}
