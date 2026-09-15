@@ -23,6 +23,7 @@ Audit behavior changes can add findings without rewriting topic content. Pin a k
 | 0.2.10 | Separated checked paths from read files, enforced successful ordered command evidence, split machine checks from review dimensions, and added shared-module regression tests. | Upgrade evidence to schema version 2; record `paths_checked`, use `required_command_sequence`, and provide a basis for each review dimension. | Medium |
 | 0.2.11 | Added a validator-ready complete evidence example and made machine-dimension derivation rules explicit in `evals/cases.json`. | Replace copied evidence fragments with `evals/example-evidence.json` as a schema reference; keep custom case producers aligned with `machine_rules`. | Low |
 | 0.2.12 | Added real-run benchmark directory and aggregation contracts, bidirectional machine-rule registry binding, and 100/1000/5000-document audit performance measurements. | Capture real traces before interpreting `benchmarks/summary.json`; treat local wall-clock values as trend data rather than CI limits. | Medium |
+| 0.2.13 | Added paired Chinese public references, language-specific README routing, and a regression check for English/Chinese documentation targets. | Keep each localized README linked to the matching language resources; update both language variants when changing a public reference. | Low |
 
 ## Safe upgrade sequence
 

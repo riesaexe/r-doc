@@ -1,5 +1,7 @@
 # Safe repair mode
 
+[简体中文版本](repair.zh-CN.md)
+
 ## Purpose
 
 `repair_docs.py` turns a small set of structural findings into a reviewable, repeatable repair plan. It is a guardrail, not a semantic decision-maker.

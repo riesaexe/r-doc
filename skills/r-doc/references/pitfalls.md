@@ -1,5 +1,7 @@
 # Common pitfalls and guardrails
 
+[简体中文版本](pitfalls.zh-CN.md)
+
 ## A file exists but is not reachable
 
 Creating `docs/new-topic.md` is not enough. Add it to the nearest index and confirm that the index itself is reachable from `AGENTS.md` and `docs/README.md`. Use the safe repair preview for missing structural links, then run the strict audit.

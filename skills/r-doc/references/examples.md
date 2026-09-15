@@ -1,5 +1,7 @@
 # Practical examples
 
+[简体中文版本](examples.zh-CN.md)
+
 ## Example 1: Initialize an existing repository
 
 Suppose a repository contains source code and a user-facing README but no project documentation entrypoint:

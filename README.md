@@ -198,9 +198,21 @@ docs/
 - Default to maintaining docs, indexes, metadata, and documentation comments, not business code;
 - Do not declare a development stage complete while its documentation remains unsynchronized.
 
-## What `0.2.12` adds (unreleased)
+## What `0.2.13` adds
 
-This development update moves evaluation from schema readiness toward empirical measurement:
+This release makes the GitHub-facing documentation language-aware and keeps the two public entrypoints aligned:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Paired public references | Adds Chinese counterparts for the safe-repair guide, practical examples, and common-pitfalls guide. | English references remain canonical for runtime terminology; localized pages cross-link to their English source. |
+| Language-specific README routing | Keeps `README.md` on English references and routes `README.zh-CN.md` to `.zh-CN.md` references. | A language switch never silently lands in the other language's user-facing guide. |
+| Localization regression guard | Tests that both README link sets exist and target the expected language suffix. | The check covers routing and file existence, not translation quality. |
+
+The release is backed by 68 regression tests, package validation, repair-preview, strict-audit, the official Skill validator, and the public-documentation routing check.
+
+## What `0.2.12` adds
+
+This release moved evaluation from schema readiness toward empirical measurement:
 
 | Improvement | What it does | Safety boundary |
 | --- | --- | --- |

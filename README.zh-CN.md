@@ -198,9 +198,21 @@ AGENTS.md 是项目级入口和导航；详细知识放在 docs/，每篇文档�
 - 默认只维护文档、索引、元数据和文档注释，不修改业务代码；
 - 文档未同步时，不把当前开发阶段宣布为已完成。
 
-## `0.2.12` 新增了什么（未发布）
+## `0.2.13` 新增了什么
 
-这一版开发更新把评测从 schema 完备推进到可实证测量：
+这一版让 GitHub 公开文档具备明确的语言路由，并保持两个公开入口彼此对应：
+
+| 改进 | 作用 | 安全边界 |
+| --- | --- | --- |
+| 成对的公开参考文档 | 为安全修复、实际案例和常见避坑指南增加中文对应版本。 | 英文文档仍是运行时术语的 canonical 来源，中文页面会回链英文原文。 |
+| 按语言路由 README | `README.md` 只进入英文参考资料，`README.zh-CN.md` 进入 `.zh-CN.md` 参考资料。 | 语言切换不会静默落到另一种语言的用户指南。 |
+| 双语路由回归检查 | 自动检查两个 README 的目标文件存在，并且后缀符合目标语言。 | 检查保证路由和文件存在，不替代翻译质量审阅。 |
+
+本版本由 68 个回归测试、Skill 包校验、修复预览、严格审计、官方 Skill 校验和公开文档路由检查共同验证。
+
+## `0.2.12` 新增了什么
+
+这一版把评测从 schema 完备推进到可实证测量：
 
 | 改进 | 作用 | 安全边界 |
 | --- | --- | --- |
@@ -327,7 +339,7 @@ python skills/r-doc/scripts/repair_docs.py --root . --apply
 python skills/r-doc/scripts/audit_docs.py --root . --strict
 ```
 
-完整边界请阅读[安全修复指南](skills/r-doc/references/repair.md)、[实际案例](skills/r-doc/references/examples.md)和[常见避坑指南](skills/r-doc/references/pitfalls.md)。
+完整边界请阅读[安全修复指南](skills/r-doc/references/repair.zh-CN.md)、[实际案例](skills/r-doc/references/examples.zh-CN.md)和[常见避坑指南](skills/r-doc/references/pitfalls.zh-CN.md)。
 
 ## `0.2.3` 新增了什么
 
