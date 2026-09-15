@@ -4,7 +4,7 @@
 
 本项目维护可复用的 Codex Skill。当前主产品是 r-doc：用于在其他项目中建立和持续维护 AGENTS.md 与 docs/ 文档知识库。
 
-项目源文件位于 `skills/`，全局安装目录（例如 `~/.agents/skills/`）只是已验证的运行副本。后续迭代必须先修改项目源文件，再通过发布流程同步安装副本。
+项目源文件位于 `skills/`，全局安装目录（例如 `~/.agents/skills/`）只是运行副本。开发过程中持续使用 `skills/r-doc/` 的最新源版本管理本项目自身的 `AGENTS.md`、`docs/` 和发布记录，以本项目践行 r-doc 的文档治理哲学。后续迭代必须先修改项目源文件；校验通过后自动同步全局安装副本，发布动作另行受授权控制。
 
 ## 快速开始
 
@@ -54,6 +54,8 @@ python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 ## 强制规则
 
 - skills/r-doc/ 是唯一事实源；不要把全局安装目录当作开发源。
+- 本项目开发持续使用 `skills/r-doc/` 的当前最新版本治理自身文档；涉及文档、Skill 行为、配置或发布记录的变更，先按 r-doc 工作流盘点影响并执行相关校验。
+- 每次 `skills/r-doc/` 源文件或版本更新且校验通过后，自动将本地源同步到 `C:\Users\RiESA\.agents\skills\r-doc`；未发布版本也可以同步，但全局同步不代表已经推送或发布。
 - Skill 入口保持精炼；详细规则放在 references/，并从入口按需链接。
 - 修改 Skill 行为时同步更新相关开发文档或发布记录。
 - 发布前必须通过格式校验、链接检查和临时项目 QA。
@@ -66,6 +68,7 @@ python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 - 不把未经验证的源文件标记为已发布。
 - 不为了通过校验删除失败证据、测试或历史记录。
 - 不把业务代码、第三方依赖、构建产物或缓存塞入 Skill 源目录。
+- 未获得用户明确指示，不执行 `git push`、创建或更新远程标签、GitHub Release、npx 远程发布或 SkillHub 导入。
 
 ## 路线指引
 
