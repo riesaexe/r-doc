@@ -9,27 +9,19 @@ from datetime import date, datetime
 from pathlib import Path
 
 STATUS_VALUES = {"draft", "proposed", "active", "superseded", "archived"}
-from rdoc import (
+from rdoc.config import ProjectConfig, _string_list, canonical_path, load_project_config, path_is_excluded, relative
+from rdoc.io import add, read_text
+from rdoc.markdown import (
     FrontmatterParseError,
-    Finding,
-    FindingList,
-    ProjectConfig,
-    SECRET_PATTERNS,
     _anchor_slug,
-    _string_list,
-    add,
-    canonical_path,
-    is_safe_example,
-    load_project_config,
     markdown_anchors,
     navigation_targets,
     parse_frontmatter,
-    path_is_excluded,
-    read_text,
-    relative,
     target_reference,
     validation_targets,
 )
+from rdoc.models import Finding, FindingList
+from rdoc.security import SECRET_PATTERNS, is_safe_example
 
 
 def markdown_files(directory: Path, root: Path, config: ProjectConfig) -> list[Path]:

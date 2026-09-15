@@ -26,7 +26,12 @@ def complete_evidence() -> dict[str, object]:
                 "criteria": {dimension: "pass" for dimension in CASES["dimensions"]},
             }
         )
-    return {"schema_version": 1, "agent": "test-agent", "scenarios": scenarios}
+    return {
+        "schema_version": 1,
+        "skill_version": CASES["skill_version"],
+        "agent": "test-agent",
+        "scenarios": scenarios,
+    }
 
 
 class AgentEvaluationTests(unittest.TestCase):
@@ -54,3 +59,16 @@ class AgentEvaluationTests(unittest.TestCase):
         result = evaluate_agent.evaluate(CASES, evidence)
         self.assertEqual(result["status"], "fail")
         self.assertTrue(any("sensitive value" in error for error in result["errors"]))
+
+    def test_skill_version_must_match_cases(self) -> None:
+        evidence = complete_evidence()
+        evidence.pop("skill_version")
+        result = evaluate_agent.evaluate(CASES, evidence)
+        self.assertEqual(result["status"], "fail")
+        self.assertTrue(any("skill_version" in error for error in result["errors"]))
+
+        evidence = complete_evidence()
+        evidence["skill_version"] = "0.2.8"
+        result = evaluate_agent.evaluate(CASES, evidence)
+        self.assertEqual(result["status"], "fail")
+        self.assertTrue(any("must match cases" in error for error in result["errors"]))

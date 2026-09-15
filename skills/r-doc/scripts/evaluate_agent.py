@@ -21,7 +21,13 @@ def load_json(path: Path) -> dict[str, Any]:
 
 def load_cases(path: Path) -> dict[str, Any]:
     cases = load_json(path)
-    if cases.get("schema_version") != 1 or not isinstance(cases.get("dimensions"), list) or not isinstance(cases.get("scenarios"), list):
+    if (
+        cases.get("schema_version") != 1
+        or not isinstance(cases.get("skill_version"), str)
+        or not cases["skill_version"].strip()
+        or not isinstance(cases.get("dimensions"), list)
+        or not isinstance(cases.get("scenarios"), list)
+    ):
         raise ValueError(f"unsupported eval case schema: {path}")
     return cases
 
@@ -58,6 +64,11 @@ def _evidence_contains_secret(evidence: dict[str, Any]) -> bool:
 def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
     dimensions = [item for item in cases["dimensions"] if isinstance(item, str)]
     errors: list[str] = []
+    expected_skill_version = cases.get("skill_version")
+    if not _non_empty_text(expected_skill_version):
+        errors.append("eval cases skill_version is required")
+    elif evidence.get("skill_version") != expected_skill_version:
+        errors.append(f"evidence skill_version must match cases: {expected_skill_version}")
     if evidence.get("schema_version") != 1:
         errors.append("evidence schema_version must be 1")
     if not _non_empty_text(evidence.get("agent")):
@@ -141,6 +152,8 @@ def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
     overall_status = "fail" if errors or "fail" in scenario_statuses else ("partial" if "partial" in scenario_statuses else "pass")
     return {
         "status": overall_status,
+        "skill_version": evidence.get("skill_version"),
+        "expected_skill_version": expected_skill_version,
         "score": total_score,
         "possible": total_possible,
         "percentage": round(total_score / total_possible * 100, 2) if total_possible else 0.0,

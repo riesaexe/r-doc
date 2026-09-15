@@ -8,7 +8,8 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from rdoc import ProjectConfig, canonical_path, load_project_config, navigation_targets, path_is_excluded, target_reference
+from rdoc.config import ProjectConfig, canonical_path, load_project_config, path_is_excluded
+from rdoc.markdown import navigation_targets, target_reference
 
 
 @dataclass(frozen=True)

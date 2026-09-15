@@ -150,6 +150,18 @@ This release closes the remaining edge cases from the v0.2.6 adversarial review 
 
 The release is backed by 50 regression tests, package validation, repair-preview, strict-audit, the official Skill validator, and the executable evaluation-evidence path.
 
+## What `0.2.9` adds
+
+This release makes the shared tooling package safer to consume and keeps Agent evaluation results tied to the Skill version they measure:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Direct submodule imports | Removes eager top-level `rdoc` re-exports so audit, repair, validation, and evaluation load only the modules they use. | Package initialization stays minimal and avoids growing a central import bottleneck. |
+| Version-bound evaluation evidence | Adds required `skill_version` to the case file and evidence contract, rejecting missing or mismatched versions. | Scores are comparable only when their tested Skill versions match. |
+| Migration and verification sync | Extends the migration matrix and verification record for the 0.2.9 behavior changes. | Upgrades still require preview, strict audit, and review of the recorded evidence. |
+
+The release is backed by 51 regression tests, package validation, repair-preview, strict-audit, the official Skill validator, and the executable evaluation-evidence path.
+
 ## What `0.2.8` adds
 
 This maintenance release closes the remaining v0.2.7 review gaps while keeping shared deterministic behavior in one tested package:

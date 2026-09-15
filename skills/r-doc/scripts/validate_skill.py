@@ -6,17 +6,16 @@ import re
 import sys
 from pathlib import Path
 
-from rdoc import (
+from rdoc.markdown import (
     FrontmatterParseError,
-    SECRET_PATTERNS,
     _anchor_slug,
-    is_safe_example,
     markdown_anchors,
     parse_frontmatter,
     target_path,
     target_reference,
     validation_targets,
 )
+from rdoc.security import SECRET_PATTERNS, is_safe_example
 
 
 def finding(path: Path, message: str) -> str:

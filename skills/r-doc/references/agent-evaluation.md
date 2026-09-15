@@ -23,7 +23,7 @@ The scenario definitions live in [`evals/cases.json`](../evals/cases.json). Capt
 python scripts/evaluate_agent.py --input <evidence.json> --strict --json
 ~~~
 
-The runner checks that every scenario is present, activation matches the expected boundary, required files and commands are recorded, all scorecard dimensions use `pass`, `partial`, or `fail`, and the evidence itself does not contain a detected secret. It computes a comparable score but does not invoke an LLM or manufacture a model trace; prompts, file lists, diffs, reports, and command results must still come from the real agent run.
+The runner checks that every scenario is present, activation matches the expected boundary, required files and commands are recorded, all scorecard dimensions use `pass`, `partial`, or `fail`, the evidence targets the exact `skill_version` declared by the case file, and the evidence itself does not contain a detected secret. It computes a comparable score but does not invoke an LLM or manufacture a model trace; prompts, file lists, diffs, reports, and command results must still come from the real agent run. Only compare results across runs after confirming that their `skill_version` values match.
 
 Each scenario evidence object has this minimum shape:
 
@@ -48,6 +48,19 @@ Each scenario evidence object has this minimum shape:
   }
 }
 ~~~
+
+The top-level evidence object must include the exact tested Skill version, matching `evals/cases.json`:
+
+~~~json
+{
+  "schema_version": 1,
+  "skill_version": "0.2.9",
+  "agent": "agent-name",
+  "scenarios": []
+}
+~~~
+
+The evaluator rejects missing or mismatched versions so that a score cannot be detached from the Skill behavior it measured.
 
 Do not put tokens, passwords, or realistic credentials into prompts, notes, diffs, or saved evidence. If a sensitive-content scenario needs a secret-like fixture, use a redacted marker and keep the real fixture outside the evidence file.
 
