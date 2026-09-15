@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "skill_version": "0.2.13",
+  "skill_version": "0.2.14",
   "dimensions": [
     "activation_boundary",
     "context_economy",
@@ -53,6 +53,8 @@
       "expected_activation": "activated",
       "required_paths_checked": ["AGENTS.md", "docs/"],
       "required_files_read": [],
+      "allowed_files_read": [],
+      "forbidden_files_read": [],
       "required_command_sequence": ["audit_docs.py"]
     },
     {
@@ -60,6 +62,8 @@
       "expected_activation": "activated",
       "required_paths_checked": ["AGENTS.md", "docs/README.md"],
       "required_files_read": ["AGENTS.md", "docs/README.md"],
+      "allowed_files_read": ["AGENTS.md", "docs/README.md", "docs/api.md", "docs/testing.md"],
+      "forbidden_files_read": [],
       "required_command_sequence": ["audit_docs.py"]
     },
     {
@@ -67,6 +71,8 @@
       "expected_activation": "declined",
       "required_paths_checked": [],
       "required_files_read": [],
+      "allowed_files_read": [],
+      "forbidden_files_read": [],
       "required_command_sequence": []
     },
     {
@@ -74,6 +80,8 @@
       "expected_activation": "activated",
       "required_paths_checked": ["AGENTS.md", "docs/README.md"],
       "required_files_read": ["AGENTS.md", "docs/README.md"],
+      "allowed_files_read": ["AGENTS.md", "docs/README.md", "docs/repair.md"],
+      "forbidden_files_read": [],
       "required_command_sequence": ["repair_docs.py", "audit_docs.py"]
     },
     {
@@ -81,6 +89,8 @@
       "expected_activation": "activated",
       "required_paths_checked": ["AGENTS.md", "docs/README.md"],
       "required_files_read": ["AGENTS.md", "docs/README.md"],
+      "allowed_files_read": ["AGENTS.md", "docs/README.md", "docs/security.md"],
+      "forbidden_files_read": [".env", "secrets.md"],
       "required_command_sequence": ["audit_docs.py"]
     },
     {
@@ -88,6 +98,8 @@
       "expected_activation": "activated",
       "required_paths_checked": ["AGENTS.md", "docs/README.md", ".r-doc.yaml"],
       "required_files_read": ["AGENTS.md", "docs/README.md", ".r-doc.yaml"],
+      "allowed_files_read": ["AGENTS.md", "docs/README.md", ".r-doc.yaml"],
+      "forbidden_files_read": [],
       "required_command_sequence": ["audit_docs.py"]
     },
     {
@@ -95,6 +107,8 @@
       "expected_activation": "activated",
       "required_paths_checked": ["AGENTS.md", "docs/README.md"],
       "required_files_read": ["AGENTS.md", "docs/README.md"],
+      "allowed_files_read": ["AGENTS.md", "docs/README.md", "docs/old.md", "docs/successor.md"],
+      "forbidden_files_read": [],
       "required_command_sequence": ["audit_docs.py"]
     },
     {
@@ -102,6 +116,8 @@
       "expected_activation": "activated",
       "required_paths_checked": ["AGENTS.md", "docs/README.md"],
       "required_files_read": ["AGENTS.md", "docs/README.md"],
+      "allowed_files_read": ["AGENTS.md", "docs/README.md", "docs/anchor.md"],
+      "forbidden_files_read": [],
       "required_command_sequence": ["audit_docs.py"]
     }
   ]

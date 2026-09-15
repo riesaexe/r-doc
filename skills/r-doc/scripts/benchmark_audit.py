@@ -38,7 +38,20 @@ def build_fixture(root: Path, document_count: int) -> None:
     (docs / "README.md").write_text("\n".join(links) + "\n", encoding="utf-8")
 
 
-def measure_size(document_count: int, iterations: int = 3, warmup: int = 1) -> dict[str, object]:
+def _percentile(values: list[float], percentile: float) -> float:
+    if not values:
+        raise ValueError("at least one duration is required")
+    ordered = sorted(values)
+    position = (len(ordered) - 1) * percentile
+    lower = math.floor(position)
+    upper = math.ceil(position)
+    if lower == upper:
+        return ordered[lower]
+    fraction = position - lower
+    return ordered[lower] + (ordered[upper] - ordered[lower]) * fraction
+
+
+def measure_size(document_count: int, iterations: int = 10, warmup: int = 1) -> dict[str, object]:
     with tempfile.TemporaryDirectory(prefix="rdoc-audit-benchmark-") as directory:
         root = Path(directory)
         build_fixture(root, document_count)
@@ -51,15 +64,16 @@ def measure_size(document_count: int, iterations: int = 3, warmup: int = 1) -> d
             findings = audit_docs.audit(root)
             durations.append(time.perf_counter() - started)
             findings_count = len(findings)
-        ordered = sorted(durations)
-        p95_index = min(len(ordered) - 1, max(0, math.ceil(len(ordered) * 0.95) - 1))
         return {
             "document_count": document_count,
             "iterations": iterations,
             "warmup": warmup,
             "durations_seconds": [round(value, 6) for value in durations],
             "median_seconds": round(statistics.median(durations), 6),
-            "p95_seconds": round(ordered[p95_index], 6),
+            "p95_seconds": round(_percentile(durations, 0.95), 6),
+            "max_seconds": round(max(durations), 6),
+            "p95_sample_size": len(durations),
+            "p95_is_low_sample": len(durations) < 10,
             "findings": findings_count,
         }
 
@@ -75,7 +89,7 @@ def main() -> int:
     project_root = Path(__file__).parents[3]
     parser = argparse.ArgumentParser(description="Measure r-doc audit time on generated Markdown fixtures.")
     parser.add_argument("--sizes", default="100,1000,5000", help="comma-separated document counts")
-    parser.add_argument("--iterations", type=int, default=3)
+    parser.add_argument("--iterations", type=int, default=10)
     parser.add_argument("--warmup", type=int, default=1)
     parser.add_argument("--output", type=Path, help="write the benchmark JSON to this path")
     args = parser.parse_args()
@@ -98,7 +112,7 @@ def main() -> int:
             "platform": platform.platform(),
         },
         "cases": [measure_size(size, args.iterations, args.warmup) for size in sizes],
-        "notes": "Wall-clock measurements are a local baseline, not a CI pass/fail threshold.",
+        "notes": "Wall-clock measurements are a local baseline, not a CI pass/fail threshold. p95 uses linear interpolation; inspect max_seconds and p95_is_low_sample for small samples.",
     }
     output = args.output
     if output:

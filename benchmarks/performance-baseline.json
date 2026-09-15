@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "tool": "r-doc audit",
-  "skill_version": "0.2.12",
-  "captured_at": "2026-09-15T03:22:10.052775+00:00",
+  "skill_version": "0.2.14",
+  "captured_at": "2026-09-15T04:28:11.796868+00:00",
   "environment": {
     "python": "3.12.10",
     "platform": "Windows-10-10.0.19044-SP0"
@@ -10,43 +10,73 @@
   "cases": [
     {
       "document_count": 100,
-      "iterations": 3,
+      "iterations": 10,
       "warmup": 0,
       "durations_seconds": [
-        0.807555,
-        0.739205,
-        0.596569
+        0.465293,
+        0.529698,
+        0.473876,
+        0.467758,
+        0.453388,
+        0.450949,
+        0.471576,
+        0.464725,
+        0.4957,
+        0.455128
       ],
-      "median_seconds": 0.739205,
-      "p95_seconds": 0.807555,
+      "median_seconds": 0.466525,
+      "p95_seconds": 0.514399,
+      "max_seconds": 0.529698,
+      "p95_sample_size": 10,
+      "p95_is_low_sample": false,
       "findings": 0
     },
     {
       "document_count": 1000,
-      "iterations": 3,
+      "iterations": 10,
       "warmup": 0,
       "durations_seconds": [
-        8.495043,
-        9.840327,
-        9.439285
+        4.564488,
+        4.380258,
+        4.395641,
+        5.323172,
+        4.42828,
+        4.346341,
+        4.357603,
+        4.410023,
+        5.036192,
+        4.338132
       ],
-      "median_seconds": 9.439285,
-      "p95_seconds": 9.840327,
+      "median_seconds": 4.402832,
+      "p95_seconds": 5.194031,
+      "max_seconds": 5.323172,
+      "p95_sample_size": 10,
+      "p95_is_low_sample": false,
       "findings": 0
     },
     {
       "document_count": 5000,
-      "iterations": 3,
+      "iterations": 10,
       "warmup": 0,
       "durations_seconds": [
-        25.025207,
-        23.783603,
-        30.173737
+        23.285891,
+        23.660197,
+        23.020565,
+        21.951377,
+        22.224762,
+        21.404696,
+        21.246707,
+        23.56924,
+        21.821793,
+        22.245144
       ],
-      "median_seconds": 25.025207,
-      "p95_seconds": 30.173737,
+      "median_seconds": 22.234953,
+      "p95_seconds": 23.619266,
+      "max_seconds": 23.660197,
+      "p95_sample_size": 10,
+      "p95_is_low_sample": false,
       "findings": 0
     }
   ],
-  "notes": "Wall-clock measurements are a local baseline, not a CI pass/fail threshold."
+  "notes": "Wall-clock measurements are a local baseline, not a CI pass/fail threshold. p95 uses linear interpolation; inspect max_seconds and p95_is_low_sample for small samples."
 }

@@ -119,10 +119,23 @@ def load_cases(path: Path) -> dict[str, Any]:
     for case in cases["scenarios"]:
         if not isinstance(case, dict) or not isinstance(case.get("id"), str) or not case["id"].strip():
             raise ValueError(f"eval scenario must have a non-empty id: {path}")
-        for field in ("required_paths_checked", "required_files_read", "required_command_sequence"):
+        for field in (
+            "required_paths_checked",
+            "required_files_read",
+            "allowed_files_read",
+            "forbidden_files_read",
+            "required_command_sequence",
+        ):
             values = case.get(field)
             if not isinstance(values, list) or not all(isinstance(item, str) and item.strip() for item in values):
                 raise ValueError(f"eval scenario {case['id']} has invalid {field}: {path}")
+        required_reads = set(case["required_files_read"])
+        allowed_reads = set(case["allowed_files_read"])
+        forbidden_reads = set(case["forbidden_files_read"])
+        if not required_reads.issubset(allowed_reads):
+            raise ValueError(f"eval scenario {case['id']} required reads must be allowed reads: {path}")
+        if allowed_reads & forbidden_reads:
+            raise ValueError(f"eval scenario {case['id']} allowed and forbidden reads overlap: {path}")
     return cases
 
 

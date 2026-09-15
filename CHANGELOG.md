@@ -2,6 +2,13 @@
 
 本文件记录 r-doc 的用户可见变化。
 
+## [0.2.14] - 2026-09-15
+
+- 将真实 Agent benchmark 的 trace 升级为带运行元数据绑定、场景生命周期和 action 事件的结构化 JSONL，并从 trace 交叉验证 paths、读取、命令和写入证据。
+- 为 benchmark 聚合增加按 `agent + model + run_id` 配对的 `with-r-doc`/`baseline-no-r-doc` 差值、均值、中位数、标准差和统计就绪度；profile 汇总不再混合 condition。
+- 将 context economy 的读取策略拆分为 required、allowed 和 forbidden 集合，分别报告 unnecessary、forbidden 和缺失 required reads。
+- 将审计性能基线默认迭代次数提高到 10，并同时记录线性插值 p95、最大值和低样本提示。
+
 ## [0.2.13] - 2026-09-15
 
 - 为 GitHub 公开入口建立中英文成对的安全修复、实际案例和常见避坑参考文档；中文 README 不再跳转到英文文档。

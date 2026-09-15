@@ -198,6 +198,19 @@ docs/
 - Default to maintaining docs, indexes, metadata, and documentation comments, not business code;
 - Do not declare a development stage complete while its documentation remains unsynchronized.
 
+## What `0.2.14` adds
+
+This release makes the empirical benchmark output auditable and directly comparable:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Structured trace gate | Parses JSONL, binds trace metadata to `run.json`, derives action evidence, and cross-checks paths, reads, commands, and writes against `evidence.json`. | A trace placeholder or evidence-only run cannot pass the benchmark gate; this checks structure and consistency, not cryptographic provenance. |
+| Paired condition analysis | Keeps profile metrics condition-aware and emits matched `agent + model + run_id` deltas with mean, median, standard deviation, and readiness. | Unpaired runs are reported as not statistically ready; at least three matched pairs are recommended. |
+| Read policy metrics | Separates required, allowed, and forbidden reads so legitimate dependency reads do not inflate `unnecessary_reads`. | Case files must declare the allowed set and keep it disjoint from forbidden reads. |
+| Audit sample reporting | Raises the performance harness default to ten iterations and records interpolated p95, maximum, and low-sample metadata. | Wall-clock values remain local trend data, not a CI threshold or complexity guarantee. |
+
+The benchmark summary remains `pending` until real Codex and no-r-doc runs are captured; no synthetic score is claimed.
+
 ## What `0.2.13` adds
 
 This release makes the GitHub-facing documentation language-aware and keeps the two public entrypoints aligned:
