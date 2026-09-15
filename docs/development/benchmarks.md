@@ -16,14 +16,14 @@ updated: 2026-09-15
 ## 两层 benchmark 与性能基线
 
 1. **Conformance Benchmark / skill-layer ablation**：使用固定 fixture 和固定 prompt 捕获真实 Codex/其他代理的结构化 trace 和 evidence，分别运行 r-doc 条件与 `baseline-no-r-doc` 条件。固定 prompt 已给出 activation、读取策略和命令顺序，因此 activation 指标是 protocol compliance；当前三个 review 维度也由 Agent 自评，`task_success` 不是独立 grader 的客观成功率。
-2. **Naturalistic Effectiveness Benchmark**：只给真实用户任务，不给 activation 答案、required/allowed reads、命令序列或“必须使用 r-doc”的提示；由独立 grader 根据最终仓库状态、diff 和 action trace 评分。协议和 API 字段改名任务见 [benchmarks/naturalistic/README.md](../../benchmarks/naturalistic/README.md)。
+2. **Naturalistic Effectiveness Benchmark**：只给真实用户任务，不给 activation 答案、required/allowed reads、命令序列或“必须使用 r-doc”的提示；由独立 capture runner 在 Agent 退出后生成最终仓库快照，从原始 CLI JSONL 和 workspace diff 规范化 action trace，并由 grader 在临时物化目录中执行 pytest、行为检查和 documentation assertion。协议和任务 portfolio 见 [benchmarks/naturalistic/README.md](../../benchmarks/naturalistic/README.md)。
 3. **确定性审计性能基线**：在 100、1000、5000 个 Markdown 文档夹具上测量审计耗时，记录中位数、p95、Python 和平台信息。
 
-三者不能混为一谈：性能基线不是 Agent benchmark，Conformance 结果不是 natural activation 结果，`example-evidence.json` 也不是实战结果。
+三者不能混为一谈：性能基线不是 Agent benchmark，Conformance 结果不是 natural activation 结果，`example-evidence.json`、task fixture 或 regression test 也不是实战结果。
 
 ## 当前状态
 
-只有存在真实、结构化且与 evidence 交叉一致的 `trace.jsonl`、`evidence.json` 且通过评测器后，才能生成可比较的 `result.json`。当前本机已捕获 3 组 Codex `gpt-5.5` skill-layer paired runs，`summary.json` 为 `partial`：trend readiness 已满足，statistical/strong readiness 仍未满足；失败的真实 capture 保存在 `benchmarks/invalid-captures/`，不进入正式汇总。捕获成功后应由聚合器重新生成状态，不能手工填入分数。Naturalistic 层没有可宣称的结果。
+只有存在真实、结构化且与 evidence 交叉一致的 `trace.jsonl`、`evidence.json` 且通过评测器后，才能生成可比较的 conformance `result.json`。当前本机已捕获 3 组 Codex `gpt-5.5` skill-layer paired runs，`summary.json` 为 `partial`：trend readiness 已满足，statistical/strong readiness 仍未满足；失败的真实 capture 保存在 `benchmarks/invalid-captures/`，不进入正式汇总。Naturalistic 层现在也有 4 对真实 Codex `gpt-5.5` capture，覆盖 4 个任务，聚合为 `partial` 且达到 portfolio-level trend readiness；8 次运行都因读取 `.env` 和 `secrets.md` 而 context safety 失败，故没有正向 effectiveness 结论。统计、多模型和 context-safe 成功运行仍未具备。
 
 ## Trace 与 evidence 的一致性门禁
 
@@ -45,6 +45,16 @@ python benchmarks/capture_codex.py --profile baseline-no-r-doc --run-id run-001 
 ```
 
 捕获器只保存 Agent 实际写出的 `benchmark-evidence.json` 和 `benchmark-trace.jsonl`，同时保存脱敏的 CLI 事件流；缺少任一产物就失败，不从 case 定义合成证据。
+
+Naturalistic 捕获使用独立入口，每次只给 Agent task 的 `user_prompt`：
+
+```bash
+python benchmarks/naturalistic/capture_codex.py --task benchmarks/naturalistic/tasks/api-response-field-rename.json --profile codex-gpt-5.5 --run-id run-001 --condition with-r-doc --model gpt-5.5
+python benchmarks/naturalistic/capture_codex.py --task benchmarks/naturalistic/tasks/api-response-field-rename.json --profile baseline-no-r-doc --run-id run-001 --condition baseline-no-r-doc --model gpt-5.5
+python benchmarks/naturalistic/aggregate.py --root benchmarks/naturalistic-runs
+```
+
+该 runner 在 Agent 进程结束后独立读取临时 workspace 生成 `final-state.json`，由原始 Codex JSONL 和 workspace diff 生成规范化 trace，记录 `artifact-hashes.json`，并调用 grader。grader 会重新物化快照并执行声明式 pytest、callable behavior 和文档断言；它拒绝没有 runner provenance 或 hash 不一致的运行。自然任务聚合按 `agent + model + task_id + run_id` 配对，并分别报告 3/5/10 对 readiness、多任务和多模型覆盖。
 
 ## 规则绑定
 
@@ -87,11 +97,11 @@ This repository separates three measurements:
 2. **Naturalistic Effectiveness Benchmark** gives only a realistic user task. It withholds activation answers, read lists, command sequences, and r-doc instructions, then uses an independent grader over final state, diff, and action trace. See [the naturalistic protocol](../../benchmarks/naturalistic/README.md).
 3. **Deterministic audit performance baseline** measures audit time on 100, 1,000, and 5,000 Markdown-document fixtures.
 
-These are not interchangeable: the performance baseline is not an Agent benchmark, and the conformance result is not a natural-activation result.
+These are not interchangeable: the performance baseline is not an Agent benchmark, the conformance result is not a natural-activation result, and a naturalistic task specification or regression fixture is not a naturalistic effectiveness result.
 
 ### Current status
 
-Only real, structured, evaluator-passing `trace.jsonl` and `evidence.json` artifacts may produce comparable results. The repository has three matched Codex `gpt-5.5` skill-layer pairs. `summary.json` is `partial`: trend readiness is true, while statistical and strong-evidence readiness are false. Invalid captures remain under `benchmarks/invalid-captures/` and are excluded from aggregation. No naturalistic result is claimed.
+Only real, structured, evaluator-passing `trace.jsonl` and `evidence.json` artifacts may produce comparable conformance results. The repository has three matched Codex `gpt-5.5` skill-layer pairs. `summary.json` is `partial`: trend readiness is true, while statistical and strong-evidence readiness are false. Invalid captures remain under `benchmarks/invalid-captures/` and are excluded from aggregation. Naturalistic aggregation now has four matched real pairs across four tasks from one model and is also `partial`; all eight runs fail context safety because `.env` and `secrets.md` were read, so this is not a positive effectiveness result.
 
 ### Trace/evidence gate
 

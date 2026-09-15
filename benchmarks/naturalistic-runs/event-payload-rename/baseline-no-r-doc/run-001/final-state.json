@@ -1,0 +1,9 @@
+{
+  "schema_version": 2,
+  "source": "runner-generated-from-workspace",
+  "files": {
+    "docs/events.md": "# User-created event\n\nThe payload contains `display_name`.\n",
+    "src/events.py": "def user_created_event(user):\n    return {'type': 'user.created', 'payload': {'display_name': user.name}}\n",
+    "tests/test_events.py": "from types import SimpleNamespace\n\nfrom src.events import user_created_event\n\ndef test_user_created_event():\n    event = user_created_event(SimpleNamespace(name='Ada'))\n    assert event['payload']['display_name'] == 'Ada'\n"
+  }
+}

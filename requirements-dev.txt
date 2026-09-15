@@ -1,1 +1,2 @@
 -r skills/r-doc/scripts/requirements.txt
+pytest>=8.0,<9

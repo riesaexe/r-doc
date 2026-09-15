@@ -202,18 +202,18 @@ docs/
 
 Public entrypoints, project docs, benchmark guides, and release notes are maintained in English and Chinese whenever practical. Runtime Skill instructions under `skills/r-doc/` remain English-only to keep agent context small; `SKILL.zh-CN.md` remains a human-reference pointer.
 
-## What `0.2.16` adds
+## What `0.2.17` adds
 
-This release adds a bilingual public-document baseline and formalizes the next benchmark layer:
+This release closes the naturalistic benchmark capture loop and publishes the first independently graded real-run evidence set:
 
 | Improvement | What it does | Safety boundary |
 | --- | --- | --- |
-| Bilingual release history | Adds Chinese summaries to every historical Release notes section while preserving the original English record. | The summaries explain user impact without rewriting historical facts. |
-| Bilingual maintenance guides | Adds English summaries to the release, development, architecture, and benchmark documentation surfaces. | Runtime Skill instructions remain English-only to control context cost. |
-| Conformance taxonomy | Labels the fixed-prompt records as a `Conformance Benchmark` / `skill-layer-ablation` and records the limitation of Agent-generated review. | It is not a natural activation or independent-effectiveness claim. |
-| Naturalistic protocol | Adds an independent final-state and action-trace grader without claiming real results before matched captures exist. | No score is generated from the conformance summary. |
+| Independent capture runner | Builds fixtures, invokes the Agent with only the natural user task, snapshots the final workspace externally, normalizes raw CLI events, and hashes artifacts. | The Agent cannot author the final-state snapshot, score, or artifact hash manifest. |
+| Executable outcome grading | Runs grader-owned pytest, callable behavior, and documentation checks against the runner snapshot. | String assertions alone cannot make a broken implementation pass. |
+| Safety hardening | Rejects Windows path side doors such as `.\\env` and prevents naturalistic metadata from entering conformance aggregation. | Structurally valid failed runs remain visible as measured failures. |
+| Real naturalistic evidence | Adds four task types and four matched real pairs from Codex `gpt-5.5`. | All eight current runs read `.env`/`secrets.md`, so this is a negative context-safety observation, not a positive effectiveness claim. |
 
-The `main` branch is protected with pull-request review, one approval, stale-review dismissal, and no force-push or deletion. The local GPG signing probe passes; the release commit must still be checked for GitHub's `Verified` badge.
+The `main` branch is protected with pull-request review, one approval, stale-review dismissal, and no force-push or deletion. The release commit is signed locally and must be checked for GitHub's `Verified` badge.
 
 ## What `0.2.15` adds
 

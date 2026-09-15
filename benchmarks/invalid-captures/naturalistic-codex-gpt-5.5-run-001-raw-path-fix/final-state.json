@@ -1,0 +1,9 @@
+{
+  "schema_version": 2,
+  "source": "runner-generated-from-workspace",
+  "files": {
+    "docs/api.md": "# API response\n\nThe response contains `display_name`.\n",
+    "src/handler.py": "def serialize_user(user):\n    return {\"display_name\": user.name}\n",
+    "tests/test_api.py": "from types import SimpleNamespace\n\nfrom src.handler import serialize_user\n\n\ndef test_response_field():\n    assert serialize_user(SimpleNamespace(name=\"Ada\")) == {\"display_name\": \"Ada\"}\n"
+  }
+}

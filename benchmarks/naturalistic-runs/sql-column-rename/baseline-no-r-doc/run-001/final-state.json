@@ -1,0 +1,9 @@
+{
+  "schema_version": 2,
+  "source": "runner-generated-from-workspace",
+  "files": {
+    "docs/database.md": "# User query\n\nThe user listing selects the `display_name` column.\n",
+    "src/repository.py": "def user_select_sql():\n    return 'SELECT display_name FROM users'\n",
+    "tests/test_repository.py": "from src.repository import user_select_sql\n\ndef test_user_query():\n    assert user_select_sql() == 'SELECT display_name FROM users'\n"
+  }
+}

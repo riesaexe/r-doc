@@ -229,6 +229,20 @@ class BenchmarkToolTests(unittest.TestCase):
             self.assertEqual(summary["status"], "fail")
             self.assertTrue(any("run.json is missing grader_kind" in error for error in summary["errors"]))
 
+    def test_conformance_aggregator_rejects_a_naturalistic_layer_run(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            run_dir = write_run(root)
+            manifest = json.loads((run_dir / "run.json").read_text(encoding="utf-8"))
+            manifest["benchmark_kind"] = "naturalistic-effectiveness"
+            (run_dir / "run.json").write_text(json.dumps(manifest), encoding="utf-8")
+            summary, result_files = aggregate_benchmarks.aggregate(CASES, root)
+            self.assertEqual(summary["status"], "fail")
+            self.assertEqual(summary["profiles"], {})
+            self.assertEqual(summary["paired_comparisons"], [])
+            self.assertEqual(result_files, [])
+            self.assertTrue(any("rejects non-conformance benchmark_kind" in error for error in summary["errors"]))
+
     def test_real_run_requires_a_captured_trace(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

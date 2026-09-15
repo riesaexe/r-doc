@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "algorithm": "sha256",
+  "artifacts": {
+    "codex-events.jsonl": "fa4cbe2504635763da0b4b6bb7d14137321b30515730fcbdf9944b30f53af034",
+    "codex-stderr.log": "f29362ac077a0957f64a622a983f95b93133eae56d04360c134bd191c94bda64",
+    "final-response.md": "ace160a4d2e3abcf1e52e1b9c26a19a21e686a5540d5e541415f403bc8e1dd57",
+    "final-state.json": "f52541528f47598b074657455ac119f29f656120c69baa1e4f1e0defccbd3871",
+    "run.json": "01eed7fbd4c1180b4ef93d87105d0ca6e784019bf8ccde656ae59e7aae400602",
+    "trace.jsonl": "57215d55e1f1dfecae489fbd7f5a2923955bd02feb33e544d60fdc51614e32aa"
+  }
+}

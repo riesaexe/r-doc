@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "skill_version": "0.2.15",
+  "skill_version": "0.2.17",
   "agent": "example-agent",
   "condition": "with-r-doc",
   "scenarios": [

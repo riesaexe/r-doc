@@ -202,18 +202,18 @@ AGENTS.md 是项目级入口和导航；详细知识放在 docs/，每篇文档�
 
 公开入口、项目文档、benchmark 指南和 Release notes 在可行时维护中英双语。为控制 Agent 上下文成本，`skills/r-doc/` 下的运行时 Skill 指令保持英语-only；`SKILL.zh-CN.md` 作为人类维护者的中文指针保留。
 
-## `0.2.16` 新增了什么
+## `0.2.17` 新增了什么
 
-这一版补齐公开文档的双语基线，并正式建立 benchmark 的下一层：
+这一版闭合 naturalistic benchmark 的 capture 链路，并发布第一批独立 grader 实测数据：
 
 | 改进 | 作用 | 安全边界 |
 | --- | --- | --- |
-| 双语发布历史 | 为所有历史 Release notes 增加中文摘要，同时保留原始英文记录。 | 中文摘要解释用户影响，不重写历史事实。 |
-| 双语维护指南 | 为发布、开发、架构和 benchmark 文档入口增加英文摘要。 | 为控制上下文成本，运行时 Skill 指令保持英语-only。 |
-| Conformance 分类 | 将固定 prompt 运行标记为 `Conformance Benchmark` / `skill-layer-ablation`，并记录 Agent 自评 review 的边界。 | 这不是自然激活或独立效果结论。 |
-| Naturalistic 协议 | 增加独立的最终状态和 action-trace grader，但在匹配真实 capture 前不宣称结果。 | 不从 Conformance summary 生成分数。 |
+| 独立 capture runner | 构建 fixture，只发送自然用户任务，外部读取最终 workspace，规范化原始 CLI 事件并哈希产物。 | Agent 不能自行生成最终快照、分数或 artifact hash manifest。 |
+| 可执行 outcome grading | 对 runner 快照执行 grader 自己的 pytest、callable 行为和文档检查。 | 单纯字符串断言不能让错误实现通过。 |
+| 安全加固 | 拒绝 `.\\env` 等 Windows 路径侧门，并阻止 naturalistic 元数据进入 conformance 聚合。 | 结构有效但失败的运行仍作为实测失败保留。 |
+| 真实 naturalistic 证据 | 增加 4 类任务，并完成 4 对 Codex `gpt-5.5` 真实匹配运行。 | 8 次运行都读取 `.env`/`secrets.md`，因此这是负向 context-safety 观测，不是正向 effectiveness 结论。 |
 
-`main` 已启用分支保护：要求 PR、至少一个批准、dismiss stale reviews，并禁止 force-push 和删除。本机 GPG 签名探针通过；发布提交仍需在 GitHub 检查 `Verified`。
+`main` 已启用分支保护：要求 PR、至少一个批准、dismiss stale reviews，并禁止 force-push 和删除。发布提交已在本机签名，仍需在 GitHub 检查 `Verified`。
 
 ## `0.2.15` 新增了什么
 

@@ -4,9 +4,19 @@ This file records user-visible changes to r-doc.
 
 ## Unreleased
 
-No unreleased changes.
-
 暂无未发布变更。
+
+## [0.2.17] - 2026-09-15
+
+- Completed the naturalistic capture boundary: the runner builds isolated fixtures, invokes the agent with only the user task, independently snapshots the final workspace, normalizes the raw CLI trace, hashes capture artifacts, and invokes the independent grader.
+- Added grader-owned executable outcome checks for pytest, callable behavior, and documentation assertions; hardened Windows path normalization and rejected cross-layer naturalistic runs at the conformance aggregator entrypoint.
+- Added four naturalistic task specifications and a separate multi-run aggregator that reports matched-pair readiness, task diversity, and multi-model coverage. Captured and independently graded four real matched pairs across the four tasks with Codex `gpt-5.5`; the aggregate is `partial` and all eight runs currently fail context safety on forbidden `.env`/`secrets.md` reads, so no positive effectiveness claim is made.
+
+### 中文摘要
+
+- 补完整 naturalistic capture 边界：runner 构建隔离 fixture，只向 Agent 发送用户任务，独立读取最终 workspace、规范化原始 CLI trace、哈希捕获产物，并调用独立 grader。
+- 增加 grader 自己执行的 pytest、callable 行为和文档断言；修复 Windows 路径规范化侧门，并让 conformance 聚合器在入口拒绝误标的 naturalistic run。
+- 增加四个自然任务和独立多运行聚合器，报告配对 readiness、任务多样性和多模型覆盖；已经完成四个任务各一对、共 8 次 `gpt-5.5` 真实 capture，聚合为 `partial`，但全部因读取 `.env`/`secrets.md` 而 context safety 失败，因此不宣称正向 naturalistic effectiveness result。
 
 ## [0.2.16] - 2026-09-15
 

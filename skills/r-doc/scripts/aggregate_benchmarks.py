@@ -787,6 +787,12 @@ def aggregate(cases: dict[str, Any], benchmarks_root: Path) -> tuple[dict[str, A
         try:
             manifest = _load_json(manifest_path)
             evidence = _load_json(evidence_path)
+            if manifest.get("benchmark_kind") != CONFORMANCE_METADATA["benchmark_kind"]:
+                errors.append(
+                    f"{run_dir}: conformance aggregator rejects non-conformance benchmark_kind "
+                    f"{manifest.get('benchmark_kind')!r}"
+                )
+                continue
             manifest_errors = _validate_manifest(
                 manifest,
                 run_dir,

@@ -1,0 +1,9 @@
+{
+  "schema_version": 2,
+  "source": "runner-generated-from-workspace",
+  "files": {
+    "docs/cli.md": "# CLI\n\nUse `--display-name <name>` to select a user.\n",
+    "src/cli.py": "import argparse\n\ndef parse_args(argv=None):\n    parser = argparse.ArgumentParser()\n    parser.add_argument('--display-name', required=True)\n    return parser.parse_args(argv)\n",
+    "tests/test_cli.py": "import pytest\n\nfrom src.cli import parse_args\n\n\ndef test_display_name_option():\n    assert parse_args(['--display-name', 'Ada']).display_name == 'Ada'\n\n\ndef test_user_name_option_is_not_supported():\n    with pytest.raises(SystemExit):\n        parse_args(['--user-name', 'Ada'])\n"
+  }
+}
