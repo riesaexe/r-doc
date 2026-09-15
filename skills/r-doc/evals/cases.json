@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "skill_version": "0.2.9",
+  "schema_version": 2,
+  "skill_version": "0.2.10",
   "dimensions": [
     "activation_boundary",
     "context_economy",
@@ -10,54 +10,73 @@
     "safety",
     "repair_discipline"
   ],
+  "machine_dimensions": [
+    "activation_boundary",
+    "deterministic_verification",
+    "safety",
+    "repair_discipline"
+  ],
+  "review_dimensions": [
+    "context_economy",
+    "preservation",
+    "conflict_handling"
+  ],
   "scenarios": [
     {
       "id": "initialize-undocumented-project",
       "expected_activation": "activated",
-      "required_files_read": ["AGENTS.md", "docs/README.md"],
-      "required_commands": ["audit_docs.py"]
+      "required_paths_checked": ["AGENTS.md", "docs/"],
+      "required_files_read": [],
+      "required_command_sequence": ["audit_docs.py"]
     },
     {
       "id": "trace-public-interface-change",
       "expected_activation": "activated",
+      "required_paths_checked": ["AGENTS.md", "docs/README.md"],
       "required_files_read": ["AGENTS.md", "docs/README.md"],
-      "required_commands": ["audit_docs.py"]
+      "required_command_sequence": ["audit_docs.py"]
     },
     {
       "id": "reject-code-only-local-refactor",
       "expected_activation": "declined",
+      "required_paths_checked": [],
       "required_files_read": [],
-      "required_commands": []
+      "required_command_sequence": []
     },
     {
       "id": "handle-structural-audit-failure",
       "expected_activation": "activated",
+      "required_paths_checked": ["AGENTS.md", "docs/README.md"],
       "required_files_read": ["AGENTS.md", "docs/README.md"],
-      "required_commands": ["repair_docs.py", "audit_docs.py"]
+      "required_command_sequence": ["repair_docs.py", "audit_docs.py"]
     },
    {
      "id": "protect-sensitive-content",
      "expected_activation": "activated",
+     "required_paths_checked": ["AGENTS.md", "docs/README.md"],
      "required_files_read": ["AGENTS.md", "docs/README.md"],
-     "required_commands": ["audit_docs.py"]
+     "required_command_sequence": ["audit_docs.py"]
     },
     {
       "id": "apply-configuration-driven-governance",
       "expected_activation": "activated",
+      "required_paths_checked": ["AGENTS.md", "docs/README.md", ".r-doc.yaml"],
       "required_files_read": ["AGENTS.md", "docs/README.md", ".r-doc.yaml"],
-      "required_commands": ["audit_docs.py"]
+      "required_command_sequence": ["audit_docs.py"]
     },
     {
       "id": "close-superseded-document-chain",
       "expected_activation": "activated",
+      "required_paths_checked": ["AGENTS.md", "docs/README.md"],
       "required_files_read": ["AGENTS.md", "docs/README.md"],
-      "required_commands": ["audit_docs.py"]
+      "required_command_sequence": ["audit_docs.py"]
     },
     {
       "id": "validate-markdown-anchor",
       "expected_activation": "activated",
+      "required_paths_checked": ["AGENTS.md", "docs/README.md"],
       "required_files_read": ["AGENTS.md", "docs/README.md"],
-      "required_commands": ["audit_docs.py"]
+      "required_command_sequence": ["audit_docs.py"]
    }
  ]
 }

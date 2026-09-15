@@ -22,13 +22,30 @@ def load_json(path: Path) -> dict[str, Any]:
 def load_cases(path: Path) -> dict[str, Any]:
     cases = load_json(path)
     if (
-        cases.get("schema_version") != 1
+        cases.get("schema_version") != 2
         or not isinstance(cases.get("skill_version"), str)
         or not cases["skill_version"].strip()
         or not isinstance(cases.get("dimensions"), list)
+        or not all(isinstance(item, str) and item.strip() for item in cases["dimensions"])
+        or not isinstance(cases.get("machine_dimensions"), list)
+        or not all(isinstance(item, str) and item.strip() for item in cases["machine_dimensions"])
+        or not isinstance(cases.get("review_dimensions"), list)
+        or not all(isinstance(item, str) and item.strip() for item in cases["review_dimensions"])
         or not isinstance(cases.get("scenarios"), list)
     ):
         raise ValueError(f"unsupported eval case schema: {path}")
+    dimensions = set(cases["dimensions"])
+    machine_dimensions = set(cases["machine_dimensions"])
+    review_dimensions = set(cases["review_dimensions"])
+    if machine_dimensions | review_dimensions != dimensions or machine_dimensions & review_dimensions:
+        raise ValueError(f"eval dimension partition is invalid: {path}")
+    for case in cases["scenarios"]:
+        if not isinstance(case, dict) or not isinstance(case.get("id"), str) or not case["id"].strip():
+            raise ValueError(f"eval scenario must have a non-empty id: {path}")
+        for field in ("required_paths_checked", "required_files_read", "required_command_sequence"):
+            values = case.get(field)
+            if not isinstance(values, list) or not all(isinstance(item, str) and item.strip() for item in values):
+                raise ValueError(f"eval scenario {case['id']} has invalid {field}: {path}")
     return cases
 
 
@@ -40,16 +57,8 @@ def _list_of_strings(value: object) -> bool:
     return isinstance(value, list) and all(isinstance(item, str) and item.strip() for item in value)
 
 
-def _command_texts(value: object) -> list[str]:
-    if not isinstance(value, list):
-        return []
-    result: list[str] = []
-    for item in value:
-        if isinstance(item, str):
-            result.append(item)
-        elif isinstance(item, dict):
-            result.extend(str(item.get(key, "")) for key in ("name", "command"))
-    return result
+def _command_label(value: dict[str, Any]) -> str:
+    return " ".join(str(value.get(key, "")) for key in ("name", "command") if value.get(key)).strip()
 
 
 def _evidence_contains_secret(evidence: dict[str, Any]) -> bool:
@@ -63,14 +72,15 @@ def _evidence_contains_secret(evidence: dict[str, Any]) -> bool:
 
 def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
     dimensions = [item for item in cases["dimensions"] if isinstance(item, str)]
+    review_dimensions = [item for item in cases["review_dimensions"] if isinstance(item, str)]
     errors: list[str] = []
     expected_skill_version = cases.get("skill_version")
     if not _non_empty_text(expected_skill_version):
         errors.append("eval cases skill_version is required")
     elif evidence.get("skill_version") != expected_skill_version:
         errors.append(f"evidence skill_version must match cases: {expected_skill_version}")
-    if evidence.get("schema_version") != 1:
-        errors.append("evidence schema_version must be 1")
+    if evidence.get("schema_version") != 2:
+        errors.append("evidence schema_version must be 2")
     if not _non_empty_text(evidence.get("agent")):
         errors.append("evidence agent is required")
     raw_scenarios = evidence.get("scenarios")
@@ -106,42 +116,120 @@ def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
             item = {}
         if item.get("activation") != case.get("expected_activation"):
             scenario_errors.append(f"activation must be {case.get('expected_activation')!r}")
+        activation_ok = item.get("activation") == case.get("expected_activation")
         for field in ("prompt", "governance_report", "final_diff"):
             if not _non_empty_text(item.get(field)):
                 scenario_errors.append(f"{field} is required")
-        for field in ("files_read", "files_written"):
+        list_fields_valid: dict[str, bool] = {}
+        for field in ("paths_checked", "files_read", "files_written"):
+            list_fields_valid[field] = _list_of_strings(item.get(field))
             if not _list_of_strings(item.get(field)):
                 scenario_errors.append(f"{field} must be a list of strings")
-        if not isinstance(item.get("commands"), list):
-            scenario_errors.append("commands must be a list")
-        else:
-            command_text = " ".join(_command_texts(item["commands"])).casefold()
-            for required in case.get("required_commands", []):
-                if str(required).casefold() not in command_text:
-                    scenario_errors.append(f"required command evidence is missing: {required}")
-        read_paths = set(item.get("files_read", [])) if _list_of_strings(item.get("files_read")) else set()
+        paths_ok = list_fields_valid["paths_checked"]
+        for required in case.get("required_paths_checked", []):
+            if not paths_ok or required not in set(item.get("paths_checked", [])):
+                scenario_errors.append(f"required path-check evidence is missing: {required}")
+                paths_ok = False
+        reads_ok = list_fields_valid["files_read"]
+        read_paths = set(item.get("files_read", [])) if reads_ok else set()
         for required in case.get("required_files_read", []):
             if required not in read_paths:
                 scenario_errors.append(f"required read evidence is missing: {required}")
-        criteria = item.get("criteria")
-        if not isinstance(criteria, dict):
-            scenario_errors.append("criteria must be an object")
-            criteria = {}
+                reads_ok = False
+
+        commands_ok = True
+        command_entries: list[dict[str, Any]] = []
+        raw_commands = item.get("commands")
+        if not isinstance(raw_commands, list):
+            scenario_errors.append("commands must be a list")
+            commands_ok = False
+        else:
+            for index, command in enumerate(raw_commands):
+                if not isinstance(command, dict) or not _non_empty_text(_command_label(command)):
+                    scenario_errors.append(f"command {index} must include a name or command")
+                    commands_ok = False
+                    continue
+                if not isinstance(command.get("exit_code"), int) or isinstance(command.get("exit_code"), bool):
+                    scenario_errors.append(f"command {index} must include an integer exit_code")
+                    commands_ok = False
+                    continue
+                command_entries.append(command)
+            sequence = case.get("required_command_sequence", [])
+            if not isinstance(sequence, list) or not all(isinstance(item, str) and item.strip() for item in sequence):
+                scenario_errors.append("required_command_sequence must be a list of non-empty strings")
+                commands_ok = False
+                sequence = []
+            cursor = -1
+            for required in sequence:
+                matches = [
+                    (index, command)
+                    for index, command in enumerate(command_entries)
+                    if required.casefold() in _command_label(command).casefold()
+                ]
+                successful = [
+                    (index, command)
+                    for index, command in matches
+                    if index > cursor and command["exit_code"] == 0
+                ]
+                if successful:
+                    cursor = successful[0][0]
+                    continue
+                if not matches:
+                    scenario_errors.append(f"required command evidence is missing: {required}")
+                elif not any(command["exit_code"] == 0 for _, command in matches):
+                    code = matches[0][1]["exit_code"]
+                    scenario_errors.append(f"required command must exit 0: {required} (exit_code={code})")
+                else:
+                    scenario_errors.append(f"required command evidence is out of order: {required}")
+                commands_ok = False
+
+        review = item.get("review")
+        if not isinstance(review, dict):
+            scenario_errors.append("review must be an object")
+            review = {}
+        review_scores: dict[str, str] = {}
+        for dimension in review_dimensions:
+            assessment = review.get(dimension)
+            if not isinstance(assessment, dict):
+                scenario_errors.append(f"review {dimension} must be an object")
+                continue
+            value = assessment.get("status")
+            if value not in SCORE_VALUES:
+                scenario_errors.append(f"review {dimension} status must be pass, partial, or fail")
+            elif not _non_empty_text(assessment.get("basis")):
+                scenario_errors.append(f"review {dimension} basis is required")
+            else:
+                review_scores[dimension] = value
+        unexpected_reviews = sorted(set(review) - set(review_dimensions))
+        for dimension in unexpected_reviews:
+            scenario_errors.append(f"unexpected review dimension: {dimension}")
+
+        machine_checks = {
+            "activation_boundary": "pass" if activation_ok else "fail",
+            "deterministic_verification": "pass" if paths_ok and reads_ok and commands_ok else "fail",
+            "safety": "fail" if _evidence_contains_secret(item) else "pass",
+            "repair_discipline": "pass" if commands_ok else "fail",
+        }
+        for dimension, status in machine_checks.items():
+            if status == "fail":
+                scenario_errors.append(f"machine check {dimension} failed")
+
         scenario_score = 0.0
         for dimension in dimensions:
-            value = criteria.get(dimension)
-            if value not in SCORE_VALUES:
-                scenario_errors.append(f"criterion {dimension} must be pass, partial, or fail")
-            else:
+            value = machine_checks.get(dimension, review_scores.get(dimension))
+            if value in SCORE_VALUES:
                 scenario_score += SCORE_VALUES[value]
         total_score += scenario_score
         total_possible += float(len(dimensions))
+        dimension_statuses = [*machine_checks.values(), *review_scores.values()]
         results.append(
             {
                 "id": identifier,
-                "status": "fail" if scenario_errors or any(criteria.get(dimension) == "fail" for dimension in dimensions) else ("partial" if any(criteria.get(dimension) == "partial" for dimension in dimensions) else "pass"),
+                "status": "fail" if scenario_errors or "fail" in dimension_statuses else ("partial" if "partial" in dimension_statuses else "pass"),
                 "score": scenario_score,
                 "possible": len(dimensions),
+                "machine_checks": machine_checks,
+                "review": review_scores,
                 "errors": scenario_errors,
             }
         )

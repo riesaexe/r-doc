@@ -20,6 +20,7 @@ Audit behavior changes can add findings without rewriting topic content. Pin a k
 | 0.2.7 | Added GitHub-compatible ATX/Setext/CJK/custom-anchor checks, visible allowlist evidence, a complete configuration matrix, migration summary, and executable agent-evidence validation. | Re-run strict audit, review informational allowlist findings, and capture complete evidence before changing the pinned tag. | Medium |
 | 0.2.8 | Extracted shared deterministic primitives into `scripts/rdoc/`, expanded Agent evaluation from five to eight scenarios, and preserved emoji code points in heading slugs. | Re-run package validation and anchor checks; if consuming the evaluation contract, add evidence for configuration, supersession, and anchor scenarios. | Low |
 | 0.2.9 | Removed eager top-level `rdoc` re-exports and bound Agent evidence to the exact tested Skill version. | Update custom evidence producers with `skill_version`; direct submodule imports avoid package-wide initialization. | Low |
+| 0.2.10 | Separated checked paths from read files, enforced successful ordered command evidence, split machine checks from review dimensions, and added shared-module regression tests. | Upgrade evidence to schema version 2; record `paths_checked`, use `required_command_sequence`, and provide a basis for each review dimension. | Medium |
 
 ## Safe upgrade sequence
 

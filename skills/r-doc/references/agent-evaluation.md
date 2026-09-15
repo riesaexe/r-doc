@@ -9,6 +9,7 @@ The bundled Python tests prove deterministic helper behavior. They do not prove 
 For every scenario, capture:
 
 - the exact prompt and the agent's selected skill or activation decision;
+- the paths checked for existence or routing, separately from files whose contents were actually read;
 - the files read and written, including the final diff;
 - the governance report and any `audit_docs.py --json` output;
 - the final project tree and exit status of the relevant checks.
@@ -23,28 +24,34 @@ The scenario definitions live in [`evals/cases.json`](../evals/cases.json). Capt
 python scripts/evaluate_agent.py --input <evidence.json> --strict --json
 ~~~
 
-The runner checks that every scenario is present, activation matches the expected boundary, required files and commands are recorded, all scorecard dimensions use `pass`, `partial`, or `fail`, the evidence targets the exact `skill_version` declared by the case file, and the evidence itself does not contain a detected secret. It computes a comparable score but does not invoke an LLM or manufacture a model trace; prompts, file lists, diffs, reports, and command results must still come from the real agent run. Only compare results across runs after confirming that their `skill_version` values match.
+The runner checks that every scenario is present, activation matches the expected boundary, required paths and files are recorded in their separate fields, required commands are present in the declared order with `exit_code: 0`, all machine checks are derived from the captured evidence, review dimensions include a human assessment basis, the evidence targets the exact `skill_version` declared by the case file, and the evidence itself does not contain a detected secret. It computes a comparable score but does not invoke an LLM or manufacture a model trace; prompts, path/file lists, diffs, reports, and command results must still come from the real agent run. Only compare results across runs after confirming that their `skill_version` values match.
 
-Each scenario evidence object has this minimum shape:
+Each scenario evidence object has this minimum shape. `paths_checked` records existence or routing checks; `files_read` records content reads and must not be used as a substitute for a missing path:
 
 ~~~json
 {
   "id": "initialize-undocumented-project",
   "activation": "activated",
   "prompt": "The exact prompt used for this scenario",
-  "files_read": ["AGENTS.md", "docs/README.md"],
+  "paths_checked": ["AGENTS.md", "docs/"],
+  "files_read": [],
   "files_written": ["AGENTS.md", "docs/README.md"],
   "commands": [{"name": "audit_docs.py", "exit_code": 0}],
   "governance_report": "Captured final report text",
   "final_diff": "Captured final diff or an explicit not-applicable note",
-  "criteria": {
-    "activation_boundary": "pass",
-    "context_economy": "pass",
-    "preservation": "pass",
-    "deterministic_verification": "pass",
-    "conflict_handling": "pass",
-    "safety": "pass",
-    "repair_discipline": "pass"
+  "review": {
+    "context_economy": {
+      "status": "pass",
+      "basis": "Read only the relevant entrypoint and index after checking the initial paths"
+    },
+    "preservation": {
+      "status": "pass",
+      "basis": "Existing project files remain unchanged outside the requested governance skeleton"
+    },
+    "conflict_handling": {
+      "status": "pass",
+      "basis": "No unresolved conflict was silently overwritten"
+    }
   }
 }
 ~~~
@@ -53,14 +60,16 @@ The top-level evidence object must include the exact tested Skill version, match
 
 ~~~json
 {
-  "schema_version": 1,
-  "skill_version": "0.2.9",
+  "schema_version": 2,
+  "skill_version": "0.2.10",
   "agent": "agent-name",
   "scenarios": []
 }
 ~~~
 
-The evaluator rejects missing or mismatched versions so that a score cannot be detached from the Skill behavior it measured.
+The evaluator rejects missing or mismatched versions so that a score cannot be detached from the Skill behavior it measured. It derives `activation_boundary`, `deterministic_verification`, `safety`, and `repair_discipline` from observable evidence. `context_economy`, `preservation`, and `conflict_handling` remain explicit human-review dimensions, but each requires a non-empty `basis`; they are no longer accepted as unqualified self-reported criterion values.
+
+Case files use `required_command_sequence` rather than an unordered command set. The evaluator rejects a required command with a non-zero exit code and rejects evidence that records required commands in the wrong order. A failed exploratory command may remain in the trace, but every required command must also have a successful, correctly ordered record.
 
 Do not put tokens, passwords, or realistic credentials into prompts, notes, diffs, or saved evidence. If a sensitive-content scenario needs a secret-like fixture, use a redacted marker and keep the real fixture outside the evidence file.
 

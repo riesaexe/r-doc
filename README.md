@@ -67,143 +67,6 @@ r-doc is not a one-off document generator. It is a governance layer for the deve
 
 > Define the standard before the change. Record facts before making judgments. Surface conflicts before they become history.
 
-## What `0.2.0` adds
-
-The latest release makes documentation governance more actionable and less dependent on an agent remembering every rule:
-
-| Capability | What it does | Safety boundary |
-| --- | --- | --- |
-| Safe structural repair | Previews and, after confirmation, creates missing entrypoints, nested indexes, and missing index links. | Never overwrites, deletes, moves, or guesses through a conflict. |
-| Deterministic checks | Audits links, index coverage, metadata, duplicate IDs, sensitive-value patterns, and Skill package structure. | Structural checks do not replace semantic review. |
-| Real workflow guidance | Includes initialization, API-change, release-audit, topic-directory examples, and a dedicated pitfalls guide. | Load only the references relevant to the current task. |
-| Release quality gates | Runs tests and validation in CI, with a reproducible temporary-project QA path. | A green check does not declare unresolved product decisions complete. |
-
-## What `0.2.1` adds
-
-This patch tightens the deterministic governance layer for real project metadata and multiple development platforms:
-
-| Capability | What it does | Safety boundary |
-| --- | --- | --- |
-| Real YAML frontmatter | Parses nested mappings and lists with a safe YAML loader and reports malformed frontmatter explicitly. | Parser errors are findings; a passing audit is not semantic approval. |
-| Broader secret baseline | Checks JWTs, OpenAI keys, credentialed database URLs, and generic password assignments in addition to common provider tokens. | It is a deterministic baseline, not a complete secret scanner. |
-| Cross-platform quality gate | Exercises Ubuntu and Windows on pinned Python 3.10–3.13 versions. | CI compatibility does not replace validation on a project's own runtime. |
-
-## What `0.2.2` adds
-
-This patch closes two small but important governance blind spots:
-
-| Capability | What it does | Safety boundary |
-| --- | --- | --- |
-| Chinese placeholder awareness | Recognizes common Chinese placeholders such as `你的密码`, `请输入你的密码`, and `示例口令` without hiding real Chinese password values. | The baseline remains finite and does not replace a full secret scanner. |
-| Self-hosted parser dogfood | Uses nested mapping and list frontmatter in r-doc's own verification record, so the repository exercises the parser it ships. | Passing the dogfood check proves parsing coverage, not semantic approval of arbitrary metadata. |
-
-## What `0.2.3` adds
-
-This release turns more of the governance contract into executable, reviewable checks:
-
-| Capability | What it does |
-| --- | --- |
-| Executable project configuration | Applies `.r-doc.yaml` to the documentation root, exclusions, required document types, document-type relationships, and lifecycle gates. |
-| Bidirectional navigation | Verifies the root entrypoint, documentation index, and nested indexes can navigate both downward and back to their parent. |
-| Deterministic link coverage | Checks inline, reference-style, and parenthesized Markdown links after resolving paths and rejecting project-root escapes. |
-| Metadata relationships | Checks document IDs, `related_docs`, `supersedes`, review dates, title headings, and creation/update order. |
-
-The release keeps semantic decisions and real-agent behavior evaluation explicit: deterministic checks provide evidence, but they do not replace human or agent-level judgment.
-
-## What `0.2.5` adds
-
-This release closes the remaining audit blind spots identified through adversarial review:
-
-| Improvement | What it does | Safety boundary |
-| --- | --- | --- |
-| Root Markdown coverage | Audits directly maintained root files such as `README.md`, `CONTRIBUTING.md`, and `SECURITY.md` for broken links and sensitive values. | Metadata and index coverage remain scoped to the configured documentation root. |
-| Complete link semantics | Checks image targets for existence, while unused reference definitions and images stay out of the navigation graph; nested indexes must link to direct parents and children. | Asset existence checks do not claim that an image's visual content is correct. |
-| Stronger metadata and gates | Validates existing `related_code` files, successor relations and backlinks for `superseded` documents, and rejects unconfigured `--stage` values. | Structural evidence still does not replace semantic review. |
-| Safer examples | Allow-lists the exact public AWS sample `AKIAIOSFODNN7EXAMPLE` without disabling scans for other fenced code. | This is a narrow exception, not a general code-block exemption. |
-
-The release is backed by 38 regression tests and the package, repair-preview, strict-audit, and Skill validator gates used for earlier releases.
-
-## What `0.2.6` adds
-
-This release hardens the audit boundary against false positives and project-specific documentation workflows:
-
-| Improvement | What it does | Safety boundary |
-| --- | --- | --- |
-| Context-aware link parsing | Ignores link-shaped text inside fenced code, inline code, and HTML comments, while still checking real image and reference targets. | Sensitive-value scanning still inspects fenced code. |
-| Fragment validation | Verifies that Markdown links point to an existing heading anchor, not only an existing file. | Heading slug matching is deterministic; semantic link intent still needs review. |
-| Configurable example exceptions | Adds exact `sensitive_allowlist` entries for reviewed provider documentation examples and expands the baseline to Google `AIza`-style keys. | Exceptions are exact strings, never patterns, and must not contain real credentials. |
-| Planning-aware metadata | Adds `planned_code` for future paths while keeping `related_code` strict about existing files. | Planned paths must remain inside the project root. |
-| Root-file and test coverage | Documents root Markdown exclusion behavior and separates audit, configuration, and repair regression suites. | Root `AGENTS.md` remains mandatory and always checked. |
-
-The release is backed by 45 regression tests, package validation, repair-preview, strict-audit, and the official Skill validator.
-
-## What `0.2.7` adds
-
-This release closes the remaining edge cases from the v0.2.6 adversarial review and makes adoption evidence easier to verify:
-
-| Improvement | What it does | Safety boundary |
-| --- | --- | --- |
-| GitHub-compatible anchors | Checks ATX and Setext headings, CJK text, punctuation, consecutive spaces, duplicate-heading suffixes, and explicit HTML `name`/`id` anchors. | The contract is GitHub-compatible; renderer-specific slug rules are not guessed. |
-| Visible allowlist evidence | Keeps exact `sensitive_allowlist` matches as informational findings instead of silently hiding them. | Allowlist values must be reviewed public examples, never real credentials. |
-| Configuration and migration clarity | Documents all eight project configuration fields, separates frontmatter `planned_code`, and adds a version migration matrix. | Upgrade notes do not rewrite project content automatically. |
-| Executable agent-evaluation evidence | Adds eight scenario definitions, including configuration-driven governance, supersession closure, and Markdown anchor validation, plus a validator for prompts, file traces, diffs, reports, commands, and scorecard results. | The validator checks supplied evidence; it does not fabricate model traces. |
-
-The release is backed by 50 regression tests, package validation, repair-preview, strict-audit, the official Skill validator, and the executable evaluation-evidence path.
-
-## What `0.2.9` adds
-
-This release makes the shared tooling package safer to consume and keeps Agent evaluation results tied to the Skill version they measure:
-
-| Improvement | What it does | Safety boundary |
-| --- | --- | --- |
-| Direct submodule imports | Removes eager top-level `rdoc` re-exports so audit, repair, validation, and evaluation load only the modules they use. | Package initialization stays minimal and avoids growing a central import bottleneck. |
-| Version-bound evaluation evidence | Adds required `skill_version` to the case file and evidence contract, rejecting missing or mismatched versions. | Scores are comparable only when their tested Skill versions match. |
-| Migration and verification sync | Extends the migration matrix and verification record for the 0.2.9 behavior changes. | Upgrades still require preview, strict audit, and review of the recorded evidence. |
-
-The release is backed by 51 regression tests, package validation, repair-preview, strict-audit, the official Skill validator, and the executable evaluation-evidence path.
-
-## What `0.2.8` adds
-
-This maintenance release closes the remaining v0.2.7 review gaps while keeping shared deterministic behavior in one tested package:
-
-| Improvement | What it does | Safety boundary |
-| --- | --- | --- |
-| Shared tooling package | Moves configuration, finding models, security detectors, Markdown parsing, and anchor generation into `scripts/rdoc/`, reused by audit, repair, validation, and Agent-evidence evaluation. | Entry-point scripts remain explicit; package extraction does not change the governance rules. |
-| Broader Agent evaluation | Adds configuration-driven, superseded-document, and Markdown-anchor scenarios to the executable evidence contract. | Evidence still comes from real Agent runs; the validator does not fabricate model behavior. |
-| Emoji-safe anchors | Preserves emoji code points when generating heading slugs and adds a regression scenario for links such as `#deploy-🚀`. | The documented contract remains GitHub-compatible and does not infer renderer-specific behavior. |
-
-The release is backed by 50 regression tests, package validation, repair-preview, strict-audit, the official Skill validator, and the executable evaluation-evidence path.
-
-## What `0.2.4` adds
-
-This hardening release closes the remaining small gaps identified after `0.2.3`:
-
-| Improvement | What it does |
-| --- | --- |
-| De-duplicated findings | Collapses identical findings from multiple audit phases, keeping symlink and unreadable-file reports actionable instead of noisy. |
-| Existing-project migration guidance | Explains how to adopt bidirectional navigation with preview-first repairs, without rewriting topic content. |
-| Verification coverage map | Documents the deterministic coverage for configuration, navigation, links, metadata relationships, and sensitive content. |
-
-The release is backed by 27 regression tests and the same package, repair-preview, strict-audit, and Skill validator gates used for earlier releases.
-
-For a repository maintainer, the guarded repair flow is:
-
-```text
-$r-doc Preview safe documentation repairs. Do not write files yet.
-Review the plan, then apply only the safe structural repairs and run a strict audit.
-```
-
-The executable helpers are also available in the source repository:
-
-```bash
-python -m pip install -r requirements-dev.txt
-python skills/r-doc/scripts/repair_docs.py --root .
-python skills/r-doc/scripts/repair_docs.py --root . --apply
-python skills/r-doc/scripts/audit_docs.py --root . --strict
-```
-
-Read the [safe repair guide](skills/r-doc/references/repair.md), [practical examples](skills/r-doc/references/examples.md), and [common pitfalls](skills/r-doc/references/pitfalls.md) for the full boundaries.
-
 ## Why r-doc
 
 | Governance principle   | How r-doc applies it                                                                                                                                                              |
@@ -334,3 +197,153 @@ docs/
 - Never write secrets, tokens, passwords, or sensitive personal information;
 - Default to maintaining docs, indexes, metadata, and documentation comments, not business code;
 - Do not declare a development stage complete while its documentation remains unsynchronized.
+
+## What `0.2.10` adds (unreleased)
+
+This unreleased maintenance update makes Agent evaluation evidence more observable and less self-reported:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Checked paths vs. read files | Records existence or routing checks in `paths_checked`, separately from files whose contents were actually read. | An absent `AGENTS.md` or `docs/` path is no longer misrepresented as a file read. |
+| Ordered command evidence | Replaces unordered required-command matching with `required_command_sequence` and requires integer `exit_code: 0` in the declared order. | Failed exploratory commands may remain in the trace, but required commands must succeed. |
+| Evidence-derived scorecard | Derives activation, deterministic verification, safety, and repair discipline from captured evidence; human review dimensions require a written basis. | The runner still does not claim to infer semantic preservation or conflict quality automatically. |
+| Shared-module regression tests | Adds focused tests for Markdown, path, and security primitives. | Module tests complement, rather than replace, end-to-end audit tests. |
+
+This local candidate is backed by 59 regression tests. It has not been pushed or published.
+
+## What `0.2.9` adds
+
+This release makes the shared tooling package safer to consume and keeps Agent evaluation results tied to the Skill version they measure:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Direct submodule imports | Removes eager top-level `rdoc` re-exports so audit, repair, validation, and evaluation load only the modules they use. | Package initialization stays minimal and avoids growing a central import bottleneck. |
+| Version-bound evaluation evidence | Adds required `skill_version` to the case file and evidence contract, rejecting missing or mismatched versions. | Scores are comparable only when their tested Skill versions match. |
+| Migration and verification sync | Extends the migration matrix and verification record for the 0.2.9 behavior changes. | Upgrades still require preview, strict audit, and review of the recorded evidence. |
+
+The release is backed by 51 regression tests, package validation, repair-preview, strict-audit, the official Skill validator, and the executable evaluation-evidence path.
+
+## What `0.2.8` adds
+
+This maintenance release closes the remaining v0.2.7 review gaps while keeping shared deterministic behavior in one tested package:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Shared tooling package | Moves configuration, finding models, security detectors, Markdown parsing, and anchor generation into `scripts/rdoc/`, reused by audit, repair, validation, and Agent-evidence evaluation. | Entry-point scripts remain explicit; package extraction does not change the governance rules. |
+| Broader Agent evaluation | Adds configuration-driven, superseded-document, and Markdown-anchor scenarios to the executable evidence contract. | Evidence still comes from real Agent runs; the validator does not fabricate model behavior. |
+| Emoji-safe anchors | Preserves emoji code points when generating heading slugs and adds a regression scenario for links such as `#deploy-🚀`. | The documented contract remains GitHub-compatible and does not infer renderer-specific behavior. |
+
+The release is backed by 50 regression tests, package validation, repair-preview, strict-audit, the official Skill validator, and the executable evaluation-evidence path.
+
+## What `0.2.7` adds
+
+This release closes the remaining edge cases from the v0.2.6 adversarial review and makes adoption evidence easier to verify:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| GitHub-compatible anchors | Checks ATX and Setext headings, CJK text, punctuation, consecutive spaces, duplicate-heading suffixes, and explicit HTML `name`/`id` anchors. | The contract is GitHub-compatible; renderer-specific slug rules are not guessed. |
+| Visible allowlist evidence | Keeps exact `sensitive_allowlist` matches as informational findings instead of silently hiding them. | Allowlist values must be reviewed public examples, never real credentials. |
+| Configuration and migration clarity | Documents all eight project configuration fields, separates frontmatter `planned_code`, and adds a version migration matrix. | Upgrade notes do not rewrite project content automatically. |
+| Executable agent-evaluation evidence | Adds eight scenario definitions, including configuration-driven governance, supersession closure, and Markdown anchor validation, plus a validator for prompts, file traces, diffs, reports, commands, and scorecard results. | The validator checks supplied evidence; it does not fabricate model traces. |
+
+The release is backed by 50 regression tests, package validation, repair-preview, strict-audit, the official Skill validator, and the executable evaluation-evidence path.
+
+## What `0.2.6` adds
+
+This release hardens the audit boundary against false positives and project-specific documentation workflows:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Context-aware link parsing | Ignores link-shaped text inside fenced code, inline code, and HTML comments, while still checking real image and reference targets. | Sensitive-value scanning still inspects fenced code. |
+| Fragment validation | Verifies that Markdown links point to an existing heading anchor, not only an existing file. | Heading slug matching is deterministic; semantic link intent still needs review. |
+| Configurable example exceptions | Adds exact `sensitive_allowlist` entries for reviewed provider documentation examples and expands the baseline to Google `AIza`-style keys. | Exceptions are exact strings, never patterns, and must not contain real credentials. |
+| Planning-aware metadata | Adds `planned_code` for future paths while keeping `related_code` strict about existing files. | Planned paths must remain inside the project root. |
+| Root-file and test coverage | Documents root Markdown exclusion behavior and separates audit, configuration, and repair regression suites. | Root `AGENTS.md` remains mandatory and always checked. |
+
+The release is backed by 45 regression tests, package validation, repair-preview, strict-audit, and the official Skill validator.
+
+## What `0.2.5` adds
+
+This release closes the remaining audit blind spots identified through adversarial review:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Root Markdown coverage | Audits directly maintained root files such as `README.md`, `CONTRIBUTING.md`, and `SECURITY.md` for broken links and sensitive values. | Metadata and index coverage remain scoped to the configured documentation root. |
+| Complete link semantics | Checks image targets for existence, while unused reference definitions and images stay out of the navigation graph; nested indexes must link to direct parents and children. | Asset existence checks do not claim that an image's visual content is correct. |
+| Stronger metadata and gates | Validates existing `related_code` files, successor relations and backlinks for `superseded` documents, and rejects unconfigured `--stage` values. | Structural evidence still does not replace semantic review. |
+| Safer examples | Allow-lists the exact public AWS sample `AKIAIOSFODNN7EXAMPLE` without disabling scans for other fenced code. | This is a narrow exception, not a general code-block exemption. |
+
+The release is backed by 38 regression tests and the package, repair-preview, strict-audit, and Skill validator gates used for earlier releases.
+
+## What `0.2.4` adds
+
+This hardening release closes the remaining small gaps identified after `0.2.3`:
+
+| Improvement | What it does |
+| --- | --- |
+| De-duplicated findings | Collapses identical findings from multiple audit phases, keeping symlink and unreadable-file reports actionable instead of noisy. |
+| Existing-project migration guidance | Explains how to adopt bidirectional navigation with preview-first repairs, without rewriting topic content. |
+| Verification coverage map | Documents the deterministic coverage for configuration, navigation, links, metadata relationships, and sensitive content. |
+
+The release is backed by 27 regression tests and the same package, repair-preview, strict-audit, and Skill validator gates used for earlier releases.
+
+For a repository maintainer, the guarded repair flow is:
+
+```text
+$r-doc Preview safe documentation repairs. Do not write files yet.
+Review the plan, then apply only the safe structural repairs and run a strict audit.
+```
+
+The executable helpers are also available in the source repository:
+
+```bash
+python -m pip install -r requirements-dev.txt
+python skills/r-doc/scripts/repair_docs.py --root .
+python skills/r-doc/scripts/repair_docs.py --root . --apply
+python skills/r-doc/scripts/audit_docs.py --root . --strict
+```
+
+Read the [safe repair guide](skills/r-doc/references/repair.md), [practical examples](skills/r-doc/references/examples.md), and [common pitfalls](skills/r-doc/references/pitfalls.md) for the full boundaries.
+
+## What `0.2.3` adds
+
+This release turns more of the governance contract into executable, reviewable checks:
+
+| Capability | What it does |
+| --- | --- |
+| Executable project configuration | Applies `.r-doc.yaml` to the documentation root, exclusions, required document types, document-type relationships, and lifecycle gates. |
+| Bidirectional navigation | Verifies the root entrypoint, documentation index, and nested indexes can navigate both downward and back to their parent. |
+| Deterministic link coverage | Checks inline, reference-style, and parenthesized Markdown links after resolving paths and rejecting project-root escapes. |
+| Metadata relationships | Checks document IDs, `related_docs`, `supersedes`, review dates, title headings, and creation/update order. |
+
+The release keeps semantic decisions and real-agent behavior evaluation explicit: deterministic checks provide evidence, but they do not replace human or agent-level judgment.
+
+## What `0.2.2` adds
+
+This patch closes two small but important governance blind spots:
+
+| Capability | What it does | Safety boundary |
+| --- | --- | --- |
+| Chinese placeholder awareness | Recognizes common Chinese placeholders such as `你的密码`, `请输入你的密码`, and `示例口令` without hiding real Chinese password values. | The baseline remains finite and does not replace a full secret scanner. |
+| Self-hosted parser dogfood | Uses nested mapping and list frontmatter in r-doc's own verification record, so the repository exercises the parser it ships. | Passing the dogfood check proves parsing coverage, not semantic approval of arbitrary metadata. |
+
+## What `0.2.1` adds
+
+This patch tightens the deterministic governance layer for real project metadata and multiple development platforms:
+
+| Capability | What it does | Safety boundary |
+| --- | --- | --- |
+| Real YAML frontmatter | Parses nested mappings and lists with a safe YAML loader and reports malformed frontmatter explicitly. | Parser errors are findings; a passing audit is not semantic approval. |
+| Broader secret baseline | Checks JWTs, OpenAI keys, credentialed database URLs, and generic password assignments in addition to common provider tokens. | It is a deterministic baseline, not a complete secret scanner. |
+| Cross-platform quality gate | Exercises Ubuntu and Windows on pinned Python 3.10–3.13 versions. | CI compatibility does not replace validation on a project's own runtime. |
+
+## What `0.2.0` adds
+
+The latest release makes documentation governance more actionable and less dependent on an agent remembering every rule:
+
+| Capability | What it does | Safety boundary |
+| --- | --- | --- |
+| Safe structural repair | Previews and, after confirmation, creates missing entrypoints, nested indexes, and missing index links. | Never overwrites, deletes, moves, or guesses through a conflict. |
+| Deterministic checks | Audits links, index coverage, metadata, duplicate IDs, sensitive-value patterns, and Skill package structure. | Structural checks do not replace semantic review. |
+| Real workflow guidance | Includes initialization, API-change, release-audit, topic-directory examples, and a dedicated pitfalls guide. | Load only the references relevant to the current task. |
+| Release quality gates | Runs tests and validation in CI, with a reproducible temporary-project QA path. | A green check does not declare unresolved product decisions complete. |
