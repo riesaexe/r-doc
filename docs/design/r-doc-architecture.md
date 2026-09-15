@@ -4,7 +4,7 @@ type: design
 status: active
 title: r-doc 架构说明
 created: 2026-09-14
-updated: 2026-09-14
+updated: 2026-09-15
 ---
 
 # r-doc 架构说明
@@ -46,3 +46,13 @@ r-doc 由项目源副本和全局安装副本组成。项目源副本用于版�
 ## 兼容性边界
 
 其他工具是否自动发现 ~/.agents/skills/ 取决于工具自身协议。r-doc 的核心内容保持为普通 Markdown；需要特定工具适配时，应在源项目中增加明确的适配文件，并在发布说明中记录。
+
+## English architecture summary
+
+r-doc has two copies: the version-controlled project source and the local global installation. The source under `<project-root>/skills/r-doc/` is the only source of truth; after validation it is synchronized to `~/.agents/skills/r-doc/` for local discovery and execution.
+
+The source package contains `SKILL.md`, `agents/openai.yaml`, references, deterministic scripts, tests, and the brand asset. Project design, development, benchmark, and release records stay under the root `docs/` and `benchmarks/` directories instead of being loaded as runtime Skill instructions.
+
+The invariants are: only validated source may update the global copy; behavior changes must be traceable to source and `CHANGELOG.md`; the runtime Skill remains portable Markdown; tool-specific metadata stays in `agents/openai.yaml`; and ordinary governance tasks must not depend on reading this repository's development history.
+
+Back to: [design index](README.md) · [documentation index](../README.md)

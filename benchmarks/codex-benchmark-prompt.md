@@ -1,5 +1,9 @@
 # Codex benchmark capture prompt
 
+## 中文说明
+
+这是为可复现实验保留的固定英文 prompt。它属于 Conformance Benchmark / `skill-layer-ablation`，有意公开 scenario activation、读取策略、helper 命令和事件契约，因此不能用于声称 natural activation 或独立 task effectiveness。英文正文必须保持稳定，修改它会改变 benchmark protocol；中文读者可阅读本说明和 [benchmark 总说明](README.md) 获取方法学解释。
+
 You are a benchmark participant. Work only in the temporary project root supplied to this run. The run metadata is:
 
 - profile: {profile}
@@ -9,15 +13,15 @@ You are a benchmark participant. Work only in the temporary project root supplie
 - r-doc skill version: {skill_version}
 - source helper scripts: {script_root}
 
-This is a fixed prompt. Do not change the scenario order or the evidence field names. Do not read or write files outside the scenario directories and the two capture outputs requested below, except for invoking the explicitly named r-doc scripts from the source repository.
+This is a fixed prompt. It defines a Conformance Benchmark and skill-layer ablation, not a natural activation or independent effectiveness benchmark. Do not change the scenario order or the evidence field names. Do not read or write files outside the scenario directories and the two capture outputs requested below, except for invoking the explicitly named r-doc scripts from the source repository.
 
 Use the provided source helper directory for deterministic checks in both conditions. For example, run `python "{script_root}/audit_docs.py" --root "<scenario-directory>"` and `python "{script_root}/repair_docs.py" --root "<scenario-directory>"`; record the actual command and exit code. Do not guess a relative script name such as `python audit_docs.py` inside a fixture directory.
 
-For the `with-r-doc` condition, use the installed `r-doc` skill for documentation-governance decisions. For the `baseline-no-r-doc` condition, do not load, quote, or use the r-doc skill; perform the same tasks with your normal reasoning and the explicitly requested helper commands. In both conditions, record what actually happened. Never invent a file read, command, write, report, diff, review, or activation decision after the fact.
+For the `with-r-doc` condition, use the installed `r-doc` skill for documentation-governance decisions. For the `baseline-no-r-doc` condition, do not load, quote, or use the r-doc skill; perform the same tasks with your normal reasoning and the explicitly requested helper commands. In both conditions, record what actually happened. Never invent a file read, command, write, report, diff, review, or activation decision after the fact. The review events are agent-generated review evidence, not independent human grading.
 
 The condition changes skill availability, not the scenario's activation answer. In both conditions, record `activation: "activated"` for the seven governance scenarios and `activation: "declined"` only for `reject-code-only-local-refactor`. In `with-r-doc`, set `skill_selected` to `"r-doc"` only for activated scenarios and to `"none"` for the declined code-only scenario. In the baseline condition, `skill_selected` is `"none"` for every scenario because r-doc is unavailable; this does not turn the governance scenarios into declined tasks.
 
-Before processing scenarios, create `benchmark-trace.jsonl`. Every line must be one JSON object with `schema_version: 2` and a contiguous zero-based `sequence`. Start with one `trace_start` containing the six run metadata fields above and finish with `trace_end`. For each scenario, emit exactly one `scenario_start` and `scenario_end`, plus trace events for the actual prompt, activation decision, selected skill, paths checked, files read, commands with exit codes, files written, governance report, final response, diff snapshot, and each human review dimension. Use only the event fields defined by the r-doc benchmark trace schema.
+Before processing scenarios, create `benchmark-trace.jsonl`. Every line must be one JSON object with `schema_version: 2` and a contiguous zero-based `sequence`. Start with one `trace_start` containing the six run metadata fields above and finish with `trace_end`. For each scenario, emit exactly one `scenario_start` and `scenario_end`, plus trace events for the actual prompt, activation decision, selected skill, paths checked, files read, commands with exit codes, files written, governance report, final response, diff snapshot, and each review dimension. Use only the event fields defined by the r-doc benchmark trace schema.
 
 Use this exact trace field contract: every event has only `schema_version`, `sequence`, and `event` plus the fields listed here. The first line must use the exact key `skill_version` (not `r_doc_skill_version` or any other spelling), for example `{"schema_version":2,"sequence":0,"event":"trace_start","run_id":"{run_id}","profile":"{profile}","condition":"{condition}","agent":"Codex","model":"{model}","skill_version":"{skill_version}"}`. `trace_start` adds `run_id`, `profile`, `condition`, `agent`, `model`, and `skill_version`; `scenario_start` and `scenario_end` add `scenario_id`; `prompt`, `governance_report`, `final_response`, and `diff_snapshot` add `scenario_id` and `text`; `activation_decision` adds `scenario_id` and `decision`; `skill_selected` adds `scenario_id` and `skill`; `path_checked`, `file_read`, and `file_written` add `scenario_id` and `path`; `command` adds `scenario_id`, `exit_code`, and optionally `name` and `command`; `review` adds `scenario_id`, `dimension`, `status`, and `basis`. Do not add `note`, timestamps, tool names, output blobs, or any other fields. Use `decision` values `activated` or `declined`, review statuses `pass`, `partial`, or `fail`, and the dimensions `context_economy`, `preservation`, and `conflict_handling`.
 

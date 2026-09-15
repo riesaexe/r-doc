@@ -202,10 +202,15 @@ def capture_run(
 
         run_dir.mkdir(parents=True)
         manifest = {
-            "schema_version": 1,
+            "schema_version": 2,
             "profile": profile,
             "run_id": run_id,
             "condition": condition,
+            "benchmark_kind": "skill-layer-ablation",
+            "prompt_contract": "fixed-protocol",
+            "activation_ground_truth": "case-contract",
+            "grader_kind": "agent-self-review",
+            "review_provenance": "agent-generated",
             "agent": "Codex",
             "model": model,
             "skill_version": skill_version,

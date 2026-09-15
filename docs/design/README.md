@@ -4,7 +4,7 @@ type: index
 status: active
 title: 设计文档索引
 created: 2026-09-14
-updated: 2026-09-14
+updated: 2026-09-15
 ---
 
 # 设计文档索引
@@ -18,3 +18,13 @@ updated: 2026-09-14
 1. [r-doc 架构说明](r-doc-architecture.md)
 
 返回：[文档总索引](../README.md) · [项目入口](../../AGENTS.md)
+
+## English overview
+
+This directory records r-doc architecture, resource boundaries, and long-term design constraints.
+
+Recommended reading order:
+
+1. [r-doc architecture](r-doc-architecture.md)
+
+Back to: [documentation index](../README.md) · [project entrypoint](../../AGENTS.md)

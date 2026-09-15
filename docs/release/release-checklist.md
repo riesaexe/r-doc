@@ -4,7 +4,7 @@ type: checklist
 status: active
 title: r-doc 发布检查清单
 created: 2026-09-14
-updated: 2026-09-14
+updated: 2026-09-15
 ---
 
 # r-doc 发布检查清单
@@ -53,3 +53,39 @@ updated: 2026-09-14
 - [ ] npx skills add riesaexe/r-doc --list 能发现 r-doc
 - [ ] npx skills add riesaexe/r-doc --skill r-doc -g -y 安装成功
 - [ ] SkillHub 已从 GitHub 地址手动导入并完成页面检查
+
+## 仓库治理
+
+- [ ] `main` 启用分支保护，要求通过 pull request 合并，并禁止 force-push 和删除
+- [ ] 发布提交在 GitHub 显示为 Verified；本机必须配置并在 GitHub 账户登记 signing key
+- [ ] 如果历史发布提交未签名，不重写已公开的提交和标签；从下一次发布开始执行签名门禁
+
+## English checklist
+
+### Source and behavior
+
+- [ ] `skills/r-doc/SKILL.md` metadata and entrypoint are correct
+- [ ] `agents/openai.yaml`, assets, references, scripts, and tests are present
+- [ ] Runtime Skill files remain English-only to control context cost; public project docs and release notes are bilingual
+- [ ] `validate_skill.py`, `audit_docs.py --strict`, unit tests, and Agent-evidence checks pass
+- [ ] The repair preview has no unreviewed writes
+- [ ] The README installation commands point to the actual repository
+- [ ] No secrets, tokens, passwords, or personal sensitive values are in the diff
+
+### Release record
+
+- [ ] `VERSION` matches `SKILL.md` metadata
+- [ ] `CHANGELOG.md` contains English entries and Chinese summaries for the current and every historical release
+- [ ] Release notes include compatibility, verification status, and known limitations
+- [ ] The package contains only required r-doc files
+- [ ] The validated source was synchronized to the global installation copy
+
+### Platform and repository governance
+
+- [ ] The public GitHub repository contains `skills/r-doc/SKILL.md`
+- [ ] `npx skills add riesaexe/r-doc --list` discovers r-doc
+- [ ] `npx skills add riesaexe/r-doc --skill r-doc -g -y` succeeds
+- [ ] SkillHub import was checked after GitHub and npx verification
+- [ ] `main` has pull-request protection, at least one approval, stale-review dismissal, and no force-push/deletion
+- [ ] The release commit is shown as `Verified` on GitHub
+- [ ] Existing unsigned release history was not rewritten; signing is a gate for the next release

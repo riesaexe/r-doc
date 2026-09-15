@@ -29,3 +29,20 @@
 | [发布检查清单](release/release-checklist.md) | 发布前逐项核对 | active |
 
 返回：[项目入口](../AGENTS.md)
+
+## English index
+
+This directory contains the project's design, development, verification, and release knowledge. Runtime Skill rules remain in `skills/r-doc/SKILL.md` and its references; these documents explain how this repository maintains and publishes the Skill.
+
+Recommended reading order:
+
+1. [Design index](design/README.md)
+2. [Development index](development/README.md)
+3. [Release guide](release/README.md)
+4. [GitHub and npx skills guide](release/github-and-npx.md)
+5. [Version migration overview](../skills/r-doc/references/migration-matrix.md)
+6. [Release checklist](release/release-checklist.md)
+
+The topic indexes and documents are listed in the Chinese section above. Each linked document now includes an English summary where the subject is relevant to public maintenance or release work.
+
+Back to: [project entrypoint](../AGENTS.md)

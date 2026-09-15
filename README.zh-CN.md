@@ -198,6 +198,23 @@ AGENTS.md 是项目级入口和导航；详细知识放在 docs/，每篇文档�
 - 默认只维护文档、索引、元数据和文档注释，不修改业务代码；
 - 文档未同步时，不把当前开发阶段宣布为已完成。
 
+## 语言策略
+
+公开入口、项目文档、benchmark 指南和 Release notes 在可行时维护中英双语。为控制 Agent 上下文成本，`skills/r-doc/` 下的运行时 Skill 指令保持英语-only；`SKILL.zh-CN.md` 作为人类维护者的中文指针保留。
+
+## `0.2.16` 新增了什么
+
+这一版补齐公开文档的双语基线，并正式建立 benchmark 的下一层：
+
+| 改进 | 作用 | 安全边界 |
+| --- | --- | --- |
+| 双语发布历史 | 为所有历史 Release notes 增加中文摘要，同时保留原始英文记录。 | 中文摘要解释用户影响，不重写历史事实。 |
+| 双语维护指南 | 为发布、开发、架构和 benchmark 文档入口增加英文摘要。 | 为控制上下文成本，运行时 Skill 指令保持英语-only。 |
+| Conformance 分类 | 将固定 prompt 运行标记为 `Conformance Benchmark` / `skill-layer-ablation`，并记录 Agent 自评 review 的边界。 | 这不是自然激活或独立效果结论。 |
+| Naturalistic 协议 | 增加独立的最终状态和 action-trace grader，但在匹配真实 capture 前不宣称结果。 | 不从 Conformance summary 生成分数。 |
+
+`main` 已启用分支保护：要求 PR、至少一个批准、dismiss stale reviews，并禁止 force-push 和删除。本机 GPG 签名探针通过；发布提交仍需在 GitHub 检查 `Verified`。
+
 ## `0.2.15` 新增了什么
 
 这一版让实证 benchmark 的输出可审计、可直接比较：
@@ -208,8 +225,9 @@ AGENTS.md 是项目级入口和导航；详细知识放在 docs/，每篇文档�
 | 配对 condition 分析 | 保持 profile 指标按 condition 分层，并按 `agent + model + run_id` 输出配对 delta、均值、中位数、标准差、95% Student-t 区间和三档就绪度。 | 三组配对只能观察趋势，至少五组才达到统计门槛，十组才适合更强结论。 |
 | 读取策略指标 | 区分 required、allowed、forbidden reads，避免合理的依赖读取被计入 `unnecessary_reads`。 | cases 必须声明 allowed 集合，并保证它与 forbidden 不重叠。 |
 | 审计样本报告 | 将性能夹具默认迭代提高到 10 次，并记录插值 p95、最大值和低样本元数据。 | 墙钟时间仍是本机趋势数据，不是 CI 门槛或复杂度保证。 |
+| Benchmark 分层 | 将当前已提交运行标为 `Conformance Benchmark` / `skill-layer-ablation`，并在机器可读元数据中记录 prompt、activation ground truth 和 grader provenance。 | 固定 prompt 已给出 activation、读取和命令答案；review 维度由 Agent 自评，因此不是 naturalistic effectiveness 分数。 |
 
-当前提交的 benchmark 汇总已经包含 3 组通过门禁的本机 Codex `gpt-5.5` 配对运行。它只达到趋势就绪，还没有达到统计就绪：观测到的 task success 平均 delta 为 `0.0pp`，unnecessary reads delta 为 `-0.67`，`n=3` 时 95% 区间仍然很宽。这是真实行为观测数据，不是 r-doc 已稳定提升成功率的结论。
+当前提交的 benchmark 汇总已经包含 3 组通过门禁的本机 Codex `gpt-5.5` skill-layer ablation 配对运行。它只达到趋势就绪，还没有达到统计就绪：观测到的 task success 平均 delta 为 `0.0pp`，unnecessary reads delta 为 `-0.67`，`n=3` 时 95% 区间仍然很宽。activation 结果是对已公开 case 答案的协议遵循，task success 包含 Agent 自评，两者都不是 naturalistic effectiveness 结论。独立的第二层协议见 [`benchmarks/naturalistic/`](benchmarks/naturalistic/)，当前尚无真实结果。
 
 ## `0.2.13` 新增了什么
 

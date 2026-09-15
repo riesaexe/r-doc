@@ -155,10 +155,15 @@ def write_run(
             "r-doc" if condition == "with-r-doc" and scenario["activation"] == "activated" else "none"
         )
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
         "profile": profile,
         "run_id": run_id,
         "condition": condition,
+        "benchmark_kind": "skill-layer-ablation",
+        "prompt_contract": "fixed-protocol",
+        "activation_ground_truth": "case-contract",
+        "grader_kind": "agent-self-review",
+        "review_provenance": "agent-generated",
         "agent": "Codex",
         "model": "gpt-5.6",
         "skill_version": CASES["skill_version"],
@@ -199,6 +204,30 @@ class BenchmarkToolTests(unittest.TestCase):
             self.assertEqual(profile["audit_compliance"], 100.0)
             self.assertEqual(profile["unnecessary_reads_average"], 0.0)
             self.assertEqual(profile["task_success"], 100.0)
+
+    def test_summary_declares_conformance_and_agent_review_boundaries(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_run(root)
+            summary, _ = aggregate_benchmarks.aggregate(CASES, root)
+            self.assertEqual(summary["benchmark_kind"], "skill-layer-ablation")
+            self.assertEqual(summary["benchmark_name"], "Conformance Benchmark")
+            self.assertEqual(summary["activation_ground_truth"], "case-contract")
+            self.assertEqual(summary["grader_kind"], "agent-self-review")
+            self.assertEqual(summary["review_provenance"], "agent-generated")
+            self.assertIn("not natural activation accuracy", summary["metric_semantics"]["activation_accuracy"])
+            self.assertIn("not independently graded", summary["metric_semantics"]["task_success"])
+
+    def test_manifest_requires_benchmark_provenance(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            run_dir = write_run(root)
+            manifest = json.loads((run_dir / "run.json").read_text(encoding="utf-8"))
+            del manifest["grader_kind"]
+            (run_dir / "run.json").write_text(json.dumps(manifest), encoding="utf-8")
+            summary, _ = aggregate_benchmarks.aggregate(CASES, root)
+            self.assertEqual(summary["status"], "fail")
+            self.assertTrue(any("run.json is missing grader_kind" in error for error in summary["errors"]))
 
     def test_real_run_requires_a_captured_trace(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

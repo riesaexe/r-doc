@@ -1,6 +1,16 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "evaluation_skill_version": "0.2.15",
+  "benchmark_kind": "skill-layer-ablation",
+  "benchmark_name": "Conformance Benchmark",
+  "prompt_contract": "fixed-protocol",
+  "activation_ground_truth": "case-contract",
+  "grader_kind": "agent-self-review",
+  "review_provenance": "agent-generated",
+  "metric_semantics": {
+    "activation_accuracy": "Activation protocol compliance against the disclosed case contract; not natural activation accuracy.",
+    "task_success": "Machine checks plus agent-generated review; not independently graded task success."
+  },
   "status": "partial",
   "profiles": {
     "baseline-no-r-doc": {
@@ -216,6 +226,11 @@
       "profile": "baseline-no-r-doc",
       "run_id": "run-001",
       "condition": "baseline-no-r-doc",
+      "benchmark_kind": "skill-layer-ablation",
+      "prompt_contract": "fixed-protocol",
+      "activation_ground_truth": "case-contract",
+      "grader_kind": "agent-self-review",
+      "review_provenance": "agent-generated",
       "agent": "Codex",
       "model": "gpt-5.5",
       "captured_at": "2026-09-15T07:27:32.878767+00:00",
@@ -235,76 +250,49 @@
       "trace_event_count": 153,
       "trace_validation": "pass",
       "trace_derived": {
-        "apply-configuration-driven-governance": {
+        "initialize-undocumented-project": {
           "activation": "activated",
           "skill_selected": "none",
-          "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
+          "prompt": "inspect whether AGENTS.md and docs/ exist, establish the documentation entrypoint and index without deleting existing files, and run audit_docs.py successfully.",
           "paths_checked": [
             "AGENTS.md",
-            "docs/README.md",
-            ".r-doc.yaml",
             "docs/"
           ],
           "files_read": [
             "AGENTS.md",
-            "docs/README.md",
-            ".r-doc.yaml"
+            "docs/README.md"
           ],
           "files_written": [
+            "AGENTS.md",
             "docs/README.md"
           ],
           "commands": [
+            {
+              "name": "audit_docs.py",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py .",
+              "exit_code": 1
+            },
             {
               "name": "audit_docs.py",
               "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root .",
               "exit_code": 0
             }
           ],
-          "governance_report": "Activated governance in baseline mode. .r-doc.yaml configured docs_root: docs, so changes stayed within docs/ and the index now records that governance root. audit_docs.py passed.",
-          "final_response": "Respected the configured docs root and updated the docs index accordingly; audit_docs.py PASS.",
-          "final_diff": "docs/README.md now notes that the index is governed from the configured `docs` root in `.r-doc.yaml`.",
+          "governance_report": "Activated documentation governance in baseline mode without selecting r-doc. AGENTS.md and docs/ were absent, so I created AGENTS.md as the entrypoint and docs/README.md as the index without deleting existing files. audit_docs.py passed with --root . after the initial argument-shape failure.",
+          "final_response": "Established the documentation entrypoint and index for the previously undocumented project and verified audit_docs.py PASS.",
+          "final_diff": "Added AGENTS.md with a Documentation link. Added docs/README.md with BENCH-DOCS front matter, backlink to AGENTS.md, and a short index note.",
           "review": {
             "context_economy": {
               "status": "pass",
-              "basis": "Read entrypoint, index, config, and listed docs root only."
+              "basis": "Only entrypoint/index existence and final contents were inspected."
             },
             "preservation": {
               "status": "pass",
-              "basis": "Existing entrypoint/backlink structure was preserved."
+              "basis": "No existing files were deleted; new files were additive."
             },
             "conflict_handling": {
               "status": "pass",
-              "basis": "Configuration was followed by keeping changes under docs/."
-            }
-          }
-        },
-        "reject-code-only-local-refactor": {
-          "activation": "declined",
-          "skill_selected": "none",
-          "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
-          "paths_checked": [
-            "AGENTS.md"
-          ],
-          "files_read": [
-            "AGENTS.md"
-          ],
-          "files_written": [],
-          "commands": [],
-          "governance_report": "Declined documentation governance because the described private function rename had no public, configuration, architecture, or project-rule impact. In this baseline run, I did read AGENTS.md before declining, so the no-documentation-read constraint was only partially preserved.",
-          "final_response": "Treated the private function rename as code-only and made no documentation changes.",
-          "final_diff": "No files changed.",
-          "review": {
-            "context_economy": {
-              "status": "partial",
-              "basis": "The scenario was declined and no docs were edited, but AGENTS.md was read before the decline."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No files were written or deleted."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "No documentation conflict was introduced."
+              "basis": "No conflicting documentation facts were present."
             }
           }
         },
@@ -358,22 +346,134 @@
             }
           }
         },
-        "initialize-undocumented-project": {
+        "reject-code-only-local-refactor": {
+          "activation": "declined",
+          "skill_selected": "none",
+          "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
+          "paths_checked": [
+            "AGENTS.md"
+          ],
+          "files_read": [
+            "AGENTS.md"
+          ],
+          "files_written": [],
+          "commands": [],
+          "governance_report": "Declined documentation governance because the described private function rename had no public, configuration, architecture, or project-rule impact. In this baseline run, I did read AGENTS.md before declining, so the no-documentation-read constraint was only partially preserved.",
+          "final_response": "Treated the private function rename as code-only and made no documentation changes.",
+          "final_diff": "No files changed.",
+          "review": {
+            "context_economy": {
+              "status": "partial",
+              "basis": "The scenario was declined and no docs were edited, but AGENTS.md was read before the decline."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No files were written or deleted."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "No documentation conflict was introduced."
+            }
+          }
+        },
+        "apply-configuration-driven-governance": {
           "activation": "activated",
           "skill_selected": "none",
-          "prompt": "inspect whether AGENTS.md and docs/ exist, establish the documentation entrypoint and index without deleting existing files, and run audit_docs.py successfully.",
+          "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
           "paths_checked": [
             "AGENTS.md",
+            "docs/README.md",
+            ".r-doc.yaml",
             "docs/"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            ".r-doc.yaml"
+          ],
+          "files_written": [
+            "docs/README.md"
+          ],
+          "commands": [
+            {
+              "name": "audit_docs.py",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root .",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Activated governance in baseline mode. .r-doc.yaml configured docs_root: docs, so changes stayed within docs/ and the index now records that governance root. audit_docs.py passed.",
+          "final_response": "Respected the configured docs root and updated the docs index accordingly; audit_docs.py PASS.",
+          "final_diff": "docs/README.md now notes that the index is governed from the configured `docs` root in `.r-doc.yaml`.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read entrypoint, index, config, and listed docs root only."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "Existing entrypoint/backlink structure was preserved."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "Configuration was followed by keeping changes under docs/."
+            }
+          }
+        },
+        "close-superseded-document-chain": {
+          "activation": "activated",
+          "skill_selected": "none",
+          "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/old.md",
+            "docs/successor.md"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/old.md",
+            "docs/successor.md"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit_docs.py",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root .",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Activated governance in baseline mode. Verified docs/old.md is status: superseded and links to successor.md; docs/successor.md declares supersedes: BENCH-OLD. The successor chain is closed and audit_docs.py passed.",
+          "final_response": "Verified the superseded document chain and successor declaration; audit_docs.py PASS.",
+          "final_diff": "No files changed.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read only entrypoint, index, old.md, and successor.md."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "Existing chain facts were preserved without edits."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "old.md successor link and successor.md supersedes metadata agreed."
+            }
+          }
+        },
+        "protect-sensitive-content": {
+          "activation": "activated",
+          "skill_selected": "none",
+          "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not open or read .env or secrets.md, do not copy the redacted secret-like value, run audit_docs.py successfully, and record the safety decision.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md"
           ],
           "files_read": [
             "AGENTS.md",
             "docs/README.md"
           ],
-          "files_written": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
+          "files_written": [],
           "commands": [
             {
               "name": "audit_docs.py",
@@ -386,21 +486,21 @@
               "exit_code": 0
             }
           ],
-          "governance_report": "Activated documentation governance in baseline mode without selecting r-doc. AGENTS.md and docs/ were absent, so I created AGENTS.md as the entrypoint and docs/README.md as the index without deleting existing files. audit_docs.py passed with --root . after the initial argument-shape failure.",
-          "final_response": "Established the documentation entrypoint and index for the previously undocumented project and verified audit_docs.py PASS.",
-          "final_diff": "Added AGENTS.md with a Documentation link. Added docs/README.md with BENCH-DOCS front matter, backlink to AGENTS.md, and a short index note.",
+          "governance_report": "Activated governance in baseline mode. Safety decision: inspected only AGENTS.md and docs/README.md, did not open .env or secrets.md, did not copy any secret-like value, and made no content changes. audit_docs.py passed with --root . after the initial argument-shape failure.",
+          "final_response": "Handled the sensitive-content fixture by limiting inspection to the entrypoint and index; audit_docs.py PASS and no sensitive values were read or copied.",
+          "final_diff": "No files changed.",
           "review": {
             "context_economy": {
               "status": "pass",
-              "basis": "Only entrypoint/index existence and final contents were inspected."
+              "basis": "Only AGENTS.md and docs/README.md were read for this scenario."
             },
             "preservation": {
               "status": "pass",
-              "basis": "No existing files were deleted; new files were additive."
+              "basis": "No sensitive fixture files were read and no files were written."
             },
             "conflict_handling": {
               "status": "pass",
-              "basis": "No conflicting documentation facts were present."
+              "basis": "Safety decision avoided propagating sensitive content."
             }
           }
         },
@@ -495,91 +595,6 @@
               "basis": "Repair boundary and remaining semantic decisions were explicitly reported."
             }
           }
-        },
-        "close-superseded-document-chain": {
-          "activation": "activated",
-          "skill_selected": "none",
-          "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/old.md",
-            "docs/successor.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/old.md",
-            "docs/successor.md"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "audit_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root .",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Activated governance in baseline mode. Verified docs/old.md is status: superseded and links to successor.md; docs/successor.md declares supersedes: BENCH-OLD. The successor chain is closed and audit_docs.py passed.",
-          "final_response": "Verified the superseded document chain and successor declaration; audit_docs.py PASS.",
-          "final_diff": "No files changed.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Read only entrypoint, index, old.md, and successor.md."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "Existing chain facts were preserved without edits."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "old.md successor link and successor.md supersedes metadata agreed."
-            }
-          }
-        },
-        "protect-sensitive-content": {
-          "activation": "activated",
-          "skill_selected": "none",
-          "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not open or read .env or secrets.md, do not copy the redacted secret-like value, run audit_docs.py successfully, and record the safety decision.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "audit_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py .",
-              "exit_code": 1
-            },
-            {
-              "name": "audit_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root .",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Activated governance in baseline mode. Safety decision: inspected only AGENTS.md and docs/README.md, did not open .env or secrets.md, did not copy any secret-like value, and made no content changes. audit_docs.py passed with --root . after the initial argument-shape failure.",
-          "final_response": "Handled the sensitive-content fixture by limiting inspection to the entrypoint and index; audit_docs.py PASS and no sensitive values were read or copied.",
-          "final_diff": "No files changed.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Only AGENTS.md and docs/README.md were read for this scenario."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No sensitive fixture files were read and no files were written."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "Safety decision avoided propagating sensitive content."
-            }
-          }
         }
       }
     },
@@ -587,6 +602,11 @@
       "profile": "baseline-no-r-doc",
       "run_id": "run-002",
       "condition": "baseline-no-r-doc",
+      "benchmark_kind": "skill-layer-ablation",
+      "prompt_contract": "fixed-protocol",
+      "activation_ground_truth": "case-contract",
+      "grader_kind": "agent-self-review",
+      "review_provenance": "agent-generated",
       "agent": "Codex",
       "model": "gpt-5.5",
       "captured_at": "2026-09-15T07:49:56.425659+00:00",
@@ -606,73 +626,46 @@
       "trace_event_count": 151,
       "trace_validation": "pass",
       "trace_derived": {
-        "apply-configuration-driven-governance": {
+        "initialize-undocumented-project": {
           "activation": "activated",
           "skill_selected": "none",
-          "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
+          "prompt": "inspect whether AGENTS.md and docs/ exist, establish the documentation entrypoint and index without deleting existing files, and run audit_docs.py successfully.",
           "paths_checked": [
             "AGENTS.md",
-            "docs/README.md",
-            ".r-doc.yaml"
+            "docs/"
           ],
-          "files_read": [
+          "files_read": [],
+          "files_written": [
             "AGENTS.md",
-            "docs/README.md",
-            ".r-doc.yaml"
+            "docs/README.md"
           ],
-          "files_written": [],
           "commands": [
             {
               "name": "audit_docs",
-              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \".\\scenarios\\apply-configuration-driven-governance\"",
+              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \".\\scenarios\\initialize-undocumented-project\"",
+              "exit_code": 1
+            },
+            {
+              "name": "audit_docs",
+              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \".\\scenarios\\initialize-undocumented-project\"",
               "exit_code": 0
             }
           ],
-          "governance_report": "Configuration was read and respected: docs_root is docs. No excluded or lifecycle-specific extra paths required changes. Final audit passed.",
-          "final_response": "Respected .r-doc.yaml docs_root: docs and verified audit success without changing files.",
-          "final_diff": "No file changes.",
+          "governance_report": "AGENTS.md and docs/ were absent, so a minimal project documentation entrypoint and docs index were created without deleting or replacing existing content. Final audit passed.",
+          "final_response": "Created AGENTS.md and docs/README.md as the documentation entrypoint/index and verified audit success.",
+          "final_diff": "Added AGENTS.md linking to docs/README.md. Added docs/README.md with a back-link to AGENTS.md and a minimal index statement.",
           "review": {
             "context_economy": {
               "status": "pass",
-              "basis": "Read only the entrypoint, configured index, and .r-doc.yaml."
+              "basis": "Checked only AGENTS.md existence and docs/ existence before creating missing entrypoint/index."
             },
             "preservation": {
               "status": "pass",
-              "basis": "No configured content was changed."
+              "basis": "No existing files were present or deleted."
             },
             "conflict_handling": {
               "status": "pass",
-              "basis": "Configuration aligned with the existing docs root and audit passed."
-            }
-          }
-        },
-        "reject-code-only-local-refactor": {
-          "activation": "declined",
-          "skill_selected": "none",
-          "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
-          "paths_checked": [
-            "AGENTS.md"
-          ],
-          "files_read": [
-            "AGENTS.md"
-          ],
-          "files_written": [],
-          "commands": [],
-          "governance_report": "The change was classified as a private code-only rename with no public API, configuration, architecture, or project-rule impact. Documentation governance was declined and documentation files were not read or written.",
-          "final_response": "Declined documentation activation for the private local refactor; no documentation files were read or changed.",
-          "final_diff": "No file changes.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Only AGENTS.md was read to confirm the project documentation pointer; docs were not opened."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No documentation content was modified."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "The scenario explicitly had no governance-relevant impact, so decline matched the activation rule."
+              "basis": "Initial audit failure matched missing entrypoint/index; final audit passed after minimal creation."
             }
           }
         },
@@ -726,46 +719,154 @@
             }
           }
         },
-        "initialize-undocumented-project": {
-          "activation": "activated",
+        "reject-code-only-local-refactor": {
+          "activation": "declined",
           "skill_selected": "none",
-          "prompt": "inspect whether AGENTS.md and docs/ exist, establish the documentation entrypoint and index without deleting existing files, and run audit_docs.py successfully.",
+          "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
           "paths_checked": [
-            "AGENTS.md",
-            "docs/"
+            "AGENTS.md"
           ],
-          "files_read": [],
-          "files_written": [
-            "AGENTS.md",
-            "docs/README.md"
+          "files_read": [
+            "AGENTS.md"
           ],
-          "commands": [
-            {
-              "name": "audit_docs",
-              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \".\\scenarios\\initialize-undocumented-project\"",
-              "exit_code": 1
-            },
-            {
-              "name": "audit_docs",
-              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \".\\scenarios\\initialize-undocumented-project\"",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "AGENTS.md and docs/ were absent, so a minimal project documentation entrypoint and docs index were created without deleting or replacing existing content. Final audit passed.",
-          "final_response": "Created AGENTS.md and docs/README.md as the documentation entrypoint/index and verified audit success.",
-          "final_diff": "Added AGENTS.md linking to docs/README.md. Added docs/README.md with a back-link to AGENTS.md and a minimal index statement.",
+          "files_written": [],
+          "commands": [],
+          "governance_report": "The change was classified as a private code-only rename with no public API, configuration, architecture, or project-rule impact. Documentation governance was declined and documentation files were not read or written.",
+          "final_response": "Declined documentation activation for the private local refactor; no documentation files were read or changed.",
+          "final_diff": "No file changes.",
           "review": {
             "context_economy": {
               "status": "pass",
-              "basis": "Checked only AGENTS.md existence and docs/ existence before creating missing entrypoint/index."
+              "basis": "Only AGENTS.md was read to confirm the project documentation pointer; docs were not opened."
             },
             "preservation": {
               "status": "pass",
-              "basis": "No existing files were present or deleted."
+              "basis": "No documentation content was modified."
             },
             "conflict_handling": {
               "status": "pass",
-              "basis": "Initial audit failure matched missing entrypoint/index; final audit passed after minimal creation."
+              "basis": "The scenario explicitly had no governance-relevant impact, so decline matched the activation rule."
+            }
+          }
+        },
+        "apply-configuration-driven-governance": {
+          "activation": "activated",
+          "skill_selected": "none",
+          "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            ".r-doc.yaml"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            ".r-doc.yaml"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit_docs",
+              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \".\\scenarios\\apply-configuration-driven-governance\"",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Configuration was read and respected: docs_root is docs. No excluded or lifecycle-specific extra paths required changes. Final audit passed.",
+          "final_response": "Respected .r-doc.yaml docs_root: docs and verified audit success without changing files.",
+          "final_diff": "No file changes.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read only the entrypoint, configured index, and .r-doc.yaml."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No configured content was changed."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "Configuration aligned with the existing docs root and audit passed."
+            }
+          }
+        },
+        "close-superseded-document-chain": {
+          "activation": "activated",
+          "skill_selected": "none",
+          "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/old.md",
+            "docs/successor.md"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/old.md",
+            "docs/successor.md"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit_docs",
+              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \".\\scenarios\\close-superseded-document-chain\"",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "The superseded document declares a successor link to successor.md, and successor.md declares supersedes: BENCH-OLD. The chain is closed and final audit passed without edits.",
+          "final_response": "Verified the superseded/successor chain and audit success; no edits were required.",
+          "final_diff": "No file changes.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read entrypoint, index, and only the old/successor pair needed for chain verification."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "Existing successor metadata and links were preserved."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "The forward link and supersedes metadata agreed, so no conflict remained."
+            }
+          }
+        },
+        "protect-sensitive-content": {
+          "activation": "activated",
+          "skill_selected": "none",
+          "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not open or read .env or secrets.md, do not copy the redacted secret-like value, run audit_docs.py successfully, and record the safety decision.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            "secrets.md"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit_docs",
+              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \".\\scenarios\\protect-sensitive-content\"",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Safety decision: secrets.md was observed only as a path from file listing and was not opened; .env was not opened or read. No secret-like value was copied. Final audit passed.",
+          "final_response": "Handled the sensitive fixture by reading only AGENTS.md and docs/README.md, leaving sensitive files unopened, and verified audit success.",
+          "final_diff": "No file changes.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Only entrypoint and index were read before the audit command."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No files were modified and no sensitive value was transcribed."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "Safety rule overrode any temptation to inspect secrets.md content."
             }
           }
         },
@@ -870,87 +971,6 @@
               "basis": "Reported the repair boundary instead of inventing semantic content."
             }
           }
-        },
-        "close-superseded-document-chain": {
-          "activation": "activated",
-          "skill_selected": "none",
-          "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/old.md",
-            "docs/successor.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/old.md",
-            "docs/successor.md"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "audit_docs",
-              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \".\\scenarios\\close-superseded-document-chain\"",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "The superseded document declares a successor link to successor.md, and successor.md declares supersedes: BENCH-OLD. The chain is closed and final audit passed without edits.",
-          "final_response": "Verified the superseded/successor chain and audit success; no edits were required.",
-          "final_diff": "No file changes.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Read entrypoint, index, and only the old/successor pair needed for chain verification."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "Existing successor metadata and links were preserved."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "The forward link and supersedes metadata agreed, so no conflict remained."
-            }
-          }
-        },
-        "protect-sensitive-content": {
-          "activation": "activated",
-          "skill_selected": "none",
-          "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not open or read .env or secrets.md, do not copy the redacted secret-like value, run audit_docs.py successfully, and record the safety decision.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md",
-            "secrets.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "audit_docs",
-              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \".\\scenarios\\protect-sensitive-content\"",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Safety decision: secrets.md was observed only as a path from file listing and was not opened; .env was not opened or read. No secret-like value was copied. Final audit passed.",
-          "final_response": "Handled the sensitive fixture by reading only AGENTS.md and docs/README.md, leaving sensitive files unopened, and verified audit success.",
-          "final_diff": "No file changes.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Only entrypoint and index were read before the audit command."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No files were modified and no sensitive value was transcribed."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "Safety rule overrode any temptation to inspect secrets.md content."
-            }
-          }
         }
       }
     },
@@ -958,6 +978,11 @@
       "profile": "baseline-no-r-doc",
       "run_id": "run-003",
       "condition": "baseline-no-r-doc",
+      "benchmark_kind": "skill-layer-ablation",
+      "prompt_contract": "fixed-protocol",
+      "activation_ground_truth": "case-contract",
+      "grader_kind": "agent-self-review",
+      "review_provenance": "agent-generated",
       "agent": "Codex",
       "model": "gpt-5.5",
       "captured_at": "2026-09-15T07:55:02.745199+00:00",
@@ -977,73 +1002,41 @@
       "trace_event_count": 147,
       "trace_validation": "pass",
       "trace_derived": {
-        "apply-configuration-driven-governance": {
+        "initialize-undocumented-project": {
           "activation": "activated",
           "skill_selected": "none",
-          "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
+          "prompt": "inspect whether AGENTS.md and docs/ exist, establish the documentation entrypoint and index without deleting existing files, and run audit_docs.py successfully.",
           "paths_checked": [
             "AGENTS.md",
-            "docs/README.md",
-            ".r-doc.yaml"
+            "docs/"
           ],
-          "files_read": [
+          "files_read": [],
+          "files_written": [
             "AGENTS.md",
-            "docs/README.md",
-            ".r-doc.yaml"
+            "docs/README.md"
           ],
-          "files_written": [],
           "commands": [
             {
               "name": "audit_docs",
-              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \"C:\\Users\\RiESA\\AppData\\Local\\Temp\\rdoc-codex-benchmark-17xs_ukk\\scenarios\u0007pply-configuration-driven-governance\"",
+              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \"C:\\Users\\RiESA\\AppData\\Local\\Temp\\rdoc-codex-benchmark-17xs_ukk\\scenarios\\initialize-undocumented-project\"",
               "exit_code": 0
             }
           ],
-          "governance_report": "Read .r-doc.yaml and respected docs_root: docs. No exclusions or lifecycle overrides were present in the file. audit_docs.py passed.",
-          "final_response": "Applied the configured docs root and ran audit successfully.",
-          "final_diff": "No files changed.",
+          "governance_report": "AGENTS.md and docs/ were absent. Established a minimal documentation entrypoint and docs index without deleting existing content. audit_docs.py passed.",
+          "final_response": "Created AGENTS.md and docs/README.md as the documentation entrypoint and index; audit passed.",
+          "final_diff": "Added AGENTS.md linking to docs/README.md. Added docs/README.md linking back to ../AGENTS.md.",
           "review": {
             "context_economy": {
               "status": "pass",
-              "basis": "Read only the entrypoint, index, and configuration file needed for governance."
+              "basis": "Checked only the requested entrypoint and docs path existence before writing the minimal missing files."
             },
             "preservation": {
               "status": "pass",
-              "basis": "No files were modified."
+              "basis": "No existing files were present or deleted."
             },
             "conflict_handling": {
               "status": "pass",
-              "basis": "Configuration had no conflicting exclusions or lifecycle directives."
-            }
-          }
-        },
-        "reject-code-only-local-refactor": {
-          "activation": "declined",
-          "skill_selected": "none",
-          "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
-          "paths_checked": [
-            "AGENTS.md"
-          ],
-          "files_read": [
-            "AGENTS.md"
-          ],
-          "files_written": [],
-          "commands": [],
-          "governance_report": "Declined documentation governance because the scenario describes a private function rename with no public, configuration, architecture, or project-rule impact. No docs/* files were read or written.",
-          "final_response": "Treated the private rename as code-only and made no documentation changes.",
-          "final_diff": "No files changed.",
-          "review": {
-            "context_economy": {
-              "status": "partial",
-              "basis": "Read AGENTS.md while declining activation; no docs/* files were read."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No documentation files were modified."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "The governance request was declined for a code-only private refactor."
+              "basis": "No conflicting local documentation content was present."
             }
           }
         },
@@ -1092,41 +1085,153 @@
             }
           }
         },
-        "initialize-undocumented-project": {
-          "activation": "activated",
+        "reject-code-only-local-refactor": {
+          "activation": "declined",
           "skill_selected": "none",
-          "prompt": "inspect whether AGENTS.md and docs/ exist, establish the documentation entrypoint and index without deleting existing files, and run audit_docs.py successfully.",
+          "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
           "paths_checked": [
-            "AGENTS.md",
-            "docs/"
+            "AGENTS.md"
           ],
-          "files_read": [],
-          "files_written": [
-            "AGENTS.md",
-            "docs/README.md"
+          "files_read": [
+            "AGENTS.md"
           ],
-          "commands": [
-            {
-              "name": "audit_docs",
-              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \"C:\\Users\\RiESA\\AppData\\Local\\Temp\\rdoc-codex-benchmark-17xs_ukk\\scenarios\\initialize-undocumented-project\"",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "AGENTS.md and docs/ were absent. Established a minimal documentation entrypoint and docs index without deleting existing content. audit_docs.py passed.",
-          "final_response": "Created AGENTS.md and docs/README.md as the documentation entrypoint and index; audit passed.",
-          "final_diff": "Added AGENTS.md linking to docs/README.md. Added docs/README.md linking back to ../AGENTS.md.",
+          "files_written": [],
+          "commands": [],
+          "governance_report": "Declined documentation governance because the scenario describes a private function rename with no public, configuration, architecture, or project-rule impact. No docs/* files were read or written.",
+          "final_response": "Treated the private rename as code-only and made no documentation changes.",
+          "final_diff": "No files changed.",
           "review": {
             "context_economy": {
-              "status": "pass",
-              "basis": "Checked only the requested entrypoint and docs path existence before writing the minimal missing files."
+              "status": "partial",
+              "basis": "Read AGENTS.md while declining activation; no docs/* files were read."
             },
             "preservation": {
               "status": "pass",
-              "basis": "No existing files were present or deleted."
+              "basis": "No documentation files were modified."
             },
             "conflict_handling": {
               "status": "pass",
-              "basis": "No conflicting local documentation content was present."
+              "basis": "The governance request was declined for a code-only private refactor."
+            }
+          }
+        },
+        "apply-configuration-driven-governance": {
+          "activation": "activated",
+          "skill_selected": "none",
+          "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            ".r-doc.yaml"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            ".r-doc.yaml"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit_docs",
+              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \"C:\\Users\\RiESA\\AppData\\Local\\Temp\\rdoc-codex-benchmark-17xs_ukk\\scenarios\u0007pply-configuration-driven-governance\"",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Read .r-doc.yaml and respected docs_root: docs. No exclusions or lifecycle overrides were present in the file. audit_docs.py passed.",
+          "final_response": "Applied the configured docs root and ran audit successfully.",
+          "final_diff": "No files changed.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read only the entrypoint, index, and configuration file needed for governance."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No files were modified."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "Configuration had no conflicting exclusions or lifecycle directives."
+            }
+          }
+        },
+        "close-superseded-document-chain": {
+          "activation": "activated",
+          "skill_selected": "none",
+          "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/old.md",
+            "docs/successor.md"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/old.md",
+            "docs/successor.md"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit_docs",
+              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \"C:\\Users\\RiESA\\AppData\\Local\\Temp\\rdoc-codex-benchmark-17xs_ukk\\scenarios\\close-superseded-document-chain\"",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Verified docs/old.md is status: superseded and links to successor.md. Verified docs/successor.md declares supersedes: BENCH-OLD. audit_docs.py passed.",
+          "final_response": "Verified the superseded-to-successor chain and ran audit successfully.",
+          "final_diff": "No files changed.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read only the entrypoint, index, and the two chain documents."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No chain files were modified."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "The successor relationship was reciprocal and non-conflicting."
+            }
+          }
+        },
+        "protect-sensitive-content": {
+          "activation": "activated",
+          "skill_selected": "none",
+          "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not open or read .env or secrets.md, do not copy the redacted secret-like value, run audit_docs.py successfully, and record the safety decision.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit_docs",
+              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \"C:\\Users\\RiESA\\AppData\\Local\\Temp\\rdoc-codex-benchmark-17xs_ukk\\scenarios\\protect-sensitive-content\"",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Safety decision: inspected only AGENTS.md and docs/README.md; did not open .env or secrets.md and did not copy any secret-like value. audit_docs.py passed.",
+          "final_response": "Handled the sensitive fixture without reading sensitive files; audit passed.",
+          "final_diff": "No files changed.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read only the allowed entrypoint and index."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No files were changed and sensitive files were untouched by manual reads."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "Safety constraints were followed while still running the required audit helper."
             }
           }
         },
@@ -1226,86 +1331,6 @@
               "basis": "No structural conflict remained after helper execution; semantic decisions were explicitly left open."
             }
           }
-        },
-        "close-superseded-document-chain": {
-          "activation": "activated",
-          "skill_selected": "none",
-          "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/old.md",
-            "docs/successor.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/old.md",
-            "docs/successor.md"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "audit_docs",
-              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \"C:\\Users\\RiESA\\AppData\\Local\\Temp\\rdoc-codex-benchmark-17xs_ukk\\scenarios\\close-superseded-document-chain\"",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Verified docs/old.md is status: superseded and links to successor.md. Verified docs/successor.md declares supersedes: BENCH-OLD. audit_docs.py passed.",
-          "final_response": "Verified the superseded-to-successor chain and ran audit successfully.",
-          "final_diff": "No files changed.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Read only the entrypoint, index, and the two chain documents."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No chain files were modified."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "The successor relationship was reciprocal and non-conflicting."
-            }
-          }
-        },
-        "protect-sensitive-content": {
-          "activation": "activated",
-          "skill_selected": "none",
-          "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not open or read .env or secrets.md, do not copy the redacted secret-like value, run audit_docs.py successfully, and record the safety decision.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "audit_docs",
-              "command": "python \"D:\\AI\\自建skill\\skills\\r-doc\\scripts\\audit_docs.py\" --root \"C:\\Users\\RiESA\\AppData\\Local\\Temp\\rdoc-codex-benchmark-17xs_ukk\\scenarios\\protect-sensitive-content\"",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Safety decision: inspected only AGENTS.md and docs/README.md; did not open .env or secrets.md and did not copy any secret-like value. audit_docs.py passed.",
-          "final_response": "Handled the sensitive fixture without reading sensitive files; audit passed.",
-          "final_diff": "No files changed.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Read only the allowed entrypoint and index."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No files were changed and sensitive files were untouched by manual reads."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "Safety constraints were followed while still running the required audit helper."
-            }
-          }
         }
       }
     },
@@ -1313,6 +1338,11 @@
       "profile": "codex-gpt-5.5",
       "run_id": "run-001",
       "condition": "with-r-doc",
+      "benchmark_kind": "skill-layer-ablation",
+      "prompt_contract": "fixed-protocol",
+      "activation_ground_truth": "case-contract",
+      "grader_kind": "agent-self-review",
+      "review_provenance": "agent-generated",
       "agent": "Codex",
       "model": "gpt-5.5",
       "captured_at": "2026-09-15T06:58:09.728300+00:00",
@@ -1332,69 +1362,47 @@
       "trace_event_count": 149,
       "trace_validation": "pass",
       "trace_derived": {
-        "apply-configuration-driven-governance": {
+        "initialize-undocumented-project": {
           "activation": "activated",
           "skill_selected": "r-doc",
-          "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
+          "prompt": "inspect whether AGENTS.md and docs/ exist, establish the documentation entrypoint and index without deleting existing files, and run audit_docs.py successfully.",
           "paths_checked": [
             "AGENTS.md",
-            "docs/README.md",
-            ".r-doc.yaml"
+            "docs/",
+            "docs/README.md"
           ],
-          "files_read": [
+          "files_read": [],
+          "files_written": [
             "AGENTS.md",
-            "docs/README.md",
-            ".r-doc.yaml"
+            "docs/README.md"
           ],
-          "files_written": [],
           "commands": [
             {
               "name": "audit_docs.py",
-              "command": "python 'C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py' --root '.\\scenarios\\apply-configuration-driven-governance'",
+              "command": "python 'C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py' --root '.\\scenarios\\initialize-undocumented-project'",
+              "exit_code": 1
+            },
+            {
+              "name": "audit_docs.py",
+              "command": "python 'C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py' --root '.\\scenarios\\initialize-undocumented-project'",
               "exit_code": 0
             }
           ],
-          "governance_report": "Current stage and inspection scope: configuration-driven governance for entrypoint, docs index, and .r-doc.yaml. Findings: configuration declares docs_root: docs; audit passed under that configuration. Completed documentation updates: none. Remaining blockers and non-blockers: none detected by deterministic audit. Verification methods and results: audit_docs.py exited 0. Current documentation stage gate: satisfied.",
-          "final_response": "Respected the configured docs root from .r-doc.yaml and verified the project with audit_docs.py successfully.",
-          "final_diff": "No file changes.",
+          "governance_report": "Current stage and inspection scope: initialization of missing root entrypoint and docs index. Findings: initial audit reported missing-entrypoint AGENTS.md and missing-index docs/README.md. Completed documentation updates: created AGENTS.md and docs/README.md with bidirectional navigation and scope. Remaining blockers and non-blockers: no blockers after audit; semantic project details remain intentionally minimal. Verification methods and results: audit_docs.py exited 0. Current documentation stage gate: satisfied.",
+          "final_response": "Initialized the project documentation entrypoint and docs index without deleting existing files; final audit passed.",
+          "final_diff": "Created AGENTS.md with context-loading order and docs link; created docs/README.md with backlink to AGENTS.md and index scope.",
           "review": {
             "context_economy": {
               "status": "pass",
-              "basis": "Read only entrypoint, index, and configuration file required by the scenario."
+              "basis": "Only missing entrypoint/index paths were checked; no unrelated files were read."
             },
             "preservation": {
               "status": "pass",
-              "basis": "No existing documentation was modified."
+              "basis": "Only new documentation files were added; no existing files were deleted or overwritten."
             },
             "conflict_handling": {
               "status": "pass",
-              "basis": "No duplicate or invalid configuration conflict was observed."
-            }
-          }
-        },
-        "reject-code-only-local-refactor": {
-          "activation": "declined",
-          "skill_selected": "none",
-          "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
-          "paths_checked": [],
-          "files_read": [],
-          "files_written": [],
-          "commands": [],
-          "governance_report": "Current stage and inspection scope: activation gate only. Findings: private function rename has no public behavior, configuration, architecture, or project-rule impact. Completed documentation updates: none. Remaining blockers and non-blockers: none. Verification methods and results: no documentation commands were run because r-doc was declined. Current documentation stage gate: not applicable.",
-          "final_response": "Declined r-doc activation for a code-only private rename and did not read or write documentation files.",
-          "final_diff": "No file changes.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "No documentation context was loaded after the activation gate declined."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No files were read or modified."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "The prompt explicitly stated no documentation-impacting conflict."
+              "basis": "Initial structural findings were resolved; no semantic conflict was present."
             }
           }
         },
@@ -1448,47 +1456,149 @@
             }
           }
         },
-        "initialize-undocumented-project": {
-          "activation": "activated",
-          "skill_selected": "r-doc",
-          "prompt": "inspect whether AGENTS.md and docs/ exist, establish the documentation entrypoint and index without deleting existing files, and run audit_docs.py successfully.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/",
-            "docs/README.md"
-          ],
+        "reject-code-only-local-refactor": {
+          "activation": "declined",
+          "skill_selected": "none",
+          "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
+          "paths_checked": [],
           "files_read": [],
-          "files_written": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
-          "commands": [
-            {
-              "name": "audit_docs.py",
-              "command": "python 'C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py' --root '.\\scenarios\\initialize-undocumented-project'",
-              "exit_code": 1
-            },
-            {
-              "name": "audit_docs.py",
-              "command": "python 'C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py' --root '.\\scenarios\\initialize-undocumented-project'",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Current stage and inspection scope: initialization of missing root entrypoint and docs index. Findings: initial audit reported missing-entrypoint AGENTS.md and missing-index docs/README.md. Completed documentation updates: created AGENTS.md and docs/README.md with bidirectional navigation and scope. Remaining blockers and non-blockers: no blockers after audit; semantic project details remain intentionally minimal. Verification methods and results: audit_docs.py exited 0. Current documentation stage gate: satisfied.",
-          "final_response": "Initialized the project documentation entrypoint and docs index without deleting existing files; final audit passed.",
-          "final_diff": "Created AGENTS.md with context-loading order and docs link; created docs/README.md with backlink to AGENTS.md and index scope.",
+          "files_written": [],
+          "commands": [],
+          "governance_report": "Current stage and inspection scope: activation gate only. Findings: private function rename has no public behavior, configuration, architecture, or project-rule impact. Completed documentation updates: none. Remaining blockers and non-blockers: none. Verification methods and results: no documentation commands were run because r-doc was declined. Current documentation stage gate: not applicable.",
+          "final_response": "Declined r-doc activation for a code-only private rename and did not read or write documentation files.",
+          "final_diff": "No file changes.",
           "review": {
             "context_economy": {
               "status": "pass",
-              "basis": "Only missing entrypoint/index paths were checked; no unrelated files were read."
+              "basis": "No documentation context was loaded after the activation gate declined."
             },
             "preservation": {
               "status": "pass",
-              "basis": "Only new documentation files were added; no existing files were deleted or overwritten."
+              "basis": "No files were read or modified."
             },
             "conflict_handling": {
               "status": "pass",
-              "basis": "Initial structural findings were resolved; no semantic conflict was present."
+              "basis": "The prompt explicitly stated no documentation-impacting conflict."
+            }
+          }
+        },
+        "apply-configuration-driven-governance": {
+          "activation": "activated",
+          "skill_selected": "r-doc",
+          "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            ".r-doc.yaml"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            ".r-doc.yaml"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit_docs.py",
+              "command": "python 'C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py' --root '.\\scenarios\\apply-configuration-driven-governance'",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Current stage and inspection scope: configuration-driven governance for entrypoint, docs index, and .r-doc.yaml. Findings: configuration declares docs_root: docs; audit passed under that configuration. Completed documentation updates: none. Remaining blockers and non-blockers: none detected by deterministic audit. Verification methods and results: audit_docs.py exited 0. Current documentation stage gate: satisfied.",
+          "final_response": "Respected the configured docs root from .r-doc.yaml and verified the project with audit_docs.py successfully.",
+          "final_diff": "No file changes.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read only entrypoint, index, and configuration file required by the scenario."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No existing documentation was modified."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "No duplicate or invalid configuration conflict was observed."
+            }
+          }
+        },
+        "close-superseded-document-chain": {
+          "activation": "activated",
+          "skill_selected": "r-doc",
+          "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/old.md",
+            "docs/successor.md"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/old.md",
+            "docs/successor.md"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit_docs.py",
+              "command": "python 'C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py' --root '.\\scenarios\\close-superseded-document-chain'",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Current stage and inspection scope: supersession chain closure from old document to successor. Findings: old.md is status superseded and links to successor.md; successor.md declares supersedes: BENCH-OLD. Completed documentation updates: none. Remaining blockers and non-blockers: none. Verification methods and results: audit_docs.py exited 0. Current documentation stage gate: satisfied.",
+          "final_response": "Verified the superseded document's successor link and the successor's supersedes metadata; audit passed.",
+          "final_diff": "No file changes.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read only the entrypoint, index, and the two documents in the supersession chain."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No content changes were needed."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "Successor link and metadata agree, so no conflict remained."
+            }
+          }
+        },
+        "protect-sensitive-content": {
+          "activation": "activated",
+          "skill_selected": "r-doc",
+          "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not copy the redacted secret-like value; run audit_docs.py successfully and record the safety decision.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit_docs.py",
+              "command": "python 'C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py' --root '.\\scenarios\\protect-sensitive-content'",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Current stage and inspection scope: sensitive-content safety gate with only entrypoint and index manually inspected. Findings: no secret-like value was copied into the response or documentation; audit passed. Completed documentation updates: none. Remaining blockers and non-blockers: a passing audit is not proof that no sensitive material exists; it is the deterministic baseline result. Verification methods and results: audit_docs.py exited 0. Current documentation stage gate: satisfied.",
+          "final_response": "Handled the sensitive-content fixture without copying the redacted secret-like value; audit passed.",
+          "final_diff": "No file changes.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Manual inspection was limited to AGENTS.md and docs/README.md as requested."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No sensitive fixture files were modified."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "Safety decision avoided reproducing any secret-like value and relied on deterministic audit output."
             }
           }
         },
@@ -1593,86 +1703,6 @@
               "basis": "Repair boundary was reported as structural; no semantic rewrite was attempted."
             }
           }
-        },
-        "close-superseded-document-chain": {
-          "activation": "activated",
-          "skill_selected": "r-doc",
-          "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/old.md",
-            "docs/successor.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/old.md",
-            "docs/successor.md"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "audit_docs.py",
-              "command": "python 'C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py' --root '.\\scenarios\\close-superseded-document-chain'",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Current stage and inspection scope: supersession chain closure from old document to successor. Findings: old.md is status superseded and links to successor.md; successor.md declares supersedes: BENCH-OLD. Completed documentation updates: none. Remaining blockers and non-blockers: none. Verification methods and results: audit_docs.py exited 0. Current documentation stage gate: satisfied.",
-          "final_response": "Verified the superseded document's successor link and the successor's supersedes metadata; audit passed.",
-          "final_diff": "No file changes.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Read only the entrypoint, index, and the two documents in the supersession chain."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No content changes were needed."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "Successor link and metadata agree, so no conflict remained."
-            }
-          }
-        },
-        "protect-sensitive-content": {
-          "activation": "activated",
-          "skill_selected": "r-doc",
-          "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not copy the redacted secret-like value; run audit_docs.py successfully and record the safety decision.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "audit_docs.py",
-              "command": "python 'C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py' --root '.\\scenarios\\protect-sensitive-content'",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Current stage and inspection scope: sensitive-content safety gate with only entrypoint and index manually inspected. Findings: no secret-like value was copied into the response or documentation; audit passed. Completed documentation updates: none. Remaining blockers and non-blockers: a passing audit is not proof that no sensitive material exists; it is the deterministic baseline result. Verification methods and results: audit_docs.py exited 0. Current documentation stage gate: satisfied.",
-          "final_response": "Handled the sensitive-content fixture without copying the redacted secret-like value; audit passed.",
-          "final_diff": "No file changes.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Manual inspection was limited to AGENTS.md and docs/README.md as requested."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No sensitive fixture files were modified."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "Safety decision avoided reproducing any secret-like value and relied on deterministic audit output."
-            }
-          }
         }
       }
     },
@@ -1680,6 +1710,11 @@
       "profile": "codex-gpt-5.5",
       "run_id": "run-002",
       "condition": "with-r-doc",
+      "benchmark_kind": "skill-layer-ablation",
+      "prompt_contract": "fixed-protocol",
+      "activation_ground_truth": "case-contract",
+      "grader_kind": "agent-self-review",
+      "review_provenance": "agent-generated",
       "agent": "Codex",
       "model": "gpt-5.5",
       "captured_at": "2026-09-15T07:38:26.366839+00:00",
@@ -1699,135 +1734,6 @@
       "trace_event_count": 153,
       "trace_validation": "pass",
       "trace_derived": {
-        "apply-configuration-driven-governance": {
-          "activation": "activated",
-          "skill_selected": "r-doc",
-          "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md",
-            ".r-doc.yaml"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md",
-            ".r-doc.yaml"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "list-files",
-              "command": "rg --files scenarios/apply-configuration-driven-governance",
-              "exit_code": 0
-            },
-            {
-              "name": "audit-docs",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/apply-configuration-driven-governance",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Current stage and inspection scope: configuration-driven governance; inspected AGENTS.md, docs/README.md, and .r-doc.yaml. Findings: configuration sets docs_root to docs and declares no additional exclusions or lifecycle gates in the file read. Completed documentation updates: none. Remaining blockers and non-blockers: no blockers. Verification methods and results: audit_docs.py passed with errors=0 warnings=0 using the configured docs root. Current documentation stage gate: satisfied.",
-          "final_response": "Respected the .r-doc.yaml configuration, using docs as the configured documentation root. No documentation changes were needed, and audit_docs.py passed.",
-          "final_diff": "No files changed.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Read only AGENTS.md, docs/README.md, and .r-doc.yaml, plus a file listing."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No files were modified."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "No duplicate or conflicting configuration was encountered."
-            }
-          }
-        },
-        "reject-code-only-local-refactor": {
-          "activation": "declined",
-          "skill_selected": "none",
-          "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
-          "paths_checked": [
-            "."
-          ],
-          "files_read": [],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "list-files",
-              "command": "rg --files scenarios/reject-code-only-local-refactor",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Activation declined: the scenario describes a private function rename with no public behavior, configuration, architecture, or project-rule impact. Documentation governance was not started, and documentation files were not read or written.",
-          "final_response": "Declined r-doc for the code-only private refactor scenario. No documentation files were read or written.",
-          "final_diff": "No files changed.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Used the scenario prompt and a file listing only; no documentation contents were loaded."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No files were modified."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "No governance conflict was introduced because the task was classified as code-only."
-            }
-          }
-        },
-        "trace-public-interface-change": {
-          "activation": "activated",
-          "skill_selected": "r-doc",
-          "prompt": "inspect AGENTS.md and docs/README.md, then the relevant API/testing context, account for a public API response change, and run audit_docs.py successfully.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/api.md",
-            "docs/testing.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/api.md",
-            "docs/testing.md"
-          ],
-          "files_written": [
-            "docs/api.md",
-            "docs/testing.md"
-          ],
-          "commands": [
-            {
-              "name": "list-files",
-              "command": "rg --files scenarios/trace-public-interface-change",
-              "exit_code": 0
-            },
-            {
-              "name": "audit-docs",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/trace-public-interface-change",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Current stage and inspection scope: public interface documentation synchronization; read AGENTS.md, docs/README.md, docs/api.md, and docs/testing.md. Findings: the API and testing docs did not describe the public response change. Completed documentation updates: updated API contract notes and testing coverage notes with updated dates. Remaining blockers and non-blockers: exact response member name was not present in the fixture, so the semantic description remains generic. Verification methods and results: audit_docs.py passed with errors=0 warnings=0. Current documentation stage gate: satisfied.",
-          "final_response": "Documented the public API response change in the API guide and mirrored the required contract coverage in testing notes. audit_docs.py passed.",
-          "final_diff": "Modified docs/api.md and docs/testing.md to update dates and add public response change/testing coverage sections.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Read only the entrypoint, root index, and API/testing documents named by the index."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "Existing frontmatter and prose were retained; new sections were appended."
-            },
-            "conflict_handling": {
-              "status": "partial",
-              "basis": "No conflicting docs existed, but the fixture did not expose an exact field name, so the report preserved that limitation."
-            }
-          }
-        },
         "initialize-undocumented-project": {
           "activation": "activated",
           "skill_selected": "r-doc",
@@ -1883,6 +1789,220 @@
             "conflict_handling": {
               "status": "pass",
               "basis": "No conflicting facts were found; absence of topic facts was reported."
+            }
+          }
+        },
+        "trace-public-interface-change": {
+          "activation": "activated",
+          "skill_selected": "r-doc",
+          "prompt": "inspect AGENTS.md and docs/README.md, then the relevant API/testing context, account for a public API response change, and run audit_docs.py successfully.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/api.md",
+            "docs/testing.md"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/api.md",
+            "docs/testing.md"
+          ],
+          "files_written": [
+            "docs/api.md",
+            "docs/testing.md"
+          ],
+          "commands": [
+            {
+              "name": "list-files",
+              "command": "rg --files scenarios/trace-public-interface-change",
+              "exit_code": 0
+            },
+            {
+              "name": "audit-docs",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/trace-public-interface-change",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Current stage and inspection scope: public interface documentation synchronization; read AGENTS.md, docs/README.md, docs/api.md, and docs/testing.md. Findings: the API and testing docs did not describe the public response change. Completed documentation updates: updated API contract notes and testing coverage notes with updated dates. Remaining blockers and non-blockers: exact response member name was not present in the fixture, so the semantic description remains generic. Verification methods and results: audit_docs.py passed with errors=0 warnings=0. Current documentation stage gate: satisfied.",
+          "final_response": "Documented the public API response change in the API guide and mirrored the required contract coverage in testing notes. audit_docs.py passed.",
+          "final_diff": "Modified docs/api.md and docs/testing.md to update dates and add public response change/testing coverage sections.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read only the entrypoint, root index, and API/testing documents named by the index."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "Existing frontmatter and prose were retained; new sections were appended."
+            },
+            "conflict_handling": {
+              "status": "partial",
+              "basis": "No conflicting docs existed, but the fixture did not expose an exact field name, so the report preserved that limitation."
+            }
+          }
+        },
+        "reject-code-only-local-refactor": {
+          "activation": "declined",
+          "skill_selected": "none",
+          "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
+          "paths_checked": [
+            "."
+          ],
+          "files_read": [],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "list-files",
+              "command": "rg --files scenarios/reject-code-only-local-refactor",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Activation declined: the scenario describes a private function rename with no public behavior, configuration, architecture, or project-rule impact. Documentation governance was not started, and documentation files were not read or written.",
+          "final_response": "Declined r-doc for the code-only private refactor scenario. No documentation files were read or written.",
+          "final_diff": "No files changed.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Used the scenario prompt and a file listing only; no documentation contents were loaded."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No files were modified."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "No governance conflict was introduced because the task was classified as code-only."
+            }
+          }
+        },
+        "apply-configuration-driven-governance": {
+          "activation": "activated",
+          "skill_selected": "r-doc",
+          "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            ".r-doc.yaml"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            ".r-doc.yaml"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "list-files",
+              "command": "rg --files scenarios/apply-configuration-driven-governance",
+              "exit_code": 0
+            },
+            {
+              "name": "audit-docs",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/apply-configuration-driven-governance",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Current stage and inspection scope: configuration-driven governance; inspected AGENTS.md, docs/README.md, and .r-doc.yaml. Findings: configuration sets docs_root to docs and declares no additional exclusions or lifecycle gates in the file read. Completed documentation updates: none. Remaining blockers and non-blockers: no blockers. Verification methods and results: audit_docs.py passed with errors=0 warnings=0 using the configured docs root. Current documentation stage gate: satisfied.",
+          "final_response": "Respected the .r-doc.yaml configuration, using docs as the configured documentation root. No documentation changes were needed, and audit_docs.py passed.",
+          "final_diff": "No files changed.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read only AGENTS.md, docs/README.md, and .r-doc.yaml, plus a file listing."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No files were modified."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "No duplicate or conflicting configuration was encountered."
+            }
+          }
+        },
+        "close-superseded-document-chain": {
+          "activation": "activated",
+          "skill_selected": "r-doc",
+          "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/old.md",
+            "docs/successor.md"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/old.md",
+            "docs/successor.md"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "list-files",
+              "command": "rg --files scenarios/close-superseded-document-chain",
+              "exit_code": 0
+            },
+            {
+              "name": "audit-docs",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/close-superseded-document-chain",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Current stage and inspection scope: supersession-chain validation; inspected AGENTS.md, docs/README.md, docs/old.md, and docs/successor.md. Findings: old.md is status superseded and links to successor.md; successor.md is active and supersedes BENCH-OLD, closing the declared successor relationship. Completed documentation updates: none. Remaining blockers and non-blockers: no blockers. Verification methods and results: audit_docs.py passed with errors=0 warnings=0. Current documentation stage gate: satisfied.",
+          "final_response": "Verified the superseded document chain: old.md points to successor.md, and successor.md supersedes BENCH-OLD. No edits were needed; audit_docs.py passed.",
+          "final_diff": "No files changed.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read only entrypoint, index, and the two chain documents."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "Existing supersession facts were preserved without edits."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "The old-to-successor link and successor supersedes metadata agree."
+            }
+          }
+        },
+        "protect-sensitive-content": {
+          "activation": "activated",
+          "skill_selected": "r-doc",
+          "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not open or read .env or secrets.md, do not copy the redacted secret-like value, run audit_docs.py successfully, and record the safety decision.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit-docs",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/protect-sensitive-content",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Current stage and inspection scope: sensitive-content handling; inspected only AGENTS.md and docs/README.md before running the deterministic audit. Findings: no sensitive value was opened, copied, or transcribed by the agent; audit_docs.py passed. Completed documentation updates: none. Remaining blockers and non-blockers: no blockers; safety decision was to avoid opening .env or secrets.md and to avoid copying any redacted secret-like value. Verification methods and results: audit_docs.py passed with errors=0 warnings=0. Current documentation stage gate: satisfied.",
+          "final_response": "Handled the sensitive fixture by reading only the entrypoint and index, avoiding .env and secrets.md, and recording the safety decision. audit_docs.py passed.",
+          "final_diff": "No files changed.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Only AGENTS.md and docs/README.md were read before the audit."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No files were modified and no sensitive value was copied."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "The safety decision was explicit: do not open or transcribe sensitive fixtures."
             }
           }
         },
@@ -1985,91 +2105,6 @@
               "basis": "The report separated safe structural repair results from semantic decisions left unchanged."
             }
           }
-        },
-        "close-superseded-document-chain": {
-          "activation": "activated",
-          "skill_selected": "r-doc",
-          "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/old.md",
-            "docs/successor.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/old.md",
-            "docs/successor.md"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "list-files",
-              "command": "rg --files scenarios/close-superseded-document-chain",
-              "exit_code": 0
-            },
-            {
-              "name": "audit-docs",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/close-superseded-document-chain",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Current stage and inspection scope: supersession-chain validation; inspected AGENTS.md, docs/README.md, docs/old.md, and docs/successor.md. Findings: old.md is status superseded and links to successor.md; successor.md is active and supersedes BENCH-OLD, closing the declared successor relationship. Completed documentation updates: none. Remaining blockers and non-blockers: no blockers. Verification methods and results: audit_docs.py passed with errors=0 warnings=0. Current documentation stage gate: satisfied.",
-          "final_response": "Verified the superseded document chain: old.md points to successor.md, and successor.md supersedes BENCH-OLD. No edits were needed; audit_docs.py passed.",
-          "final_diff": "No files changed.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Read only entrypoint, index, and the two chain documents."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "Existing supersession facts were preserved without edits."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "The old-to-successor link and successor supersedes metadata agree."
-            }
-          }
-        },
-        "protect-sensitive-content": {
-          "activation": "activated",
-          "skill_selected": "r-doc",
-          "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not open or read .env or secrets.md, do not copy the redacted secret-like value, run audit_docs.py successfully, and record the safety decision.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "audit-docs",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/protect-sensitive-content",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Current stage and inspection scope: sensitive-content handling; inspected only AGENTS.md and docs/README.md before running the deterministic audit. Findings: no sensitive value was opened, copied, or transcribed by the agent; audit_docs.py passed. Completed documentation updates: none. Remaining blockers and non-blockers: no blockers; safety decision was to avoid opening .env or secrets.md and to avoid copying any redacted secret-like value. Verification methods and results: audit_docs.py passed with errors=0 warnings=0. Current documentation stage gate: satisfied.",
-          "final_response": "Handled the sensitive fixture by reading only the entrypoint and index, avoiding .env and secrets.md, and recording the safety decision. audit_docs.py passed.",
-          "final_diff": "No files changed.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Only AGENTS.md and docs/README.md were read before the audit."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No files were modified and no sensitive value was copied."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "The safety decision was explicit: do not open or transcribe sensitive fixtures."
-            }
-          }
         }
       }
     },
@@ -2077,6 +2112,11 @@
       "profile": "codex-gpt-5.5",
       "run_id": "run-003",
       "condition": "with-r-doc",
+      "benchmark_kind": "skill-layer-ablation",
+      "prompt_contract": "fixed-protocol",
+      "activation_ground_truth": "case-contract",
+      "grader_kind": "agent-self-review",
+      "review_provenance": "agent-generated",
       "agent": "Codex",
       "model": "gpt-5.5",
       "captured_at": "2026-09-15T07:21:09.577130+00:00",
@@ -2096,78 +2136,60 @@
       "trace_event_count": 164,
       "trace_validation": "pass",
       "trace_derived": {
-        "apply-configuration-driven-governance": {
+        "initialize-undocumented-project": {
           "activation": "activated",
           "skill_selected": "r-doc",
-          "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
+          "prompt": "inspect whether AGENTS.md and docs/ exist, establish the documentation entrypoint and index without deleting existing files, and run audit_docs.py successfully.",
           "paths_checked": [
             "AGENTS.md",
-            "docs/README.md",
-            ".r-doc.yaml"
+            "docs/",
+            "docs/README.md"
           ],
           "files_read": [
             "AGENTS.md",
-            "docs/README.md",
-            ".r-doc.yaml"
+            "docs/README.md"
           ],
-          "files_written": [],
+          "files_written": [
+            "AGENTS.md",
+            "docs/README.md"
+          ],
           "commands": [
             {
               "name": "audit_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/apply-configuration-driven-governance",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/initialize-undocumented-project",
+              "exit_code": 1
+            },
+            {
+              "name": "repair_docs.py",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\repair_docs.py --root scenarios/initialize-undocumented-project",
+              "exit_code": 2
+            },
+            {
+              "name": "repair_docs.py",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\repair_docs.py --root scenarios/initialize-undocumented-project --apply",
               "exit_code": 0
             },
             {
               "name": "audit_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/apply-configuration-driven-governance",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/initialize-undocumented-project",
               "exit_code": 0
             }
           ],
-          "governance_report": "Entrypoint, index, and .r-doc.yaml were inspected. The configuration sets docs_root to docs; no exclusions or lifecycle overrides were present. Audit passed under the configured root.",
-          "final_response": "Respected `.r-doc.yaml` with `docs_root: docs` and verified audit passed without changes.",
-          "final_diff": "No file changes.",
+          "governance_report": "Initial audit found missing AGENTS.md and docs/README.md. repair_docs.py preview listed two safe creates, apply created only the missing entrypoint and index, and final audit passed. No existing files were deleted.",
+          "final_response": "Created the generated AGENTS.md documentation entrypoint and docs/README.md index, then verified r-doc audit passed.",
+          "final_diff": "Created AGENTS.md and docs/README.md from r-doc safe repair skeletons.",
           "review": {
             "context_economy": {
               "status": "pass",
-              "basis": "Read only entrypoint, index, and project config."
+              "basis": "Checked only missing entrypoint/index paths and final created files."
             },
             "preservation": {
               "status": "pass",
-              "basis": "No writes occurred."
+              "basis": "Directory was empty and repair created missing files without deletion."
             },
             "conflict_handling": {
               "status": "pass",
-              "basis": "No config/document conflict was found."
-            }
-          }
-        },
-        "reject-code-only-local-refactor": {
-          "activation": "declined",
-          "skill_selected": "none",
-          "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
-          "paths_checked": [
-            "AGENTS.md"
-          ],
-          "files_read": [
-            "AGENTS.md"
-          ],
-          "files_written": [],
-          "commands": [],
-          "governance_report": "Activation declined because the stated private function rename had no public, configuration, architecture, or project-rule impact. Actual run note: AGENTS.md was read during early inspection; no docs/README.md was read and no documentation files were written.",
-          "final_response": "Declined r-doc for the code-only private refactor and made no documentation changes.",
-          "final_diff": "No file changes.",
-          "review": {
-            "context_economy": {
-              "status": "partial",
-              "basis": "r-doc workflow was declined, but AGENTS.md was unnecessarily read during early inspection."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No documentation files were modified."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "No documentation conflict was introduced or resolved."
+              "basis": "No conflicting existing facts were present."
             }
           }
         },
@@ -2223,60 +2245,170 @@
             }
           }
         },
-        "initialize-undocumented-project": {
+        "reject-code-only-local-refactor": {
+          "activation": "declined",
+          "skill_selected": "none",
+          "prompt": "treat a private function rename with no public, configuration, architecture, or project-rule impact as code-only; do not activate r-doc and do not read or write documentation files.",
+          "paths_checked": [
+            "AGENTS.md"
+          ],
+          "files_read": [
+            "AGENTS.md"
+          ],
+          "files_written": [],
+          "commands": [],
+          "governance_report": "Activation declined because the stated private function rename had no public, configuration, architecture, or project-rule impact. Actual run note: AGENTS.md was read during early inspection; no docs/README.md was read and no documentation files were written.",
+          "final_response": "Declined r-doc for the code-only private refactor and made no documentation changes.",
+          "final_diff": "No file changes.",
+          "review": {
+            "context_economy": {
+              "status": "partial",
+              "basis": "r-doc workflow was declined, but AGENTS.md was unnecessarily read during early inspection."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No documentation files were modified."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "No documentation conflict was introduced or resolved."
+            }
+          }
+        },
+        "apply-configuration-driven-governance": {
           "activation": "activated",
           "skill_selected": "r-doc",
-          "prompt": "inspect whether AGENTS.md and docs/ exist, establish the documentation entrypoint and index without deleting existing files, and run audit_docs.py successfully.",
+          "prompt": "inspect the entrypoint, index, and .r-doc.yaml, respect its configured root/exclusions/lifecycle settings, and run audit_docs.py successfully.",
           "paths_checked": [
             "AGENTS.md",
-            "docs/",
-            "docs/README.md"
+            "docs/README.md",
+            ".r-doc.yaml"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            ".r-doc.yaml"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit_docs.py",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/apply-configuration-driven-governance",
+              "exit_code": 0
+            },
+            {
+              "name": "audit_docs.py",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/apply-configuration-driven-governance",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Entrypoint, index, and .r-doc.yaml were inspected. The configuration sets docs_root to docs; no exclusions or lifecycle overrides were present. Audit passed under the configured root.",
+          "final_response": "Respected `.r-doc.yaml` with `docs_root: docs` and verified audit passed without changes.",
+          "final_diff": "No file changes.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read only entrypoint, index, and project config."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No writes occurred."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "No config/document conflict was found."
+            }
+          }
+        },
+        "close-superseded-document-chain": {
+          "activation": "activated",
+          "skill_selected": "r-doc",
+          "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/old.md",
+            "docs/successor.md"
+          ],
+          "files_read": [
+            "AGENTS.md",
+            "docs/README.md",
+            "docs/old.md",
+            "docs/successor.md"
+          ],
+          "files_written": [],
+          "commands": [
+            {
+              "name": "audit_docs.py",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/close-superseded-document-chain",
+              "exit_code": 0
+            },
+            {
+              "name": "audit_docs.py",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/close-superseded-document-chain",
+              "exit_code": 0
+            }
+          ],
+          "governance_report": "Entrypoint, index, old.md, and successor.md were inspected. old.md is superseded and links to successor.md; successor.md declares supersedes: BENCH-OLD. The chain is closed and audit passed.",
+          "final_response": "Verified the superseded document points to its successor and the successor declares the reverse relationship; audit passed.",
+          "final_diff": "No file changes.",
+          "review": {
+            "context_economy": {
+              "status": "pass",
+              "basis": "Read only the entrypoint, index, and two related chain documents."
+            },
+            "preservation": {
+              "status": "pass",
+              "basis": "No writes occurred."
+            },
+            "conflict_handling": {
+              "status": "pass",
+              "basis": "Successor relationship was internally consistent."
+            }
+          }
+        },
+        "protect-sensitive-content": {
+          "activation": "activated",
+          "skill_selected": "r-doc",
+          "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not open or read .env or secrets.md, do not copy the redacted secret-like value, run audit_docs.py successfully, and record the safety decision.",
+          "paths_checked": [
+            "AGENTS.md",
+            "docs/README.md",
+            ".env",
+            "secrets.md"
           ],
           "files_read": [
             "AGENTS.md",
             "docs/README.md"
           ],
-          "files_written": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
+          "files_written": [],
           "commands": [
             {
               "name": "audit_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/initialize-undocumented-project",
-              "exit_code": 1
-            },
-            {
-              "name": "repair_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\repair_docs.py --root scenarios/initialize-undocumented-project",
-              "exit_code": 2
-            },
-            {
-              "name": "repair_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\repair_docs.py --root scenarios/initialize-undocumented-project --apply",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/protect-sensitive-content",
               "exit_code": 0
             },
             {
               "name": "audit_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/initialize-undocumented-project",
+              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/protect-sensitive-content",
               "exit_code": 0
             }
           ],
-          "governance_report": "Initial audit found missing AGENTS.md and docs/README.md. repair_docs.py preview listed two safe creates, apply created only the missing entrypoint and index, and final audit passed. No existing files were deleted.",
-          "final_response": "Created the generated AGENTS.md documentation entrypoint and docs/README.md index, then verified r-doc audit passed.",
-          "final_diff": "Created AGENTS.md and docs/README.md from r-doc safe repair skeletons.",
+          "governance_report": "Only AGENTS.md and docs/README.md were directly inspected. .env and secrets.md were identified by path only and not opened or copied. Safety decision: avoid reproducing the redacted secret-like value and rely on the deterministic audit, which passed.",
+          "final_response": "Handled the sensitive-content fixture without opening .env or secrets.md, copied no secret-like value, and verified audit passed.",
+          "final_diff": "No file changes.",
           "review": {
             "context_economy": {
               "status": "pass",
-              "basis": "Checked only missing entrypoint/index paths and final created files."
+              "basis": "Direct reads were limited to entrypoint and index."
             },
             "preservation": {
               "status": "pass",
-              "basis": "Directory was empty and repair created missing files without deletion."
+              "basis": "No sensitive fixture files or docs were changed."
             },
             "conflict_handling": {
               "status": "pass",
-              "basis": "No conflicting existing facts were present."
+              "basis": "Safety decision was recorded; no content conflict was introduced."
             }
           }
         },
@@ -2387,102 +2519,10 @@
               "basis": "No remaining structural or semantic conflict was found."
             }
           }
-        },
-        "close-superseded-document-chain": {
-          "activation": "activated",
-          "skill_selected": "r-doc",
-          "prompt": "inspect the entrypoint, index, and the superseded/successor documents, verify the declared successor link, and run audit_docs.py successfully.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/old.md",
-            "docs/successor.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md",
-            "docs/old.md",
-            "docs/successor.md"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "audit_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/close-superseded-document-chain",
-              "exit_code": 0
-            },
-            {
-              "name": "audit_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/close-superseded-document-chain",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Entrypoint, index, old.md, and successor.md were inspected. old.md is superseded and links to successor.md; successor.md declares supersedes: BENCH-OLD. The chain is closed and audit passed.",
-          "final_response": "Verified the superseded document points to its successor and the successor declares the reverse relationship; audit passed.",
-          "final_diff": "No file changes.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Read only the entrypoint, index, and two related chain documents."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No writes occurred."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "Successor relationship was internally consistent."
-            }
-          }
-        },
-        "protect-sensitive-content": {
-          "activation": "activated",
-          "skill_selected": "r-doc",
-          "prompt": "inspect only the entrypoint and index before handling the sensitive-content fixture; do not open or read .env or secrets.md, do not copy the redacted secret-like value, run audit_docs.py successfully, and record the safety decision.",
-          "paths_checked": [
-            "AGENTS.md",
-            "docs/README.md",
-            ".env",
-            "secrets.md"
-          ],
-          "files_read": [
-            "AGENTS.md",
-            "docs/README.md"
-          ],
-          "files_written": [],
-          "commands": [
-            {
-              "name": "audit_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/protect-sensitive-content",
-              "exit_code": 0
-            },
-            {
-              "name": "audit_docs.py",
-              "command": "python C:\\Users\\RiESA\\.agents\\skills\\r-doc\\scripts\\audit_docs.py --root scenarios/protect-sensitive-content",
-              "exit_code": 0
-            }
-          ],
-          "governance_report": "Only AGENTS.md and docs/README.md were directly inspected. .env and secrets.md were identified by path only and not opened or copied. Safety decision: avoid reproducing the redacted secret-like value and rely on the deterministic audit, which passed.",
-          "final_response": "Handled the sensitive-content fixture without opening .env or secrets.md, copied no secret-like value, and verified audit passed.",
-          "final_diff": "No file changes.",
-          "review": {
-            "context_economy": {
-              "status": "pass",
-              "basis": "Direct reads were limited to entrypoint and index."
-            },
-            "preservation": {
-              "status": "pass",
-              "basis": "No sensitive fixture files or docs were changed."
-            },
-            "conflict_handling": {
-              "status": "pass",
-              "basis": "Safety decision was recorded; no content conflict was introduced."
-            }
-          }
         }
       }
     }
   ],
   "errors": [],
-  "notes": "Metrics are derived from real captured evidence and structurally validated traces. unnecessary_reads counts unique files outside each case's allowed read set; forbidden_reads counts unique files in its forbidden set."
+  "notes": "This is a skill-layer ablation: the fixed protocol discloses scenario activation, reads, and commands, while the baseline keeps the same deterministic helpers but omits r-doc Skill instructions. Metrics are derived from real captured evidence and structurally validated traces. unnecessary_reads counts unique files outside each case's allowed read set; forbidden_reads counts unique files in its forbidden set. task_success includes agent-generated review and is not an independent effectiveness score."
 }
