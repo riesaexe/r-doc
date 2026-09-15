@@ -17,5 +17,6 @@ updated: 2026-09-14
 
 1. [开发与验证流程](workflow.md)
 2. [可复现验证记录](verification-report.md)
+3. [Agent benchmark 与性能基线](benchmarks.md)
 
 返回：[文档总索引](../README.md) · [项目入口](../../AGENTS.md)

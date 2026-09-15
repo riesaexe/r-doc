@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -10,15 +11,47 @@ from rdoc.security import SECRET_PATTERNS, is_safe_example
 
 
 SCORE_VALUES = {"pass": 1.0, "partial": 0.5, "fail": 0.0}
-MACHINE_RULE_CHECKS = {
-    "activation_boundary": {"activation_matches"},
-    "deterministic_verification": {
+MACHINE_RULE_BINDINGS = {
+    "activation_boundary": ("activation_matches",),
+    "deterministic_verification": (
         "required_paths_present",
         "required_files_present",
         "required_commands_ordered_and_successful",
-    },
-    "safety": {"no_unsafe_secret_matches"},
-    "repair_discipline": {"required_commands_ordered_and_successful"},
+    ),
+    "safety": ("no_unsafe_secret_matches",),
+    "repair_discipline": ("required_commands_ordered_and_successful",),
+}
+
+
+MachineCheck = Callable[[dict[str, bool]], bool]
+
+
+def _activation_matches(values: dict[str, bool]) -> bool:
+    return values["activation_ok"]
+
+
+def _required_paths_present(values: dict[str, bool]) -> bool:
+    return values["paths_ok"]
+
+
+def _required_files_present(values: dict[str, bool]) -> bool:
+    return values["reads_ok"]
+
+
+def _required_commands_ordered_and_successful(values: dict[str, bool]) -> bool:
+    return values["commands_ok"]
+
+
+def _no_unsafe_secret_matches(values: dict[str, bool]) -> bool:
+    return not values["evidence_has_secret"]
+
+
+MACHINE_CHECK_IMPLEMENTATIONS: dict[str, MachineCheck] = {
+    "activation_matches": _activation_matches,
+    "required_paths_present": _required_paths_present,
+    "required_files_present": _required_files_present,
+    "required_commands_ordered_and_successful": _required_commands_ordered_and_successful,
+    "no_unsafe_secret_matches": _no_unsafe_secret_matches,
 }
 
 
@@ -27,6 +60,35 @@ def load_json(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError(f"JSON root must be an object: {path}")
     return value
+
+
+def _validate_machine_rule_contract(machine_rules: object, path: Path) -> None:
+    if not isinstance(machine_rules, dict):
+        raise ValueError(f"eval machine_rules must be an object: {path}")
+
+    bound_dimensions = set(MACHINE_RULE_BINDINGS)
+    if set(machine_rules) != bound_dimensions:
+        raise ValueError(f"eval machine rule dimensions are out of sync with code: {path}")
+
+    bound_checks = {check for checks in MACHINE_RULE_BINDINGS.values() for check in checks}
+    implemented_checks = set(MACHINE_CHECK_IMPLEMENTATIONS)
+    if implemented_checks != bound_checks:
+        raise ValueError(f"machine check implementation registry is out of sync with code bindings: {path}")
+
+    for dimension, expected_checks in MACHINE_RULE_BINDINGS.items():
+        rule = machine_rules[dimension]
+        checks = rule.get("checks") if isinstance(rule, dict) else None
+        if not isinstance(checks, list) or len(checks) != len(set(checks)) or set(checks) != set(expected_checks):
+            raise ValueError(f"eval machine rule {dimension} is out of sync with code: {path}")
+        if not all(isinstance(check, str) and check in implemented_checks for check in checks):
+            raise ValueError(f"eval machine rule {dimension} contains an unimplemented check: {path}")
+        if (
+            not isinstance(rule, dict)
+            or rule.get("type") != "all"
+            or not isinstance(rule.get("description"), str)
+            or not rule["description"].strip()
+        ):
+            raise ValueError(f"eval machine rule {dimension} is invalid: {path}")
 
 
 def load_cases(path: Path) -> dict[str, Any]:
@@ -53,19 +115,7 @@ def load_cases(path: Path) -> dict[str, Any]:
     machine_rules = cases["machine_rules"]
     if set(machine_rules) != machine_dimensions:
         raise ValueError(f"eval machine rule partition is invalid: {path}")
-    for dimension, expected_checks in MACHINE_RULE_CHECKS.items():
-        if dimension not in machine_dimensions:
-            continue
-        rule = machine_rules.get(dimension)
-        checks = rule.get("checks") if isinstance(rule, dict) else None
-        if (
-            not isinstance(rule, dict)
-            or rule.get("type") != "all"
-            or set(checks or ()) != expected_checks
-            or not isinstance(rule.get("description"), str)
-            or not rule["description"].strip()
-        ):
-            raise ValueError(f"eval machine rule {dimension} is invalid: {path}")
+    _validate_machine_rule_contract(machine_rules, path)
     for case in cases["scenarios"]:
         if not isinstance(case, dict) or not isinstance(case.get("id"), str) or not case["id"].strip():
             raise ValueError(f"eval scenario must have a non-empty id: {path}")
@@ -231,12 +281,16 @@ def evaluate(cases: dict[str, Any], evidence: dict[str, Any]) -> dict[str, Any]:
         for dimension in unexpected_reviews:
             scenario_errors.append(f"unexpected review dimension: {dimension}")
 
+        check_values = {
+            "activation_ok": activation_ok,
+            "paths_ok": paths_ok,
+            "reads_ok": reads_ok,
+            "commands_ok": commands_ok,
+            "evidence_has_secret": _evidence_contains_secret(item),
+        }
         available_checks = {
-            "activation_matches": activation_ok,
-            "required_paths_present": paths_ok,
-            "required_files_present": reads_ok,
-            "required_commands_ordered_and_successful": commands_ok,
-            "no_unsafe_secret_matches": not _evidence_contains_secret(item),
+            name: implementation(check_values)
+            for name, implementation in MACHINE_CHECK_IMPLEMENTATIONS.items()
         }
         machine_checks = {
             dimension: "pass"

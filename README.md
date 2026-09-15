@@ -198,6 +198,18 @@ docs/
 - Default to maintaining docs, indexes, metadata, and documentation comments, not business code;
 - Do not declare a development stage complete while its documentation remains unsynchronized.
 
+## What `0.2.12` adds (unreleased)
+
+This development update moves evaluation from schema readiness toward empirical measurement:
+
+| Improvement | What it does | Safety boundary |
+| --- | --- | --- |
+| Real benchmark contract | Adds `benchmarks/` run metadata, captured-trace requirements, validated results, and profile aggregation for r-doc and no-r-doc conditions. | No real Agent score is claimed until captured evidence and trace files are present. |
+| Bound machine rules | Binds every `machine_rules` check identifier to a code registry and rejects additions, removals, or renames on either side. | The binding proves rule wiring, not semantic correctness of a model's interpretation. |
+| Audit performance baseline | Measures 100, 1000, and 5000 Markdown-document fixtures with median and p95 wall-clock times. | Measurements are local trend data, not a CI hard threshold. |
+
+The first benchmark summary is intentionally `pending` until real Codex runs and a no-r-doc baseline are captured.
+
 ## What `0.2.11` adds
 
 This maintenance update makes Agent evaluation evidence directly runnable and makes machine scoring rules explicit:

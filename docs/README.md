@@ -22,6 +22,7 @@
 | [开发文档索引](development/README.md) | 开发文档入口 | active |
 | [开发与验证流程](development/workflow.md) | 日常修改、校验和 QA | active |
 | [可复现验证记录](development/verification-report.md) | 当前源副本的验证证据和限制 | active |
+| [Agent benchmark 与性能基线](development/benchmarks.md) | 真实 Agent 运行记录和审计规模基线 | active |
 | [发布指南](release/README.md) | 版本和发布流程 | active |
 | [GitHub 与 npx skills 发布指南](release/github-and-npx.md) | 公开仓库、安装和 SkillHub 导入 | active |
 | [版本迁移总览](../skills/r-doc/references/migration-matrix.md) | r-doc 审计行为变化与升级步骤 | active |

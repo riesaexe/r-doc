@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "tool": "r-doc audit",
+  "skill_version": "0.2.12",
+  "captured_at": "2026-09-15T03:22:10.052775+00:00",
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-10-10.0.19044-SP0"
+  },
+  "cases": [
+    {
+      "document_count": 100,
+      "iterations": 3,
+      "warmup": 0,
+      "durations_seconds": [
+        0.807555,
+        0.739205,
+        0.596569
+      ],
+      "median_seconds": 0.739205,
+      "p95_seconds": 0.807555,
+      "findings": 0
+    },
+    {
+      "document_count": 1000,
+      "iterations": 3,
+      "warmup": 0,
+      "durations_seconds": [
+        8.495043,
+        9.840327,
+        9.439285
+      ],
+      "median_seconds": 9.439285,
+      "p95_seconds": 9.840327,
+      "findings": 0
+    },
+    {
+      "document_count": 5000,
+      "iterations": 3,
+      "warmup": 0,
+      "durations_seconds": [
+        25.025207,
+        23.783603,
+        30.173737
+      ],
+      "median_seconds": 25.025207,
+      "p95_seconds": 30.173737,
+      "findings": 0
+    }
+  ],
+  "notes": "Wall-clock measurements are a local baseline, not a CI pass/fail threshold."
+}

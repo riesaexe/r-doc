@@ -33,6 +33,7 @@ AGENTS.md
 | docs/design/ | 设计和架构决策 |
 | docs/development/ | 开发、验证和同步流程 |
 | docs/release/ | 版本、校验、打包和发布流程 |
+| benchmarks/ | 真实 Agent 运行记录和审计性能基线 |
 | CHANGELOG.md | 版本变更记录 |
 | VERSION | 当前项目版本 |
 
@@ -77,6 +78,7 @@ python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 - 生命周期门槛：读 skills/r-doc/references/lifecycle-checklists.md。
 - 元数据或状态：读 skills/r-doc/references/metadata-schema.md。
 - 项目覆盖配置：读 skills/r-doc/references/project-config.md。
+- Agent benchmark 和审计性能基线：读 [docs/development/benchmarks.md](docs/development/benchmarks.md) 及 [benchmarks/README.md](benchmarks/README.md)。
 - 版本和发布：读 [docs/release/README.md](docs/release/README.md)。
 - GitHub、npx skills 和 SkillHub：读 [docs/release/github-and-npx.md](docs/release/github-and-npx.md)。
 

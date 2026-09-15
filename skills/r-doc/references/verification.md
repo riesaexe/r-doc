@@ -80,6 +80,18 @@ The deterministic checks currently cover:
 | Metadata relationships | IDs, title/H1 consistency, ISO dates and ordering, review dates, `related_docs`, `supersedes`, existing `related_code` files, in-root `planned_code` paths, and superseded-document successor links. |
 | Sensitive content | The finite token, credential, JWT, Google API key, database URL, password baseline, built-in AWS sample exception, project-configured exact examples, and visible allowlist evidence documented below. |
 
+## Empirical and scale benchmarks
+
+The Agent-evaluation schema is not a benchmark result. Store real runs with an actual trace under the repository's `benchmarks/<profile>/run-<number>/` layout and use `aggregate_benchmarks.py` to regenerate `result.json` and `summary.json`; keep `with-r-doc` and `baseline-no-r-doc` conditions separate and capture at least three runs per condition. A missing run remains `pending` rather than becoming a zero or passing score.
+
+Use `benchmark_audit.py` for the separate deterministic scale baseline:
+
+~~~bash
+python scripts/benchmark_audit.py --sizes 100,1000,5000 --iterations 3 --warmup 0 --output ../../benchmarks/performance-baseline.json
+~~~
+
+The recorded median and p95 wall-clock values are machine-specific trend data. They are useful for discovering scale risks, but are not a universal CI threshold.
+
 ## Validate the skill package
 
 Run:

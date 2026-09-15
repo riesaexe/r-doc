@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "evaluation_skill_version": "0.2.12",
+  "status": "pending",
+  "profiles": {},
+  "runs": [],
+  "errors": [],
+  "notes": "No real agent benchmark runs have been captured yet."
+}
