@@ -4,7 +4,31 @@ This file records user-visible changes to r-doc.
 
 ## Unreleased
 
-暂无未发布变更。
+- 暂无未发布变更。
+
+### English
+
+- No unreleased changes.
+
+## [0.3.0] - 2026-09-19
+
+- Corrected naturalistic measurement semantics: the CLI task no longer forbids the `user_name` identifier inside a valid negative-option test, and command-level read inference now distinguishes `rg` hidden-file/content-search behavior from `rg --files`, `Get-ChildItem`, and `git status` metadata operations.
+- Reworked naturalistic coverage reporting so total pair coverage is separate from per-task replication and readiness; checked-in traces and results were replayed from raw CLI events, and text artifact hashes are stable across LF/CRLF checkouts.
+- Added an explicit benchmark governance gate: model selection for real Agent/test-data capture requires the user's confirmation before any new run batch, and confirmed models must be recorded without silent mixing across experiments.
+- Added an optional decision-note layer with lifecycle/class routing, deterministic validation, project configuration, a reusable template, and tests; existing projects remain compatible when no notes root is present.
+- Added supersession target/link/cycle checks and a safe decision-note archive helper with preview-by-default and explicit `--apply` mutation.
+
+### 中文摘要
+
+- 修正 naturalistic 测量语义：CLI 任务不再禁止合法的旧参数拒绝测试中出现 `user_name` 标识符；命令级读取推断区分 `rg` 的 hidden/内容搜索语义，以及 `rg --files`、`Get-ChildItem` 和 `git status` 的元数据操作。
+- 重做 naturalistic coverage 报告，将总配对覆盖与每任务重复/就绪度分开；已从原始 CLI 事件重放仓库内 trace/result，并让文本 artifact hash 兼容 LF/CRLF checkout。
+- 增加 benchmark 治理门禁：真实 Agent/测试数据采集涉及的模型选择必须先获得用户确认，确认后的模型必须原样记录，不能在实验批次之间静默混用。
+- 增加可选的决策笔记层，支持生命周期/分类路径、确定性校验、项目配置、复用模板和测试；未创建笔记根目录的现有项目保持兼容。
+- 增加 supersedes 目标/链接/环检查和安全的决策笔记归档辅助命令，默认只预览，只有显式 `--apply` 才执行移动。
+
+This release is backward-compatible for projects that do not configure a decision-note root. The naturalistic benchmark extension is measurement evidence only: it reaches the sample-size threshold but does not establish positive effectiveness.
+
+The public repository includes the Luna aggregate summary; raw local CLI traces and logs remain outside the release because they contain machine-specific paths.
 
 ## [0.2.17] - 2026-09-15
 

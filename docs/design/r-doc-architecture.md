@@ -42,6 +42,22 @@ r-doc 由项目源副本和全局安装副本组成。项目源副本用于版�
 - scripts/：不修改项目文件的确定性验证脚本；
 - tests/：验证脚本和临时项目行为测试。
 - assets/r-doc.svg：Skill 界面和项目 README 使用的品牌图标。
+- references/decision-notes.md：可选的决策记忆层规范；
+- references/templates/decision.md：决策笔记起始模板。
+
+## 决策记忆层
+
+r-doc 将项目当前事实与重要决策理由分开：`docs/` 描述现在是什么，`.agents/notes/` 在需要时保存为什么这样做、考虑过什么替代方案以及产生了什么代价和收益。该层默认可选，存在时由确定性审计自动发现，也可以通过 `decision_notes.root` 显式配置。决策笔记不进入普通 `docs/` 索引覆盖图，但复用同一套链接、路径安全和敏感信息闸门。
+
+笔记使用 `proposed/`、`implemented/`、`rejected/`、`archived/` 生命周期目录和固定分类目录。Skill 源文件定义规范与校验行为；项目根 `docs/` 记录本项目采用该层的设计与开发事实。
+supersedes 关系由审计器检查目标、链接和环；归档通过默认预览的生命周期辅助命令完成，避免无意移动历史记录。
+
+## Decision memory layer
+
+r-doc separates current facts from durable rationale: `docs/` describes what is true now, while `.agents/notes/` records why an important choice was made, which alternatives were considered, and which costs and benefits follow. The layer is optional by default, auto-discovered when present, and can be routed with `decision_notes.root`. Notes stay outside the ordinary `docs/` index-coverage graph but reuse the same link, path-safety, and sensitive-content gates.
+
+Notes use `proposed/`, `implemented/`, `rejected/`, and `archived/` lifecycle directories with fixed class directories. The Skill source defines the format and validator; the project-level `docs/` records this repository's design and development facts.
+The audit checks supersession targets, links, and cycles; archiving uses a preview-by-default lifecycle helper so historical records are not moved accidentally.
 
 ## 兼容性边界
 

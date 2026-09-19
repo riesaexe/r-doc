@@ -202,16 +202,17 @@ docs/
 
 Public entrypoints, project docs, benchmark guides, and release notes are maintained in English and Chinese whenever practical. Runtime Skill instructions under `skills/r-doc/` remain English-only to keep agent context small; `SKILL.zh-CN.md` remains a human-reference pointer.
 
-## What `0.2.17` adds
+## What `0.3.0` adds
 
-This release closes the naturalistic benchmark capture loop and publishes the first independently graded real-run evidence set:
+This release adds optional decision-note governance and publishes the extended, independently graded naturalistic evidence set:
 
 | Improvement | What it does | Safety boundary |
 | --- | --- | --- |
 | Independent capture runner | Builds fixtures, invokes the Agent with only the natural user task, snapshots the final workspace externally, normalizes raw CLI events, and hashes artifacts. | The Agent cannot author the final-state snapshot, score, or artifact hash manifest. |
 | Executable outcome grading | Runs grader-owned pytest, callable behavior, and documentation checks against the runner snapshot. | String assertions alone cannot make a broken implementation pass. |
 | Safety hardening | Rejects Windows path side doors such as `.\\env` and prevents naturalistic metadata from entering conformance aggregation. | Structurally valid failed runs remain visible as measured failures. |
-| Real naturalistic evidence | Adds four task types and four matched real pairs from Codex `gpt-5.5`. | All eight current runs read `.env`/`secrets.md`, so this is a negative context-safety observation, not a positive effectiveness claim. |
+| Decision-note governance | Adds lifecycle/class routing, deterministic note validation, `supersedes` closure checks, and a preview-first archive helper. | Existing projects remain compatible when no notes root is configured; archive mutation requires explicit `--apply`. |
+| Real naturalistic evidence | Adds four task types with ten matched pairs per task from the user-approved Codex `gpt-5.6-luna` batch. | All 80 measurement-valid runs are retained as evidence; 76 hit forbidden reads and both conditions average 5% task success/context safety, so this is not a positive effectiveness claim. |
 
 The `main` branch is protected with pull-request review, one approval, stale-review dismissal, and no force-push or deletion. The release commit is signed locally and must be checked for GitHub's `Verified` badge.
 

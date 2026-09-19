@@ -39,6 +39,8 @@ relationships:
 sensitive_allowlist:
   google-api-key:
     - <copy-provider-documented-example-here>
+decision_notes:
+  root: .agents/notes
 ~~~
 
 Optional fields:
@@ -50,11 +52,12 @@ Optional fields:
 - `exclude`: additional directory or file patterns to exclude;
 - `gates`: stage strength such as `advisory`, `audit`, or `blocking`; a `--stage` value that is not configured is an `invalid-stage` error rather than a passing no-op;
 - `relationships.require_for`: minimum relationships between document types;
-- `sensitive_allowlist`: exact, reviewed provider-documentation examples keyed by a supported detector code; values are literal strings, never regular expressions, and must not be real credentials.
++ `sensitive_allowlist`: exact, reviewed provider-documentation examples keyed by a supported detector code; values are literal strings, never regular expressions, and must not be real credentials;
++ `decision_notes.root`: optional in-root location for the decision-note layer. If configured, the directory and its `README.md` are required. If omitted, `.agents/notes/` is discovered when it already exists.
 
 ## Supported field matrix
 
-The recommended shape above is intentionally complete: the audit recognizes eight top-level fields. The first two protect configuration compatibility and describe project conventions; the remaining six affect document discovery or audit behavior.
+The recommended shape above is intentionally complete: the audit recognizes nine top-level fields. The first two protect configuration compatibility and describe project conventions; the remaining seven affect document discovery or audit behavior.
 
 | Field | Deterministic effect | Typical location |
 | --- | --- | --- |
@@ -66,6 +69,7 @@ The recommended shape above is intentionally complete: the audit recognizes eigh
 | `gates` | Maps `--stage` names to `advisory`, `audit`, or `blocking` behavior. | `.r-doc.yaml` |
 | `relationships.require_for` | Requires configured `related_docs` edges between document types. | `.r-doc.yaml` |
 | `sensitive_allowlist` | Allows only exact, reviewed public examples for named detectors and emits an informational audit record when one matches. | `.r-doc.yaml` |
+| `decision_notes.root` | Enables and routes the optional decision-note layer; validates the configured root and its `README.md`. | `.r-doc.yaml` |
 
 `planned_code` is deliberately not a configuration field. It belongs in a topic document's frontmatter because it describes that document's planned code relationship. Use `planned_code` for an in-root path that may not exist yet; use `related_code` only for an existing file. See [metadata-schema.md](metadata-schema.md).
 
@@ -80,5 +84,6 @@ The helpers execute these fields rather than treating them as descriptive metada
 - `gates` maps a `--stage <name>` invocation to `advisory`, `audit`, or `blocking`; the latter two treat warnings as failures;
 - `relationships.require_for` requires a source document's `related_docs` to include at least one document of each configured target type.
 - `sensitive_allowlist` records an informational finding for each exact matching value and suppresses only the corresponding error; it cannot disable a detector or turn a malformed configuration into a pass. Use it only for public, unusable, provider-documented examples, never for credentials.
+- `decision_notes.root` enables strict routing for decision notes. An existing default `.agents/notes/` root is also audited without configuration. Notes remain outside ordinary `docs/` index coverage, but their links and sensitive values are checked by the same gates.
 
 The path and list fields must be relative, non-empty, and type-correct. Report unknown fields and invalid configuration, then continue audit checks with safe defaults. Do not treat a configuration error as a passing audit.

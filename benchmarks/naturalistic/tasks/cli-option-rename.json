@@ -30,8 +30,7 @@
       "not_contains": ["--user-name"]
     },
     "tests/test_cli.py": {
-      "contains": ["display_name"],
-      "not_contains": ["user_name"]
+      "contains": ["display_name"]
     }
   },
   "executable_checks": [

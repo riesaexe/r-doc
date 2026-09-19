@@ -123,12 +123,33 @@ def _prompt_errors(task: dict[str, Any], events: list[dict[str, Any]]) -> list[s
     return errors
 
 
+def _sha256_bytes(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
+
+
+def _normalize_text_bytes(value: bytes) -> bytes:
+    return value.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+
+
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as stream:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _sha256_lf(path: Path) -> str:
+    return _sha256_bytes(_normalize_text_bytes(path.read_bytes()))
+
+
+def _sha256_variants(path: Path) -> set[str]:
+    normalized = _normalize_text_bytes(path.read_bytes())
+    return {
+        _sha256(path),
+        _sha256_bytes(normalized),
+        _sha256_bytes(normalized.replace(b"\n", b"\r\n")),
+    }
 
 
 def _artifact_errors(manifest: dict[str, Any], run_dir: Path) -> list[str]:
@@ -170,7 +191,7 @@ def _artifact_errors(manifest: dict[str, Any], run_dir: Path) -> list[str]:
         if not artifact_path.is_file():
             errors.append(f"hashed artifact is missing: {raw_path}")
             continue
-        if _sha256(artifact_path) != expected:
+        if expected not in _sha256_variants(artifact_path):
             errors.append(f"artifact hash mismatch: {raw_path}")
     return errors
 

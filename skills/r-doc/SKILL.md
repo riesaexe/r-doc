@@ -2,7 +2,7 @@
 name: r-doc
 description: "Govern project documentation when a user asks to initialize, audit, repair, or maintain AGENTS.md, docs/, indexes, plans, requirements, design, APIs, testing, releases, or deployment records, or when a change affects public behavior, interfaces, configuration, architecture, deployment, or documented project rules. Do not activate for code-only edits with no documentation impact; do not replace business-code implementation."
 metadata:
-  version: "0.2.17"
+  version: "0.3.0"
 ---
 
 # r-doc: Project documentation governance
@@ -108,6 +108,13 @@ draft → proposed → active → superseded → archived
 When documentation disagrees with code, tests, or other documents, state the intended behavior, current behavior, conflict location, and decision that requires confirmation. Do not automatically rewrite the implementation into the standard or let the newest file erase other facts.
 
 For metadata rules, read [references/metadata-schema.md](references/metadata-schema.md). For project-level overrides, read [references/project-config.md](references/project-config.md).
+
+## Decision notes
+
+Use the optional decision-note layer for non-trivial changes whose rationale, alternatives, or consequences would otherwise be lost in a commit or scattered across documents. It lives under `.agents/notes/` by convention and is discovered automatically when present; configure `decision_notes.root` when a project uses another in-root location. Notes use `proposed/`, `implemented/`, `rejected/`, or `archived/` lifecycle directories and one class directory such as `architecture/`, `feature/`, or `testing/`. The deterministic audit checks their frontmatter, lifecycle path, required sections, links, relationships, and sensitive content, but does not require a central high-churn index. Search existing notes before proposing a related decision, update the owning note when the decision remains the same, and create a linked successor when the decision reverses or materially changes.
+
+Read [references/decision-notes.md](references/decision-notes.md) for the trigger boundary, format, lifecycle, and maintenance workflow. Use [references/templates/decision.md](references/templates/decision.md) only after confirming that a decision note is warranted.
+For lifecycle operations, use `python scripts/decision_notes.py archive <note-path>` to preview an archive move; add `--apply` only after confirmation. Supersession links and cycles are checked by the normal audit.
 
 ## Minimum report standard
 

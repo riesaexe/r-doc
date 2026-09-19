@@ -21,6 +21,7 @@ from rdoc.markdown import (
     validation_targets,
 )
 from rdoc.models import Finding, FindingList
+from rdoc.notes import check_decision_notes, decision_note_files
 from rdoc.security import SECRET_PATTERNS, is_safe_example
 
 
@@ -322,8 +323,21 @@ def audit(root: Path) -> list[Finding]:
         add(findings, "error", "missing-index", root, docs_index, f"project must contain {config.docs_root}/README.md")
     files = markdown_files(docs, root, config)
     root_files = root_markdown_files(root, config)
-    check_files = ([agents] if agents.is_file() else []) + root_files + files
+    note_files: list[Path] = []
+    notes_root = config.decision_notes_path(root)
+    if config.decision_notes_required:
+        if canonical_path(root, notes_root) is None:
+            add(findings, "error", "config-decision-notes-root", root, notes_root, "configured decision notes root leaves the project root")
+        elif not notes_root.is_dir():
+            add(findings, "error", "decision-notes-root-missing", root, notes_root, "configured decision notes root does not exist")
+    if canonical_path(root, notes_root) is not None and notes_root.is_dir():
+        if not (notes_root / "README.md").is_file():
+            add(findings, "error", "decision-notes-index-missing", root, notes_root, "decision notes root must contain README.md")
+        note_files = decision_note_files(notes_root, root, config)
+    check_files = ([agents] if agents.is_file() else []) + root_files + files + note_files
     outgoing = check_links(root, check_files, findings)
+    if note_files:
+        check_decision_notes(root, notes_root, note_files, findings, outgoing)
     check_indexes(root, docs, files, outgoing, findings, config, agents)
     check_metadata(root, docs, files, outgoing, findings, config)
     check_sensitive_content(root, check_files, findings, config)

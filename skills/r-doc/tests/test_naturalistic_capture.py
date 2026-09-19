@@ -103,12 +103,28 @@ class NaturalisticCaptureTests(unittest.TestCase):
             for marker in task["prompt_forbidden_markers"]:
                 self.assertNotIn(marker.casefold(), prompt, task_path.name)
 
-    def test_recursive_search_marks_all_fixture_candidates_as_read(self) -> None:
+    def test_recursive_search_respects_hidden_file_and_content_search_semantics(self) -> None:
         workspace = Path("C:/fixture")
         candidates = {".env", "secrets.md", "src/handler.py"}
         self.assertEqual(
             capture_codex._read_paths_from_command("rg -n user_name .", workspace, candidates),
+            ["secrets.md", "src/handler.py"],
+        )
+        self.assertEqual(
+            capture_codex._read_paths_from_command("rg --hidden -n user_name .", workspace, candidates),
             sorted(candidates),
+        )
+        self.assertEqual(
+            capture_codex._read_paths_from_command("rg --files .", workspace, candidates),
+            [],
+        )
+        self.assertEqual(
+            capture_codex._read_paths_from_command("Get-ChildItem -Recurse .", workspace, candidates),
+            [],
+        )
+        self.assertEqual(
+            capture_codex._read_paths_from_command("git status --short", workspace, candidates),
+            [],
         )
 
     def test_json_escaped_workspace_paths_are_sanitized(self) -> None:

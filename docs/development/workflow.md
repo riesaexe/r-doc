@@ -17,6 +17,7 @@ related_code:
 2. 确认修改属于入口、工作流、生命周期、元数据、配置还是模板。
 3. 修改 skills/r-doc/ 源文件，不直接修改全局安装副本。
 4. 如果改变了用户可见行为，更新本文件或对应设计/发布文档。
+5. 如果改变了重要决策边界，先检索现有决策笔记；必要时更新原笔记或创建带 `supersedes` 的新笔记。
 
 ## 确定性验证
 
@@ -31,6 +32,8 @@ python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 ```
 
 `requirements-dev.txt` 提供确定性 frontmatter 解析所需的 PyYAML。`validate_skill.py` 检查 Skill 包的入口、UI 元数据、内部链接、脚本语法、机器特定路径和敏感值。`repair_docs.py` 默认只预览安全结构修复，只有显式 `--apply` 才写入。`audit_docs.py` 使用 PyYAML 解析嵌套 frontmatter，解析错误会作为明确 finding 报告，不会静默丢弃列表；它还检查项目入口、嵌套索引、链接、索引覆盖、frontmatter 和敏感值。`--strict` 会把元数据缺失等警告视为失败。
+`audit_docs.py` 还会在存在 `.agents/notes/` 或配置了 `decision_notes.root` 时校验决策笔记的生命周期路径、状态、必需章节、关系、链接和敏感值；该层不要求加入 `docs/` 索引。
+生命周期移动先运行 `python skills/r-doc/scripts/decision_notes.py archive <note-path>` 预览，确认后才允许追加 `--apply`。
 
 ## 验证顺序
 
@@ -41,6 +44,7 @@ python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 5. 用临时项目验证根入口、根索引、嵌套索引、冲突和排除目录。
 6. 检查敏感信息和未经脱敏的示例。
 7. 验证通过后再同步全局安装副本。
+8. 若归档或 supersede 行为发生变化，补跑生命周期专项测试并核对源/全局副本哈希。
 
 ## 同步原则
 
@@ -56,6 +60,7 @@ python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 2. Identify whether the change affects entrypoints, workflow, lifecycle, metadata, configuration, templates, public behavior, or release records.
 3. Edit the source under `skills/r-doc/`; do not develop directly in the global installation copy.
 4. If user-visible behavior changes, update this workflow or the relevant design/release document. Public project documentation and Release notes should be bilingual; runtime Skill instructions remain English-only to control context cost.
+5. If an important decision boundary changes, search existing decision notes first; update the owning note or create a linked successor with `supersedes` when the decision changes.
 
 Run the deterministic checks from the repository root:
 
@@ -67,5 +72,7 @@ python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 ```
 
 Verify frontmatter and placeholders, referenced resources, Markdown links, helper output, temporary-project scenarios, sensitive-value handling, and the source/global-copy version boundary. Synchronize the validated source only after the checks pass. Record behavior, trigger, status-rule, template, and release changes in `CHANGELOG.md`; each release section carries English notes and a Chinese summary.
+`audit_docs.py` also validates decision-note routing and required sections when the optional layer exists. Decision notes remain separate from ordinary `docs/` index coverage but share its link and sensitive-content gates.
+The archive helper previews by default and requires `--apply` for a move; the audit checks supersession targets, links, cycles, and archive dates.
 
 Back to: [development index](README.md) · [documentation index](../README.md)

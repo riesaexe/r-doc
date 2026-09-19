@@ -28,6 +28,8 @@ The helper is read-only. It checks:
 - GitHub-compatible anchor targets from ATX and Setext headings, duplicate heading suffixes, Unicode/CJK text, preserved emoji code points, punctuation and consecutive-space cases, plus explicit `<a name="...">` and `<a id="...">` anchors; renderer-specific anchor rules outside this contract are not inferred;
 - whether documents under the configured documentation root are reachable from an index;
 - supported frontmatter fields, lifecycle status, duplicate IDs, dates, titles, relationship IDs, existing `related_code` files, non-existent-but-in-root `planned_code` paths, supersession successors and successor links, and configured document-type requirements;
+- decision-note supersession targets, required links, self-references, cycles, and archive dates;
+- optional decision notes under `.agents/notes/` or the configured `decision_notes.root`, including lifecycle/class path routing, frontmatter, required sections, related code paths, and the required notes index;
 - project configuration, including duplicate files, invalid fields, configured stage names, stage gates, exclusions, and custom documentation roots;
 - common secret and token patterns.
 
@@ -78,6 +80,8 @@ The deterministic checks currently cover:
 | Navigation and coverage | Root entrypoint/index bidirectionality, strict parent-to-direct-child index links, index coverage, missing indexes, safe canonical paths, and root Markdown exclusion behavior. Images and unused reference definitions are validation targets, not navigation edges. |
 | Markdown links | Inline, reference-style, parenthesized, image, broken, broken-anchor, unused-definition, and project-root-escaping targets, with code/comment masking for link syntax. |
 | Metadata relationships | IDs, title/H1 consistency, ISO dates and ordering, review dates, `related_docs`, `supersedes`, existing `related_code` files, in-root `planned_code` paths, and superseded-document successor links. |
+| Decision notes | Optional root discovery/configuration, lifecycle and class paths, note status/type, required sections, note metadata, relationships, links, and sensitive values. |
+| Decision lifecycle operations | Supersession graph checks plus read-only archive planning and explicit archive application with collision/concurrent-change guards. |
 | Sensitive content | The finite token, credential, JWT, Google API key, database URL, password baseline, built-in AWS sample exception, project-configured exact examples, and visible allowlist evidence documented below. |
 
 ## Empirical and scale benchmarks
@@ -119,6 +123,8 @@ The bundled tests create isolated temporary projects and cover:
 11. GitHub-compatible ATX/Setext/CJK/emoji/duplicate/custom-anchor fragment checks;
 12. configuration-driven, supersession-closure, and Agent-evidence evaluation scenarios;
 13. a non-mutating repair preview, idempotent apply, strict direct-child index routes, missing index routes, and concurrent-change refusal.
+14. optional decision-note discovery, configured roots, lifecycle/status mismatch, required sections, note links, and note sensitive-content checks.
+15. supersession target/link/cycle checks and archive preview/apply behavior.
 
 Run them with:
 

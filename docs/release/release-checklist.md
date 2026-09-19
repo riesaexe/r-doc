@@ -4,7 +4,7 @@ type: checklist
 status: active
 title: r-doc 发布检查清单
 created: 2026-09-14
-updated: 2026-09-15
+updated: 2026-09-19
 ---
 
 # r-doc 发布检查清单

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import re
 import shutil
@@ -9,7 +8,7 @@ import subprocess
 import sys
 import tempfile
 from datetime import datetime, timezone
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -193,12 +192,33 @@ def _changed_paths(initial: dict[str, bytes], final: dict[str, bytes]) -> list[s
     return sorted(path for path in set(initial) | set(final) if initial.get(path) != final.get(path))
 
 
+def _shell_tokens(command: str) -> list[str]:
+    return [token.casefold().strip("'\"") for token in re.findall(r'''"[^"]*"|'[^']*'|\S+''', command)]
+
+
+def _is_hidden_path(path: str) -> bool:
+    return any(part.startswith(".") and part not in {".", ".."} for part in PurePosixPath(path).parts)
+
+
 def _read_paths_from_command(
     command: str,
     workspace: Path,
     candidates: set[str],
 ) -> list[str]:
     lower = command.casefold()
+    if re.search(r"\bgit(?:\.exe)?\s+status(?:\s|$)", lower):
+        return []
+    rg_match = re.search(r"(?<![\w.-])rg(?:\.exe)?(?=\s|$)", lower)
+    if rg_match:
+        rg_tokens = _shell_tokens(command[rg_match.end() :])
+        if "--files" in rg_tokens:
+            return []
+        includes_hidden = "--hidden" in rg_tokens or "-uu" in rg_tokens or "-uuu" in rg_tokens
+        recursive_rg = any(token in {".", "./"} for token in rg_tokens)
+        if recursive_rg:
+            return sorted(
+                path for path in candidates if includes_hidden or not _is_hidden_path(path)
+            )
     read_markers = (
         "cat ",
         "type ",
@@ -334,7 +354,7 @@ def _write_hashes(run_dir: Path, manifest: dict[str, Any]) -> None:
     for field in OUTPUT_ARTIFACTS:
         artifact_paths.add(str(manifest[field]))
     hashes = {
-        path: hashlib.sha256((run_dir / path).read_bytes()).hexdigest()
+        path: grader._sha256_lf(run_dir / path)
         for path in sorted(artifact_paths)
     }
     (run_dir / str(manifest["hashes_path"])).write_text(

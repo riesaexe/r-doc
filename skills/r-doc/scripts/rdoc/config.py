@@ -20,6 +20,7 @@ CONFIG_KEYS = {
     "gates",
     "relationships",
     "sensitive_allowlist",
+    "decision_notes",
 }
 GATE_VALUES = {"advisory", "audit", "blocking"}
 
@@ -27,6 +28,8 @@ GATE_VALUES = {"advisory", "audit", "blocking"}
 @dataclass(frozen=True)
 class ProjectConfig:
     docs_root: str = "docs"
+    decision_notes_root: str = ".agents/notes"
+    decision_notes_required: bool = False
     exclude: tuple[str, ...] = ()
     required_document_types: tuple[str, ...] = ()
     gates: dict[str, str] | None = None
@@ -36,6 +39,9 @@ class ProjectConfig:
 
     def docs_path(self, root: Path) -> Path:
         return root / self.docs_root
+
+    def decision_notes_path(self, root: Path) -> Path:
+        return root / self.decision_notes_root
 
     def gate_for(self, stage: str | None) -> str | None:
         if not stage or not self.gates:
@@ -112,6 +118,33 @@ def load_project_config(root: Path) -> tuple[ProjectConfig, list[ConfigProblem]]
         else:
             docs_root = normalized_docs_root
 
+    decision_notes_root = ".agents/notes"
+    decision_notes_required = False
+    if "decision_notes" in values:
+        raw_decision_notes = values["decision_notes"]
+        if not isinstance(raw_decision_notes, dict):
+            problems.append(_config_error(source, "config-decision-notes", "decision_notes must be a mapping with an optional root"))
+        else:
+            unknown_decision_notes = sorted(str(key) for key in raw_decision_notes if key != "root")
+            if unknown_decision_notes:
+                problems.append(_config_error(source, "config-decision-notes", f"unsupported decision_notes field(s): {', '.join(unknown_decision_notes)}"))
+            raw_notes_root = raw_decision_notes.get("root", decision_notes_root)
+            if not isinstance(raw_notes_root, str) or not raw_notes_root.strip():
+                problems.append(_config_error(source, "config-decision-notes", "decision_notes.root must be a non-empty relative path"))
+            else:
+                normalized_notes_root = raw_notes_root.strip().replace("\\", "/")
+                notes_root_path = PurePosixPath(normalized_notes_root)
+                if (
+                    notes_root_path.is_absolute()
+                    or PureWindowsPath(normalized_notes_root).is_absolute()
+                    or ".." in notes_root_path.parts
+                    or normalized_notes_root in {"", "."}
+                ):
+                    problems.append(_config_error(source, "config-decision-notes", "decision_notes.root must stay inside the project root"))
+                else:
+                    decision_notes_root = normalized_notes_root.strip("/")
+                    decision_notes_required = True
+
     exclude: tuple[str, ...] = ()
     if "exclude" in values:
         parsed_exclude = _string_list(values["exclude"])
@@ -178,6 +211,8 @@ def load_project_config(root: Path) -> tuple[ProjectConfig, list[ConfigProblem]]
 
     return ProjectConfig(
         docs_root=docs_root,
+        decision_notes_root=decision_notes_root,
+        decision_notes_required=decision_notes_required,
         exclude=exclude,
         required_document_types=required_document_types,
         gates=gates,

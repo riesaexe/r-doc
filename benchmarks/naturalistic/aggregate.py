@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import grader
 
 
-SUMMARY_SCHEMA_VERSION = 2
+SUMMARY_SCHEMA_VERSION = 3
 METRICS = ("task_success", "outcome_compliance", "executable_outcome", "context_safety", "trace_integrity")
 MEASUREMENT_GATE_CHECKS = {
     "manifest",
@@ -193,7 +193,7 @@ def aggregate(benchmarks_root: Path, tasks_root: Path) -> dict[str, Any]:
                 "status": result.get("status"),
                 "measurement_valid": _measurement_valid(result),
                 "metrics": result.get("metrics", {}),
-                "result_path": run_dir.joinpath("result.json").as_posix(),
+                "result_path": run_dir.relative_to(benchmarks_root).joinpath("result.json").as_posix(),
                 "errors": result.get("errors", []),
             }
         )
@@ -216,18 +216,44 @@ def aggregate(benchmarks_root: Path, tasks_root: Path) -> dict[str, Any]:
     pair_count = sum(item["paired_run_count"] for item in comparisons)
     models = sorted({str(record["model"]) for record in valid})
     task_ids = sorted({str(record["task_id"]) for record in valid})
+    task_pair_groups: dict[str, list[int]] = {}
+    for comparison in comparisons:
+        task_id = str(comparison["task_id"])
+        pair_count_for_group = int(comparison["paired_run_count"])
+        if pair_count_for_group:
+            task_pair_groups.setdefault(task_id, []).append(pair_count_for_group)
+    task_pair_counts = {
+        task_id: min(pair_counts)
+        for task_id, pair_counts in task_pair_groups.items()
+    }
+    paired_task_ids = sorted(task_pair_counts)
+    tasks_with_trend_readiness = sorted(
+        task_id for task_id, count in task_pair_counts.items() if count >= 3
+    )
+    tasks_with_statistical_readiness = sorted(
+        task_id for task_id, count in task_pair_counts.items() if count >= 5
+    )
+    tasks_with_strong_evidence_readiness = sorted(
+        task_id for task_id, count in task_pair_counts.items() if count >= 10
+    )
     coverage = {
         "models": models,
         "model_count": len(models),
         "multi_model": len(models) >= 2,
         "task_ids": task_ids,
         "task_count": len(task_ids),
-        "task_diversity": len(task_ids) >= 4,
-        "paired_run_count": pair_count,
-        "trend_readiness": pair_count >= 3,
-        "statistical_readiness": pair_count >= 5,
-        "strong_evidence_readiness": pair_count >= 10,
+        "paired_task_ids": paired_task_ids,
+        "paired_task_count": len(paired_task_ids),
+        "task_diversity_ready": len(paired_task_ids) >= 4,
+        "coverage_pair_count": pair_count,
+        "task_pair_counts": dict(sorted(task_pair_counts.items())),
+        "replicated_task_count": sum(count >= 2 for count in task_pair_counts.values()),
+        "min_pairs_per_task": min(task_pair_counts.values(), default=0),
+        "tasks_with_trend_readiness": tasks_with_trend_readiness,
+        "tasks_with_statistical_readiness": tasks_with_statistical_readiness,
+        "tasks_with_strong_evidence_readiness": tasks_with_strong_evidence_readiness,
         "sample_size_guidance": {
+            "replication_min_pairs": 2,
             "trend_min_pairs": 3,
             "statistical_min_pairs": 5,
             "strong_evidence_min_pairs": 10,
@@ -240,7 +266,10 @@ def aggregate(benchmarks_root: Path, tasks_root: Path) -> dict[str, Any]:
     elif errors or any(not record["measurement_valid"] for record in records):
         status = "fail"
     else:
-        status = "partial" if not coverage["strong_evidence_readiness"] else "pass"
+        all_tasks_strong = bool(task_pair_counts) and all(
+            count >= 10 for count in task_pair_counts.values()
+        )
+        status = "partial" if not all_tasks_strong else "pass"
     return {
         "schema_version": SUMMARY_SCHEMA_VERSION,
         "benchmark_kind": grader.NATURALISTIC_BENCHMARK_KIND,
@@ -251,7 +280,7 @@ def aggregate(benchmarks_root: Path, tasks_root: Path) -> dict[str, Any]:
         "review_provenance": grader.NATURALISTIC_REVIEW_PROVENANCE,
         "metric_semantics": {
             "task_success": "Independent runner snapshot, executable outcome checks, and trace safety; not agent self-report.",
-            "outcome_compliance": "Static assertions over the runner-generated final snapshot.",
+            "outcome_compliance": "Narrow static contract assertions over the runner-generated final snapshot; runtime behavior is reported separately.",
             "executable_outcome": "Grader-owned pytest and behavior checks executed from the final snapshot.",
         },
         "status": status,

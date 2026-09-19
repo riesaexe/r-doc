@@ -17,7 +17,7 @@ updated: 2026-09-15
 
 - 版本文件：[VERSION](../../VERSION)
 - 变更记录：[CHANGELOG.md](../../CHANGELOG.md)
-- 当前发布版本：0.2.17；源代码版本：0.2.17（下一次行为变更按 PATCH 递增）
+- 当前发布版本：0.3.0；源代码版本：0.3.0
 
 ## 发布步骤
 
@@ -27,7 +27,7 @@ updated: 2026-09-15
 4. 更新 VERSION，以及 skills/r-doc/SKILL.md 的 metadata.version。
 5. 确认公开 GitHub 仓库结构和许可证。
 6. 按 [GitHub 与 npx skills 发布指南](github-and-npx.md) 和 [发布检查清单](release-checklist.md) 执行校验和临时项目 QA。
-7. 生成带版本号的发布包（如果目标平台需要），例如 r-doc-v0.2.17.zip；包内顶层目录固定为 r-doc/。
+7. 生成带版本号的发布包（如果目标平台需要），例如 r-doc-v0.3.0.zip；包内顶层目录固定为 r-doc/。
 8. 将验证通过的发布内容同步到全局安装目录。
 9. 验证全局副本的版本、文件树和入口文件。
 10. 发布后记录仓库地址、标签、实际包路径、校验结果和已知限制。
@@ -66,7 +66,7 @@ The release unit is the `skills/r-doc/` directory, so other tools can read `SKIL
 
 - Version file: [VERSION](../../VERSION)
 - Changelog: [CHANGELOG.md](../../CHANGELOG.md)
-- Current release: 0.2.17; source version: 0.2.17.
+- Current release: 0.3.0; source version: 0.3.0.
 
 ### Release steps
 
@@ -76,7 +76,7 @@ The release unit is the `skills/r-doc/` directory, so other tools can read `SKIL
 4. Update `VERSION` and `metadata.version` in `skills/r-doc/SKILL.md`.
 5. Confirm the public GitHub repository structure and license.
 6. Follow the [GitHub and npx skills guide](github-and-npx.md) and [release checklist](release-checklist.md), including temporary-project QA.
-7. Build a versioned package when the target platform requires one, for example `r-doc-v0.2.17.zip` with a top-level `r-doc/` directory.
+7. Build a versioned package when the target platform requires one, for example `r-doc-v0.3.0.zip` with a top-level `r-doc/` directory.
 8. Synchronize validated source files to the global installation copy.
 9. Recheck the global copy's version, file tree, and entrypoint.
 10. Record the repository URL, tag, package path, verification results, and known limitations after release.
