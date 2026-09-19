@@ -49,6 +49,10 @@ updated: 2026-09-19
 
 ## 平台验证
 
+- [ ] GitHub Release 通过本机 Git Credential Manager + REST API 创建或复用，未使用网页发布流程
+- [ ] 已按 tag 做幂等查询，API 回读确认 draft=false、标签、附件名称和大小；重复执行不会重复创建
+- [ ] 终端、日志、提交和报告中没有 PAT、密码或 git credential fill 完整输出
+
 - [ ] GitHub 仓库为公开仓库且包含 skills/r-doc/SKILL.md
 - [ ] npx skills add riesaexe/r-doc --list 能发现 r-doc
 - [ ] npx skills add riesaexe/r-doc --skill r-doc -g -y 安装成功
@@ -81,6 +85,10 @@ updated: 2026-09-19
 - [ ] The validated source was synchronized to the global installation copy
 
 ### Platform and repository governance
+
+- [ ] The GitHub Release was created or reused through the local Git Credential Manager and REST API, not the web UI
+- [ ] The tag lookup and API read-back verified idempotency, draft=false, the tag, and asset name/size
+- [ ] No PAT, password, or complete git credential fill output appears in terminals, logs, commits, or reports
 
 - [ ] The public GitHub repository contains `skills/r-doc/SKILL.md`
 - [ ] `npx skills add riesaexe/r-doc --list` discovers r-doc

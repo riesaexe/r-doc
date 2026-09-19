@@ -4,7 +4,7 @@ type: guide
 status: active
 title: GitHub 与 npx skills 发布指南
 created: 2026-09-14
-updated: 2026-09-15
+updated: 2026-09-19
 ---
 
 # GitHub 与 npx skills 发布指南
@@ -46,6 +46,29 @@ python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 输出中应能看到 r-doc。这个命令只用于列出发现结果，不代表已经完成公开发布。
 
 ## GitHub 发布
+
+### GitHub Release API 发布规范（必须遵守）
+
+正式 Release 不得通过 GitHub 网页创建、编辑或上传。必须在本机命令行中使用 Git Credential Manager 提供的凭据，直接调用 GitHub REST API：
+
+1. 用 GET /repos/<owner>/<repo>/releases/tags/<tag> 按标签查询现有 Release；
+2. 只有返回 404 时才用 POST /repos/<owner>/<repo>/releases 创建 Release；
+3. 读取返回的 upload_url，仅上传不存在的版本包附件；
+4. 再次 GET Release，确认 draft=false、标签与 VERSION 一致、附件名称和大小正确。
+
+凭据只能在内存变量或受控的临时配置中使用，不能把 git credential fill 的完整输出、PAT、密码或带凭据的 URL 写入终端、日志、提交或报告。一个不泄露凭据的获取方式是：
+
+~~~bash
+cred="$(printf 'protocol=https\nhost=github.com\n\n' | git credential fill)"
+# 将 cred 解析为仅供 curl 使用的内存变量；不要 echo cred、username 或 password
+curl --user "$username:$password" \
+  -H 'Accept: application/vnd.github+json' \
+  -H 'X-GitHub-Api-Version: 2022-11-28' \
+  ...
+unset cred username password
+~~~
+
+发布脚本必须具备幂等行为：已存在的 Release 或附件应被复用，不应重复创建。网页只允许用于只读查看最终公开结果；本规范不把浏览器操作视为发布成功证据。执行外部发布前仍需取得用户明确授权。
 
 公开发布前需要确定 GitHub owner/repository、默认分支和许可证。准备完成后：
 
@@ -131,6 +154,17 @@ python -m unittest discover -s skills/r-doc/tests -p 'test_*.py'
 The output should list r-doc. Discovery is not the same as a public release.
 
 ### GitHub release
+
+#### Required GitHub Release API workflow
+
+Do not create, edit, or upload a formal Release through the GitHub web UI. From the local command line, use credentials supplied by Git Credential Manager and call the GitHub REST API directly:
+
+1. GET /repos/<owner>/<repo>/releases/tags/<tag> to find an existing Release;
+2. only on 404, POST /repos/<owner>/<repo>/releases to create it;
+3. use the returned upload_url and upload only a missing versioned asset;
+4. GET the Release again and verify draft=false, the tag matches VERSION, and the asset name and size are correct.
+
+Keep credentials in memory or a controlled temporary config only. Never write the complete git credential fill output, a PAT, a password, or a credential-bearing URL to the terminal, logs, commits, or reports. The browser is read-only for checking the final public result and is not evidence of a successful publication. The flow must be idempotent, and explicit user authorization is required before external publication.
 
 1. Confirm the GitHub owner/repository, default branch, and license.
 2. Commit `skills/r-doc`, README files, docs, `VERSION`, `CHANGELOG.md`, and `LICENSE`.

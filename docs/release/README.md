@@ -4,7 +4,7 @@ type: release
 status: active
 title: r-doc 发布指南
 created: 2026-09-14
-updated: 2026-09-15
+updated: 2026-09-19
 ---
 
 # r-doc 发布指南
@@ -20,6 +20,12 @@ updated: 2026-09-15
 - 当前发布版本：0.3.0；源代码版本：0.3.0
 
 ## 发布步骤
+
+### GitHub Release 执行面
+
+正式 GitHub Release 的创建、说明写入和附件上传必须使用本机 Git Credential Manager 返回的凭据，通过 GitHub REST API 完成。发布脚本先按 tag 查询现有 Release，再按需创建和上传缺失附件，最后用 API 验证 draft=false、tag 和附件名称/大小；重复执行不得创建重复 Release 或重复附件。不得把 PAT、密码或 git credential fill 输出写入日志、命令输出或仓库。浏览器只能用于只读查看公开结果，不能用于创建、编辑或上传 Release。
+
+Git 推送、标签推送和 npx 验证同样从本机命令行完成。使用该发布面需要先取得用户对外部发布的明确授权；没有授权时只做本地验证和打包。
 
 1. 在 skills/r-doc/ 中完成修改。
 2. 更新项目文档和 CHANGELOG.md。
@@ -69,6 +75,12 @@ The release unit is the `skills/r-doc/` directory, so other tools can read `SKIL
 - Current release: 0.3.0; source version: 0.3.0.
 
 ### Release steps
+
+#### GitHub Release execution surface
+
+Formal GitHub Release creation, release-note writing, and asset upload must use credentials returned by the local Git Credential Manager through the GitHub REST API. The flow must look up the tag first, create the Release only when it is absent, upload only missing assets, and read the Release back through the API to verify draft=false, the tag, and asset name/size. Re-running the flow must not create duplicate Releases or assets. Never write a PAT, password, or git credential fill output to logs, command output, or the repository. The browser is read-only for checking the public result; it is not a release execution surface.
+
+Git pushes, tag pushes, and npx verification also run from the local command line. Obtain explicit user authorization before making the external publication; without it, stop at local validation and packaging.
 
 1. Complete the source change under `skills/r-doc/`.
 2. Update project documentation and `CHANGELOG.md`; release notes must contain both English and Chinese summaries.

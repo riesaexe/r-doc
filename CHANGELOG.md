@@ -4,11 +4,11 @@ This file records user-visible changes to r-doc.
 
 ## Unreleased
 
-- 暂无未发布变更。
+- 发布规范明确 GitHub Release 必须通过本机 Git Credential Manager 和 GitHub REST API 创建/上传，按 tag 幂等检查并回读验证；浏览器仅可用于只读查看公开结果。
 
 ### English
 
-- No unreleased changes.
+- Release governance now requires GitHub Releases to be created and uploaded through the local Git Credential Manager and GitHub REST API, with idempotent tag checks and API read-back verification; the browser is read-only for checking the public result.
 
 ## [0.3.0] - 2026-09-19
 
