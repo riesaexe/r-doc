@@ -14,6 +14,7 @@ import grader
 
 TASK_PATH = Path(__file__).parents[3] / "benchmarks" / "naturalistic" / "tasks" / "api-response-field-rename.json"
 CLI_TASK_PATH = Path(__file__).parents[3] / "benchmarks" / "naturalistic" / "tasks" / "cli-option-rename.json"
+EVENT_TASK_PATH = Path(__file__).parents[3] / "benchmarks" / "naturalistic" / "tasks" / "event-payload-rename-v2.json"
 
 
 def _write_hashes(run_dir: Path, manifest: dict[str, object], *, mismatch: bool = False) -> None:
@@ -25,13 +26,26 @@ def _write_hashes(run_dir: Path, manifest: dict[str, object], *, mismatch: bool 
         str(manifest["final_response_path"]),
     }
     hashes = {
-        path: hashlib.sha256((run_dir / path).read_bytes()).hexdigest()
+        path: {
+            "sha256": grader._sha256_lf(run_dir / path),
+            "canonicalization": grader.HASH_CANONICALIZATION,
+        }
         for path in sorted(paths)
     }
     if mismatch:
-        hashes["final-state.json"] = "0" * 64
+        hashes["final-state.json"] = {
+            "sha256": "0" * 64,
+            "canonicalization": grader.HASH_CANONICALIZATION,
+        }
     (run_dir / "artifact-hashes.json").write_text(
-        json.dumps({"schema_version": 1, "algorithm": "sha256", "artifacts": hashes}),
+        json.dumps(
+            {
+                "schema_version": grader.HASH_SCHEMA_VERSION,
+                "algorithm": "sha256",
+                "canonicalization": grader.HASH_CANONICALIZATION,
+                "artifacts": hashes,
+            }
+        ),
         encoding="utf-8",
     )
 
@@ -66,6 +80,23 @@ def write_run(
         "capture_source": "naturalistic-capture-runner",
         "final_state_provenance": "runner-generated-from-workspace",
         "trace_provenance": "runner-normalized-raw-cli",
+        "activation_evidence": {
+            "schema_version": grader.ACTIVATION_EVIDENCE_SCHEMA_VERSION,
+            "skill": "r-doc",
+            "visibility": {
+                "status": "not_applicable" if condition == "baseline-no-r-doc" else "confirmed",
+                "signals": ["test-fixture"],
+            },
+            "load": {
+                "status": "not_applicable" if condition == "baseline-no-r-doc" else "observed",
+                "signals": ["test-fixture"],
+            },
+            "use": {
+                "status": "not_applicable" if condition == "baseline-no-r-doc" else "observed",
+                "signals": ["test-fixture"],
+            },
+            "limitation": "test fixture",
+        },
         "task_id": task["task_id"],
         "agent": "Codex",
         "model": model,
@@ -147,6 +178,21 @@ class NaturalisticGraderTests(unittest.TestCase):
             self.assertEqual(result["metrics"]["executable_outcome"], 100.0)
             self.assertFalse(result["agent_review_used"])
 
+    def test_unverified_activation_does_not_hide_a_successful_task_outcome(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            run_dir = write_run(Path(directory))
+            manifest_path = run_dir / "run.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["activation_evidence"]["use"]["status"] = "not_observed"
+            manifest["activation_evidence"]["use"]["signals"] = []
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+            _write_hashes(run_dir, manifest)
+            result = grader.grade(TASK_PATH, run_dir)
+            self.assertEqual(result["status"], "fail")
+            self.assertEqual(result["task_outcome_status"], "pass")
+            self.assertEqual(result["metrics"]["task_success"], 100.0)
+            self.assertEqual(result["metrics"]["context_safety"], 100.0)
+
     def test_final_state_failure_is_independent_of_trace_review(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             result = grader.grade(TASK_PATH, write_run(Path(directory), stale_state=True))
@@ -187,6 +233,36 @@ class NaturalisticGraderTests(unittest.TestCase):
                 write_run(
                     Path(directory),
                     task_path=CLI_TASK_PATH,
+                    final_files=files,
+                ),
+            )
+            self.assertEqual(result["status"], "pass")
+            self.assertEqual(result["metrics"]["outcome_compliance"], 100.0)
+            self.assertEqual(result["metrics"]["executable_outcome"], 100.0)
+
+    def test_event_absence_assertion_is_not_rejected_by_static_assertion(self) -> None:
+        files = {
+            "src/__init__.py": "",
+            "src/events.py": (
+                "def user_created_event(user):\n"
+                "    return {'type': 'user.created', 'payload': {'display_name': user.name}}\n"
+            ),
+            "docs/events.md": "# User-created event\n\nThe payload contains `display_name`.\n",
+            "tests/test_events.py": (
+                "from types import SimpleNamespace\n\n"
+                "from src.events import user_created_event\n\n\n"
+                "def test_user_created_event():\n"
+                "    event = user_created_event(SimpleNamespace(name='Ada'))\n"
+                "    assert event['payload']['display_name'] == 'Ada'\n"
+                "    assert 'user_name' not in event['payload']\n"
+            ),
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            result = grader.grade(
+                EVENT_TASK_PATH,
+                write_run(
+                    Path(directory),
+                    task_path=EVENT_TASK_PATH,
                     final_files=files,
                 ),
             )

@@ -99,6 +99,28 @@ class DecisionNoteCliTests(unittest.TestCase):
             )
             self.assertTrue(note_path.is_file())
 
+    def test_archive_rewrites_inbound_note_links(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._prepare(root)
+            successor = (
+                implemented_note("DEC-002", "New decision")
+                .replace("status: implemented", "status: proposed")
+                .replace("updated: 2026-09-19\n---", "updated: 2026-09-19\nsupersedes: DEC-001\n---")
+                .replace("## Decision", "## Proposal")
+                .replace("## Consequences", "## Acceptance criteria")
+                + "\n## Risks\n\nThe archived rationale remains reviewable.\n\n[Old decision](../../implemented/architecture/adopt-notes.md)\n"
+            )
+            write_file(root, ".agents/notes/proposed/architecture/new-decision.md", successor)
+            note_path = root / ".agents/notes/implemented/architecture/adopt-notes.md"
+            self.assertEqual(
+                decision_notes.main(["archive", "--root", str(root), "--apply", str(note_path.relative_to(root))]),
+                0,
+            )
+            successor_text = (root / ".agents/notes/proposed/architecture/new-decision.md").read_text(encoding="utf-8")
+            self.assertIn("../../archived/architecture/adopt-notes.md", successor_text)
+            self.assertEqual(audit_docs.audit(root), [])
+
 
 if __name__ == "__main__":
     unittest.main()

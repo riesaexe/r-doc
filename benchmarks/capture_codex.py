@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -20,6 +21,18 @@ SCENARIO_IDS = (
     "close-superseded-document-chain",
     "validate-markdown-anchor",
 )
+
+
+def _isolated_codex_environment(codex_home: Path) -> dict[str, str]:
+    environment = os.environ.copy()
+    configured_home = os.environ.get("CODEX_HOME")
+    source_home = Path(configured_home) if configured_home else Path.home() / ".codex"
+    auth_source = source_home / "auth.json"
+    if auth_source.is_file():
+        codex_home.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(auth_source, codex_home / "auth.json")
+        environment["CODEX_HOME"] = str(codex_home)
+    return environment
 
 
 def _document(identifier: str, title: str, body: str = "Benchmark fixture.") -> str:
@@ -141,8 +154,11 @@ def capture_run(
         raise ValueError(f"benchmark run already exists: {run_dir}")
     template_path = project_root / "benchmarks" / "codex-benchmark-prompt.md"
     skill_version = _skill_version(project_root)
-    with tempfile.TemporaryDirectory(prefix="rdoc-codex-benchmark-") as directory:
+    with tempfile.TemporaryDirectory(prefix="rdoc-codex-benchmark-") as directory, tempfile.TemporaryDirectory(
+        prefix="rdoc-codex-home-"
+    ) as codex_home_directory:
         workspace = Path(directory)
+        codex_environment = _isolated_codex_environment(Path(codex_home_directory))
         for scenario_id in SCENARIO_IDS:
             scenario_root = workspace / "scenarios" / scenario_id
             scenario_root.mkdir(parents=True, exist_ok=True)
@@ -183,6 +199,7 @@ def capture_run(
             errors="replace",
             timeout=timeout,
             check=False,
+            env=codex_environment,
         )
         sanitized_events = completed.stdout.replace(str(workspace), "<fixture-root>")
         if completed.returncode != 0:

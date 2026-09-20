@@ -18,6 +18,8 @@ Register unknown formats before editing them. Binary documents may be checked fo
 
 The deterministic audit also scans directly maintained Markdown files in the project root, including `README.md`, `CONTRIBUTING.md`, and `SECURITY.md`, for broken links and sensitive values. `README.md` is included by default, and `.r-doc.yaml` `exclude` applies to root Markdown as well. Metadata, index coverage, and lifecycle relationships remain scoped to Markdown documents under the configured `docs_root`; generated or excluded paths are not scanned. `AGENTS.md` is the mandatory entrypoint and is always checked.
 
+Before reading file contents, apply a bounded read plan: enumerate paths without opening them, choose explicit source/documentation/test roots, and read only named files or those roots. Never use a whole-tree content search from `.` or `rg --hidden` merely to discover the project. Treat `.env`, `.env.*`, `secrets.*`, credential/key/certificate files, and secret-named paths as protected; do not open or pass them to search, test, or build commands. If a task depends on protected content, report the path and request explicit direction. Keep safe entrypoint reads separate from wildcard or recursive content commands.
+
 ## 3. Initialize or repair entry points
 
 When entry points are missing, propose a minimal initialization plan, normally creating only `AGENTS.md` and `docs/README.md`. Create topic directories and documents only when the real project needs them. `AGENTS.md` should contain project navigation, common commands, mandatory rules, prohibitions, context-loading order, task or module routes, and a link to `docs/README.md`.

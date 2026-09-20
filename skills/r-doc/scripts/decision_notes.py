@@ -46,6 +46,7 @@ def main(argv: list[str] | None = None) -> int:
         "id": plan.identifier,
         "source": relative(root, plan.source),
         "destination": relative(root, plan.destination),
+        "updated_links": [relative(root, update.path) for update in plan.link_updates],
         "changed": False,
     }
     if not args.apply:

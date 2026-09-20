@@ -137,6 +137,16 @@ class DecisionNotesTests(unittest.TestCase):
             codes = {item.code for item in audit_docs.audit(root)}
             self.assertIn("decision-note-path", codes)
 
+    def test_nested_note_indexes_are_not_decision_notes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid_project(root)
+            write_file(root, ".agents/notes/README.md", "# Decision notes\n")
+            write_file(root, ".agents/notes/proposed/architecture/README.md", "# Architecture notes\n")
+            write_file(root, ".agents/notes/proposed/architecture/adopt-notes.md", proposed_note())
+            codes = {item.code for item in audit_docs.audit(root)}
+            self.assertNotIn("decision-note-path", codes)
+
     def test_note_links_and_sensitive_content_use_existing_gates(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

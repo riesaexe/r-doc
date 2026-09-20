@@ -10,7 +10,7 @@ Do not write one for mechanical formatting, local CRUD, routine renames, or chan
 
 ## Location and configuration
 
-The conventional root is `.agents/notes/`. It is optional: existing projects are not required to create it. If the directory exists, the audit expects a root `README.md` and scans Markdown below it. A project may route the layer explicitly:
+The conventional root is `.agents/notes/`. It is optional: existing projects are not required to create it. If the directory exists, the audit expects a root `README.md` and scans decision-note Markdown below it. `README.md` files at the root or in lifecycle subdirectories are navigation files, not decision notes, so nested indexes do not create a frontmatter conflict. A project may route the layer explicitly:
 
 ~~~yaml
 decision_notes:
@@ -87,7 +87,7 @@ python scripts/decision_notes.py archive .agents/notes/implemented/architecture/
 python scripts/decision_notes.py archive --apply .agents/notes/implemented/architecture/example.md
 ~~~
 
-The first command is read-only and prints the planned destination. `--apply` updates `status`, `updated`, and `archived`, then moves the note to `archived/<class>/`. It refuses missing roots, mismatched lifecycle/status, malformed frontmatter, concurrent edits, and an existing destination. It does not rewrite indexes or create an empty successor.
+The first command is read-only and prints the planned destination. `--apply` updates `status`, `updated`, and `archived`, then moves the note to `archived/<class>/`. It refuses missing roots, mismatched lifecycle/status, malformed frontmatter, concurrent edits, and an existing destination. Before the move it rewrites inbound relative Markdown links that target the note and reports them as `updated_links`; it does not generate indexes or create an empty successor. The link rewrite is limited to references that resolve to the archived source, so unrelated links are unchanged.
 
 ## Review questions
 

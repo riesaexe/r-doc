@@ -202,17 +202,18 @@ docs/
 
 Public entrypoints, project docs, benchmark guides, and release notes are maintained in English and Chinese whenever practical. Runtime Skill instructions under `skills/r-doc/` remain English-only to keep agent context small; `SKILL.zh-CN.md` remains a human-reference pointer.
 
-## What `0.3.0` adds
+## What `0.4.0` adds
 
-This release adds optional decision-note governance and publishes the extended, independently graded naturalistic evidence set:
+This release adds bounded runtime read governance, optional decision-note governance, and the extended, independently graded naturalistic batch with explicit evidence limits:
 
 | Improvement | What it does | Safety boundary |
 | --- | --- | --- |
-| Independent capture runner | Builds fixtures, invokes the Agent with only the natural user task, snapshots the final workspace externally, normalizes raw CLI events, and hashes artifacts. | The Agent cannot author the final-state snapshot, score, or artifact hash manifest. |
+| Independent capture runner | Builds fixtures, invokes the Agent with the natural user task plus a condition-identical discovery/safe-read preflight, snapshots the final workspace externally, normalizes raw CLI events, and hashes artifacts. | The Agent cannot author the final-state snapshot, score, or artifact hash manifest; the shared preflight is a safety floor, not an r-doc-only effect. |
+| Bounded runtime reads | Enumerates paths before reading, scopes content searches to explicit roots, and protects `.env`, secrets, credentials, keys, and certificates. | Unrelated code-only refactors stay outside the governance workflow; protected paths are reported without opening their contents. |
 | Executable outcome grading | Runs grader-owned pytest, callable behavior, and documentation checks against the runner snapshot. | String assertions alone cannot make a broken implementation pass. |
 | Safety hardening | Rejects Windows path side doors such as `.\\env` and prevents naturalistic metadata from entering conformance aggregation. | Structurally valid failed runs remain visible as measured failures. |
 | Decision-note governance | Adds lifecycle/class routing, deterministic note validation, `supersedes` closure checks, and a preview-first archive helper. | Existing projects remain compatible when no notes root is configured; archive mutation requires explicit `--apply`. |
-| Real naturalistic evidence | Adds four task types with ten matched pairs per task from the user-approved Codex `gpt-5.6-luna` batch. | All 80 measurement-valid runs are retained as evidence; 76 hit forbidden reads and both conditions average 5% task success/context safety, so this is not a positive effectiveness claim. |
+| Real naturalistic evidence | Adds four task types with ten matched pairs per task from the user-approved Codex `gpt-5.6-luna` batch. | The historical v0.3.0 rerun has 80 runs and 49 measurement-valid runs: 40 baseline runs are non-applicable for activation, while 9 `with-r-doc` runs have complete visible/load/use evidence. Those 9 pairs span 3 tasks; the CLI task has no verified pair. The aggregate has 6 overall passes and 74 gated failures; 67 runs contain forbidden-read evidence and 31 lack observed Skill use. Three path-enumeration false positives were removed, but the remaining result is still exploratory and cannot support a Skill-effect claim. The pre-v0.3.0 80-run batch remains historical. |
 
 The `main` branch is protected with pull-request review, one approval, stale-review dismissal, and no force-push or deletion. The release commit is signed locally and must be checked for GitHub's `Verified` badge.
 
@@ -228,7 +229,7 @@ This release makes the empirical benchmark output auditable and directly compara
 | Audit sample reporting | Raises the performance harness default to ten iterations and records interpolated p95, maximum, and low-sample metadata. | Wall-clock values remain local trend data, not a CI threshold or complexity guarantee. |
 | Benchmark taxonomy | Labels the checked-in runs as a `Conformance Benchmark` and `skill-layer-ablation`, with machine-readable prompt, activation-ground-truth, and grader provenance. | The fixed prompt discloses activation, reads, and commands; review dimensions are agent-generated, so these results are not naturalistic effectiveness scores. |
 
-The checked-in benchmark summary now contains three valid matched local Codex `gpt-5.5` pairs for the skill-layer ablation. It is trend-ready but not statistical-ready: the observed mean task-success delta is `0.0pp`, unnecessary-read delta is `-0.67`, and the 95% intervals remain wide at `n=3`. The activation result is protocol compliance against disclosed case answers, and task success includes agent-generated review; neither is a naturalistic effectiveness claim. The independent second layer is specified in [`benchmarks/naturalistic/`](benchmarks/naturalistic/), with no real result claimed yet.
+The historical conformance result remains reproducible as `benchmarks/summary-v0.2.15.json`. The current `benchmarks/summary.json` is regenerated against the 0.4.0 contract and explicitly fails the version gate for the six historical manifests; this prevents an old partial summary from being mistaken for a current release result. The activation result is protocol compliance against disclosed case answers, and task success includes agent-generated review; neither is a naturalistic effectiveness claim. The independent second layer is specified in [`benchmarks/naturalistic/`](benchmarks/naturalistic/), where current effect comparisons require verified visible/load/use evidence.
 
 ## What `0.2.13` adds
 

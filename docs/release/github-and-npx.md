@@ -4,7 +4,7 @@ type: guide
 status: active
 title: GitHub 与 npx skills 发布指南
 created: 2026-09-14
-updated: 2026-09-19
+updated: 2026-09-20
 ---
 
 # GitHub 与 npx skills 发布指南
@@ -75,7 +75,7 @@ unset cred username password
 1. 在本地初始化或连接 Git 仓库；
 2. 提交 skills/r-doc、README、docs、VERSION、CHANGELOG 和 LICENSE；
 3. 推送默认分支到公开 GitHub 仓库；
-4. 创建与 VERSION 一致的版本标签，例如 v0.3.0；
+4. 创建与 VERSION 一致的版本标签，例如 v0.4.0；
 5. 创建 GitHub Release，附上变更说明和必要的发布包；
 6. 从公开仓库地址执行 npx 安装验证。
 
@@ -169,7 +169,7 @@ Keep credentials in memory or a controlled temporary config only. Never write th
 1. Confirm the GitHub owner/repository, default branch, and license.
 2. Commit `skills/r-doc`, README files, docs, `VERSION`, `CHANGELOG.md`, and `LICENSE`.
 3. Push the default branch.
-4. Create the tag matching `VERSION`, such as `v0.3.0`.
+4. Create the tag matching `VERSION`, such as `v0.4.0`.
 5. Create a GitHub Release with bilingual notes and any required package.
 6. Verify installation from the public repository URL with `npx skills`.
 

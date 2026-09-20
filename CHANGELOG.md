@@ -4,11 +4,41 @@ This file records user-visible changes to r-doc.
 
 ## Unreleased
 
+## [0.4.0] - 2026-09-20
+
+- v8 的原始汇总和逐次证据保持不可变；修正任务契约后的派生汇总 `summary-regraded-event-contract.json` 报告 80/80 次运行通过，明确区分原始采集结果与修复后的重判结果。
 - 发布规范明确 GitHub Release 必须通过本机 Git Credential Manager 和 GitHub REST API 创建/上传，按 tag 幂等检查并回读验证；浏览器仅可用于只读查看公开结果。
+- 修复 naturalistic 证据链：捕获器隔离 `CODEX_HOME`，逐次记录 Skill 的 visible/load/use 信号，效果比较只纳入已验证激活的运行；artifact hash 使用 schema 2 的 UTF-8 LF canonical digest，并提供脱敏逐次证据导出与显式 `--write-results` 重放。
+- 将旧 Luna 批次明确降级为历史观察，避免在缺少 activation evidence 的情况下把聚合数字解释为 Skill 效果；同时修复决策笔记嵌套 README 与归档入链断裂问题，并为历史评测合约保留版本化 cases 文件。
+- 修复 naturalistic runner 的目录枚举误报，并重放完整 Luna A/B 批次：80 次运行中 49 次 measurement-valid，形成 9 个完整配对覆盖 3 个任务；6 次整体通过、74 次门禁失败，67 次仍包含 forbidden-read 证据，另有 31 次缺少 Skill use 证据，因此结果仅作可复核的 runner/fixture 诊断和小样本探索。
+- 增强 r-doc 的运行时读取边界：要求先枚举路径再按显式范围读取，禁止从项目根目录进行宽范围内容扫描，并将 `.env`、secrets、凭据、密钥和证书路径设为保护对象；用于降低文档治理任务中的无关/敏感读取。
+- 修复 naturalistic runner 的首个读取竞态：两种条件都先执行不点名具体 Skill 的通用 discovery preflight，并要求 Skill 文件读取与项目扫描分开；同时压缩 r-doc 入口描述，降低上下文预算导致 Skill 降级的风险。
+- 将 naturalistic runner 的安全读取边界提升为两种条件共用的 preflight 契约：明确保护 `.env`、secrets、凭据、密钥和证书路径，并禁止从项目根执行 `rg --hidden` 等无限制内容扫描；旧批次不重写，新批次使用新的 preflight 版本标识。
+- 完成首个新 preflight 的 `gpt-5.6-luna` 小批次验证：4 个任务各 1 对、共 8 次运行，forbidden read 为 0/8、activation 未验证为 0/8；baseline 4/4 通过，with-r-doc 3/4 通过，唯一失败是 event 任务的 `display_name` 运行时契约，不是安全读取失败。
+- 为 Event 任务新增版本化 `event-payload-rename-v2` fixture，明确输入对象仍使用 `user.name`，只将输出 payload key 从 `user_name` 改为 `display_name`；旧 v6 运行记录保持不可变，新的 A/B 结果待单独采集。
+- 完成 Event v2 独立小批次验证：使用 `gpt-5.6-luna` 对 `baseline-no-r-doc` 与 `with-r-doc` 各运行 1 次，2/2 通过运行时契约、forbidden read 为 0/2、activation 未验证为 0/2；结果确认修复生效，但单对样本不构成 Skill 效果结论。
+- 完成新 runner 的完整 `gpt-5.6-luna` A/B 批次：API、CLI、SQL、Event v2 各 10 对，共 80 次运行；79/80 通过，唯一失败为 SQL baseline 读取 `.env` 的 forbidden-read，activation 未验证为 0/80，四类任务均达到 10 对强证据数量门槛。该结果验证了可复核采集链和 Event v2 fixture，但共同 preflight 与单模型设计仍不支持直接归因 Skill 增量效果。
+- 修复 naturalistic runner 的命令读取归因假阳性：嵌套 PowerShell 引号中的 `rg --glob '!*.env'` 等保护路径排除参数不再被当作实际读取；runner 协议升级为 `skill-discovery-safe-read-preflight-v2-command-glob`，旧 v1 证据保持不可变。
+- 按 v2 command-glob runner 完成后续完整 `gpt-5.6-luna` A/B 批次：API、CLI、SQL、Event v2 各 10 对，共 80 次运行；79/80 通过，forbidden read 为 0/80、activation 未验证为 0/80，SQL 任务已全部通过。唯一失败是 `event-payload-rename-v2 / with-r-doc / run-002` 的最终状态检查，`tests/test_events.py` 仍含旧 `user_name`；因此该批次不是全通过，但确认了此前 SQL baseline forbidden-read 问题已消失。
+- 修复 Event v2 benchmark 的静态断言假阴性：测试文件可通过可执行 pytest 验证旧字段不出现在运行结果中，不再用原始字符串 `not_contains` 拒绝合法的负向断言；v8 的原始失败证据保持不变。
 
 ### English
 
+- The original v8 aggregate and per-run evidence remain immutable; the corrected derived `summary-regraded-event-contract.json` reports 80/80 passing runs and keeps collection results separate from post-fix regrading.
 - Release governance now requires GitHub Releases to be created and uploaded through the local Git Credential Manager and GitHub REST API, with idempotent tag checks and API read-back verification; the browser is read-only for checking the public result.
+- Naturalistic evidence now isolates `CODEX_HOME`, records per-run Skill visible/load/use signals, gates effect comparisons on verified activation, uses schema-2 UTF-8 LF canonical artifact digests, and provides sanitized per-run export plus explicit `--write-results` replay.
+- The pre-v0.3.0 Luna batch is explicitly historical rather than current effect evidence; nested decision-note README files and inbound archive links are handled deterministically, and historical evaluation contracts are versioned separately.
+- The naturalistic runner now separates directory enumeration from content reads and has regraded the complete Luna A/B batch: 80 runs, 49 measurement-valid runs (40 baseline activation-not-applicable and 9 `with-r-doc` runs with complete visible/load/use evidence), and 9 complete pairs across 3 tasks; 6 runs pass overall, 74 fail a gate, 67 retain forbidden-read evidence, and 31 lack observed Skill use. The result remains reproducible runner/fixture evidence and exploratory data rather than a Skill-effect claim.
+- r-doc now defines a bounded runtime read policy: enumerate paths before reading, keep content searches scoped to explicit roots, and protect `.env`, secrets, credentials, keys, and certificates from convenience scans or command concatenation.
+- The naturalistic runner now applies a generic, condition-identical Skill-discovery preflight before project inspection and keeps Skill-file reads separate from project scans; the r-doc entry description is shorter to reduce context-budget degradation.
+- The naturalistic runner now applies a condition-identical safe-read boundary in addition to generic Skill discovery: protected `.env`, secret, credential, key, and certificate paths are excluded, and unrestricted root `rg --hidden` content scans are prohibited. Historical batches are not rewritten; new captures carry a distinct preflight version.
+- The Event task now has a versioned `event-payload-rename-v2` fixture that explicitly keeps the input object at `user.name` while renaming only the emitted payload key to `display_name`; the old v6 evidence remains immutable pending a fresh A/B capture.
+- The Event v2 isolated smoke pair completed with `gpt-5.6-luna`: both `baseline-no-r-doc` and `with-r-doc` passed the runtime contract, forbidden reads were `0/2`, and unverified activation was `0/2`. This confirms the fixture fix, not Skill effectiveness; one pair is below evidence-readiness thresholds.
+- The complete new-runner `gpt-5.6-luna` A/B batch is complete: API, CLI, SQL, and Event v2 each have 10 matched pairs, 80 runs total, and 79/80 overall passes. The only failure is a SQL baseline forbidden read of `.env`; unverified activation is `0/80`, and every task reaches the 10-pair strong-evidence count. The batch validates the reproducible capture chain and Event v2 fixture, but its common preflight and single-model design do not support a direct Skill-increment attribution.
+- Fixed a naturalistic runner command-attribution false positive: protected-path exclusions such as `rg --glob '!*.env'` inside nested PowerShell quoting are no longer treated as actual reads. Future manifests use `skill-discovery-safe-read-preflight-v2-command-glob`; historical v1 evidence remains immutable.
+- Completed the first post-fix `gpt-5.6-luna` smoke validation under the new preflight: four matched A/B task pairs and eight runs, with 0/8 forbidden-read runs and 0/8 unverified activations. Baseline passed 4/4; `with-r-doc` passed 3/4, with the only failure being the event task's `display_name` runtime contract rather than a read-safety failure.
+- Completed the follow-up full `gpt-5.6-luna` A/B batch with the v2 command-glob runner: 10 matched pairs each for API, CLI, SQL, and Event v2, 80 runs total. Seventy-nine runs pass; forbidden reads are `0/80`, unverified activation is `0/80`, and all SQL runs pass. The only failure is the Event v2 `with-r-doc` run-002 final-state check, which still finds the old `user_name` in `tests/test_events.py`; the batch is therefore not clean, but the earlier SQL baseline forbidden-read problem is gone.
+- Fixed the Event v2 benchmark's static-assertion false negative: test files may use executable pytest to verify that the legacy field is absent from runtime output, so a raw `not_contains` string rule is no longer applied to a test file that intentionally contains a negative assertion. The original v8 failure evidence remains unchanged.
 
 ## [0.3.0] - 2026-09-19
 

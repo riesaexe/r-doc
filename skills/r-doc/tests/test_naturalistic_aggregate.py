@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 import unittest
@@ -14,6 +15,26 @@ from test_naturalistic_grader import write_run
 
 
 class NaturalisticAggregateTests(unittest.TestCase):
+    def test_write_results_replays_the_current_grader_contract(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_run(
+                root,
+                profile="codex-gpt-5.5",
+                run_id="run-001",
+                condition="with-r-doc",
+            )
+            result_path = root / "codex-gpt-5.5" / "run-001" / "result.json"
+            result_path.write_text(json.dumps({"status": "stale"}), encoding="utf-8")
+            aggregate.aggregate(
+                root,
+                PROJECT_ROOT / "benchmarks" / "naturalistic" / "tasks",
+                write_results=True,
+            )
+            result = json.loads(result_path.read_text(encoding="utf-8"))
+            self.assertNotEqual(result["status"], "stale")
+            self.assertIn("activation_verified", result)
+
     def test_aggregate_keeps_naturalistic_pairs_and_readiness_explicit(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -63,6 +84,8 @@ class NaturalisticAggregateTests(unittest.TestCase):
             self.assertEqual(summary["status"], "partial")
             self.assertEqual(summary["coverage"]["coverage_pair_count"], 1)
             self.assertEqual(summary["paired_comparisons"][0]["conditions"]["with-r-doc"]["task_success"], 0.0)
+            self.assertEqual(summary["failure_analysis"]["forbidden_read_runs"], 2)
+            self.assertEqual(summary["failure_analysis"]["failure_modes"]["forbidden_read_only"], 2)
 
     def test_top_level_readiness_requires_repeated_pairs_for_the_same_task(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

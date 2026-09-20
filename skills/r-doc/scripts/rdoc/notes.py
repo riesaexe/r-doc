@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from datetime import date
 from dataclasses import dataclass
+import os
 from pathlib import Path
 import re
 
 from .config import ProjectConfig, _string_list, canonical_path, path_is_excluded, relative
 from .io import add, read_text
-from .markdown import parse_frontmatter
+from .markdown import parse_frontmatter, target_reference
 from .models import Finding, FrontmatterParseError
 
 
@@ -25,12 +26,20 @@ IMPLEMENTED_FORBIDDEN_SECTIONS = {"proposal", "plan", "migration plan", "accepta
 
 
 @dataclass(frozen=True)
+class ArchiveLinkUpdate:
+    path: Path
+    before: str
+    after: str
+
+
+@dataclass(frozen=True)
 class ArchivePlan:
     source: Path
     destination: Path
     before: str
     after: str
     identifier: str
+    link_updates: tuple[ArchiveLinkUpdate, ...] = ()
 
 
 def decision_note_files(notes_root: Path, root: Path, config: ProjectConfig) -> list[Path]:
@@ -40,7 +49,9 @@ def decision_note_files(notes_root: Path, root: Path, config: ProjectConfig) -> 
         (
             path
             for path in notes_root.rglob("*.md")
-            if path.is_file() and not path_is_excluded(root, path, config)
+            if path.is_file()
+            and path.name != "README.md"
+            and not path_is_excluded(root, path, config)
         ),
         key=lambda path: relative(root, path),
     )
@@ -288,6 +299,49 @@ def _update_frontmatter_scalars(text: str, updates: dict[str, str]) -> str:
     return "".join([lines[0], *body, lines[closing], *lines[closing + 1:]])
 
 
+def _rewrite_archive_links(
+    text: str,
+    path: Path,
+    root: Path,
+    source: Path,
+    destination: Path,
+) -> str:
+    pattern = re.compile(r"(?P<prefix>\]\()(?P<target>[^)\n]+)(?P<suffix>\))")
+
+    def replace(match: re.Match[str]) -> str:
+        raw_target = match.group("target")
+        reference = target_reference(path, raw_target, root)
+        if reference is None or reference.path is None:
+            return match.group(0)
+        canonical_target = canonical_path(root, reference.path)
+        canonical_source = canonical_path(root, source)
+        if canonical_target is None or canonical_source is None or canonical_target != canonical_source:
+            return match.group(0)
+        relative_target = os.path.relpath(destination, path.parent).replace(os.sep, "/")
+        if reference.fragment:
+            relative_target += f"#{reference.fragment}"
+        return f"{match.group('prefix')}{relative_target}{match.group('suffix')}"
+
+    return pattern.sub(replace, text)
+
+
+def _archive_link_updates(
+    root: Path,
+    config: ProjectConfig,
+    source: Path,
+    destination: Path,
+) -> tuple[ArchiveLinkUpdate, ...]:
+    updates: list[ArchiveLinkUpdate] = []
+    for path in sorted(root.rglob("*.md")):
+        if path == source or path_is_excluded(root, path, config):
+            continue
+        before = path.read_text(encoding="utf-8")
+        after = _rewrite_archive_links(before, path, root, source, destination)
+        if after != before:
+            updates.append(ArchiveLinkUpdate(path, before, after))
+    return tuple(updates)
+
+
 def plan_archive(root: Path, config: ProjectConfig, note_path: Path, today: date | None = None) -> ArchivePlan:
     root = root.resolve()
     notes_root = config.decision_notes_path(root)
@@ -318,7 +372,8 @@ def plan_archive(root: Path, config: ProjectConfig, note_path: Path, today: date
         raise ValueError(f"archive destination already exists: {relative(root, destination)}")
     archive_date = (today or date.today()).isoformat()
     updated = _update_frontmatter_scalars(text, {"status": "archived", "updated": archive_date, "archived": archive_date})
-    return ArchivePlan(canonical_candidate, destination, text, updated, identifier.strip())
+    link_updates = _archive_link_updates(root, config, canonical_candidate, destination)
+    return ArchivePlan(canonical_candidate, destination, text, updated, identifier.strip(), link_updates)
 
 
 def apply_archive(plan: ArchivePlan) -> None:
@@ -328,11 +383,25 @@ def apply_archive(plan: ArchivePlan) -> None:
         raise ValueError(f"archive source changed after planning: {plan.source}")
     if plan.destination.exists():
         raise ValueError(f"archive destination appeared after planning: {plan.destination}")
+    for update in plan.link_updates:
+        if not update.path.is_file():
+            raise ValueError(f"archive link target disappeared: {update.path}")
+        if update.path.read_text(encoding="utf-8") != update.before:
+            raise ValueError(f"archive link target changed after planning: {update.path}")
     plan.destination.parent.mkdir(parents=True, exist_ok=True)
+    updated_links: list[ArchiveLinkUpdate] = []
     try:
+        for update in plan.link_updates:
+            update.path.write_text(update.after, encoding="utf-8")
+            updated_links.append(update)
         plan.destination.write_text(plan.after, encoding="utf-8")
         plan.source.unlink()
     except OSError:
+        for update in reversed(updated_links):
+            try:
+                update.path.write_text(update.before, encoding="utf-8")
+            except OSError:
+                pass
         if plan.destination.is_file() and plan.source.is_file():
             try:
                 plan.destination.unlink()

@@ -1,8 +1,8 @@
 ---
 name: r-doc
-description: "Govern project documentation when a user asks to initialize, audit, repair, or maintain AGENTS.md, docs/, indexes, plans, requirements, design, APIs, testing, releases, or deployment records, or when a change affects public behavior, interfaces, configuration, architecture, deployment, or documented project rules. Do not activate for code-only edits with no documentation impact; do not replace business-code implementation."
+description: "Govern documentation with bounded safe reads for public, interface, config, architecture, release, or docs changes; protect .env/secrets and skip unrelated code-only refactors."
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
 ---
 
 # r-doc: Project documentation governance
@@ -34,6 +34,17 @@ Implicit activation is intentionally supported, but apply this gate before doing
 - The task asks to initialize, index, audit, repair, synchronize, review, or publish project documentation.
 
 Do not turn an unrelated code edit into a documentation project merely because the repository contains `AGENTS.md` or `docs/`.
+
+## Bounded and safe reading
+
+Use a bounded, deny-by-default reading plan. Enumerate paths without opening their contents, using tools such as `rg --files` or `Get-ChildItem`; then read only named files or explicit source, documentation, and test directories required by the task.
+
+- Do not run content searches from `.` or the whole project root. Prefer a narrow search such as `rg -n 'term' src docs tests` and add exclusions explicitly when a broader scope is unavoidable.
+- Do not use `rg --hidden` or equivalent whole-tree content scans for convenience. Inspect hidden directories only when the task names a specific path, such as `.agents/notes/`.
+- Treat `.env`, `.env.*`, `secrets.*`, credential files, private keys, certificates, and files or directories whose names identify secrets as protected. Do not open, concatenate, execute, or pass them to search, test, or build commands. If the task appears to depend on one, report the path without its contents and request explicit direction.
+- Never combine a known safe file read with a wildcard or recursive content read. Keep `AGENTS.md`, indexes, and target files as separate, explicit reads.
+
+Path enumeration is not content reading, but a command that searches or prints file contents must still obey these boundaries.
 
 ## Non-negotiable constraints
 

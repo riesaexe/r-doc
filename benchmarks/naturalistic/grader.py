@@ -18,9 +18,11 @@ from typing import Any
 
 RUN_SCHEMA_VERSION = 2
 FINAL_STATE_SCHEMA_VERSION = 2
-HASH_SCHEMA_VERSION = 1
+HASH_SCHEMA_VERSION = 2
+HASH_CANONICALIZATION = "utf-8-lf"
 TASK_SCHEMA_VERSION = 2
 RESULT_SCHEMA_VERSION = 2
+ACTIVATION_EVIDENCE_SCHEMA_VERSION = 1
 NATURALISTIC_BENCHMARK_KIND = "naturalistic-effectiveness"
 NATURALISTIC_PROMPT_CONTRACT = "naturalistic-user-task"
 NATURALISTIC_ACTIVATION_GROUND_TRUTH = "independent-task-spec"
@@ -38,6 +40,10 @@ TRACE_FIELDS = {
     "response": {"sequence", "event", "text"},
     "diff_snapshot": {"sequence", "event", "text"},
     "review": {"sequence", "event", "dimension", "status", "basis"},
+}
+TRACE_OPTIONAL_FIELDS = {
+    "file_read": {"source", "basis"},
+    "file_written": {"source", "basis"},
 }
 PROMPT_REQUIRED_FIELDS = {"sequence", "event", "text"}
 
@@ -91,7 +97,9 @@ def _load_trace(path: Path) -> tuple[list[dict[str, Any]], list[str]]:
         if event_type not in TRACE_EVENTS:
             errors.append(f"trace line {line_number} has unsupported event {event_type!r}")
             continue
-        unsupported = sorted(set(event) - TRACE_FIELDS[event_type])
+        unsupported = sorted(
+            set(event) - TRACE_FIELDS[event_type] - TRACE_OPTIONAL_FIELDS.get(event_type, set())
+        )
         missing = sorted(TRACE_FIELDS[event_type] - set(event))
         if unsupported:
             errors.append(f"trace line {line_number} has unsupported fields: {', '.join(unsupported)}")
@@ -143,15 +151,6 @@ def _sha256_lf(path: Path) -> str:
     return _sha256_bytes(_normalize_text_bytes(path.read_bytes()))
 
 
-def _sha256_variants(path: Path) -> set[str]:
-    normalized = _normalize_text_bytes(path.read_bytes())
-    return {
-        _sha256(path),
-        _sha256_bytes(normalized),
-        _sha256_bytes(normalized.replace(b"\n", b"\r\n")),
-    }
-
-
 def _artifact_errors(manifest: dict[str, Any], run_dir: Path) -> list[str]:
     hashes_value = _safe_relative(manifest.get("hashes_path"))
     errors: list[str] = []
@@ -164,17 +163,25 @@ def _artifact_errors(manifest: dict[str, Any], run_dir: Path) -> list[str]:
         hashes = _load_json(hashes_path)
     except (OSError, ValueError, json.JSONDecodeError) as error:
         return [f"invalid artifact hash manifest: {error}"]
-    if hashes.get("schema_version") != HASH_SCHEMA_VERSION or hashes.get("algorithm") != "sha256":
-        errors.append("artifact hash manifest has an unsupported schema or algorithm")
+    if (
+        hashes.get("schema_version") != HASH_SCHEMA_VERSION
+        or hashes.get("algorithm") != "sha256"
+        or hashes.get("canonicalization") != HASH_CANONICALIZATION
+    ):
+        errors.append("artifact hash manifest has an unsupported schema, algorithm, or canonicalization")
     artifacts = hashes.get("artifacts")
     if not isinstance(artifacts, dict) or not artifacts:
         return errors + ["artifact hash manifest must contain a non-empty artifacts object"]
     required_paths = {
-        "run.json",
-        str(manifest.get("trace_path", "")),
-        str(manifest.get("final_state_path", "")),
-        str(manifest.get("final_response_path", "")),
-        str(manifest.get("raw_trace_path", "")),
+        path
+        for path in {
+            "run.json",
+            manifest.get("trace_path"),
+            manifest.get("final_state_path"),
+            manifest.get("final_response_path"),
+            manifest.get("raw_trace_path"),
+        }
+        if isinstance(path, str) and path
     }
     if not required_paths.issubset(artifacts):
         missing = sorted(path for path in required_paths if path not in artifacts)
@@ -184,16 +191,59 @@ def _artifact_errors(manifest: dict[str, Any], run_dir: Path) -> list[str]:
         if safe_path is None or safe_path != raw_path:
             errors.append(f"artifact hash path is unsafe: {raw_path}")
             continue
-        if not isinstance(expected, str) or len(expected) != 64:
+        if (
+            not isinstance(expected, dict)
+            or expected.get("canonicalization") != HASH_CANONICALIZATION
+            or not isinstance(expected.get("sha256"), str)
+            or len(expected["sha256"]) != 64
+        ):
             errors.append(f"artifact hash is invalid: {raw_path}")
             continue
         artifact_path = run_dir / safe_path
         if not artifact_path.is_file():
             errors.append(f"hashed artifact is missing: {raw_path}")
             continue
-        if expected not in _sha256_variants(artifact_path):
+        if expected["sha256"] != _sha256_lf(artifact_path):
             errors.append(f"artifact hash mismatch: {raw_path}")
     return errors
+
+
+def _activation_evidence_errors(manifest: dict[str, Any]) -> list[str]:
+    evidence = manifest.get("activation_evidence")
+    if not isinstance(evidence, dict):
+        return ["run.json is missing activation_evidence"]
+    if evidence.get("schema_version") != ACTIVATION_EVIDENCE_SCHEMA_VERSION:
+        return ["activation_evidence has an unsupported schema_version"]
+
+    condition = manifest.get("condition")
+    expected_status = "not_applicable" if condition == "baseline-no-r-doc" else None
+    errors: list[str] = []
+    for stage in ("visibility", "load", "use"):
+        stage_value = evidence.get(stage)
+        if not isinstance(stage_value, dict):
+            errors.append(f"activation_evidence.{stage} must be an object")
+            continue
+        status = stage_value.get("status")
+        if not isinstance(status, str) or not status:
+            errors.append(f"activation_evidence.{stage}.status is required")
+        elif expected_status and status != expected_status:
+            errors.append(f"baseline activation_evidence.{stage} must be not_applicable")
+
+    if condition == "with-r-doc":
+        visibility = evidence.get("visibility", {}).get("status")
+        load = evidence.get("load", {}).get("status")
+        use = evidence.get("use", {}).get("status")
+        if visibility not in {"confirmed", "confirmed_degraded"}:
+            errors.append("r-doc visibility was not confirmed by the raw Codex event stream")
+        if load != "observed":
+            errors.append("r-doc load was not observed in the raw Codex event stream")
+        if use != "observed":
+            errors.append("r-doc use was not observed in the raw Codex event stream")
+    return errors
+
+
+def _activation_verified(manifest: dict[str, Any]) -> bool:
+    return not _activation_evidence_errors(manifest)
 
 
 def _materialize_argument(value: object) -> object:
@@ -374,6 +424,16 @@ def grade(task_path: Path, run_dir: Path) -> dict[str, Any]:
     if manifest.get("agent_exit_code") != 0:
         errors.append("agent process did not exit successfully")
 
+    activation_errors = _activation_evidence_errors(manifest)
+    errors.extend(activation_errors)
+    checks.append(
+        _check(
+            not activation_errors,
+            "activation_evidence",
+            "raw Codex evidence records r-doc visibility, load, and use without claiming unavailable telemetry",
+        )
+    )
+
     artifact_errors = _artifact_errors(manifest, run_dir)
     errors.extend(artifact_errors)
     checks.append(_check(not artifact_errors, "artifact_integrity", "runner artifacts match their recorded SHA-256 hashes"))
@@ -406,15 +466,48 @@ def grade(task_path: Path, run_dir: Path) -> dict[str, Any]:
     checks.append(_check(not prompt_errors, "prompt_contract", "prompt contains only the naturalistic user task"))
 
     forbidden = {_safe_relative(path) for path in task.get("forbidden_reads", [])}
+    read_evidence: dict[str, dict[str, set[str]]] = {}
+    for event in events:
+        if event.get("event") != "file_read":
+            continue
+        path = _safe_relative(event.get("path"))
+        if path is None:
+            continue
+        read_evidence.setdefault(path, {"sources": set(), "bases": set()})
+        source = event.get("source")
+        basis = event.get("basis")
+        if isinstance(source, str) and source:
+            read_evidence[path]["sources"].add(source)
+        if isinstance(basis, str) and basis:
+            read_evidence[path]["bases"].add(basis)
     reads = {
         _safe_relative(event.get("path"))
         for event in events
         if event.get("event") == "file_read"
     }
+    read_paths = sorted(path for path in reads if path is not None)
     forbidden_hits = sorted(path for path in reads & forbidden if path is not None)
     if forbidden_hits:
         errors.append("forbidden reads: " + ", ".join(forbidden_hits))
     checks.append(_check(not forbidden_hits, "forbidden_reads", "trace did not read forbidden fixture paths"))
+
+    def attribution(path: str) -> dict[str, Any]:
+        evidence = read_evidence.get(path, {})
+        sources = sorted(evidence.get("sources", set())) or ["legacy_trace_without_source"]
+        bases = sorted(evidence.get("bases", set())) or ["source_unavailable"]
+        return {
+            "path": path,
+            "forbidden": path in forbidden,
+            "sources": sources,
+            "bases": bases,
+        }
+
+    read_attribution = {
+        "actual_os_access_telemetry": "unavailable",
+        "forbidden_reads_are": "normalized_trace_events",
+        "reads": [attribution(path) for path in read_paths],
+        "forbidden": [attribution(path) for path in forbidden_hits],
+    }
 
     outcome_errors: list[str] = []
     files: dict[str, Any] = {}
@@ -473,7 +566,15 @@ def grade(task_path: Path, run_dir: Path) -> dict[str, Any]:
     if not response_ok:
         errors.append("final response artifact is missing or empty")
 
-    return _result(task, manifest, checks, errors, executable_results)
+    return _result(
+        task,
+        manifest,
+        checks,
+        errors,
+        executable_results,
+        read_attribution,
+        activation_errors=activation_errors,
+    )
 
 
 def _result(
@@ -482,8 +583,13 @@ def _result(
     checks: list[dict[str, str]],
     errors: list[str],
     executable_results: list[dict[str, str]] | None = None,
+    read_attribution: dict[str, Any] | None = None,
+    activation_errors: list[str] | None = None,
 ) -> dict[str, Any]:
     status = "pass" if not errors else "fail"
+    activation_error_set = set(activation_errors or [])
+    task_outcome_errors = [error for error in errors if error not in activation_error_set]
+    task_outcome_status = "pass" if not task_outcome_errors else "fail"
     return {
         "schema_version": RESULT_SCHEMA_VERSION,
         "status": status,
@@ -493,14 +599,22 @@ def _result(
         "condition": manifest.get("condition"),
         "agent": manifest.get("agent"),
         "model": manifest.get("model"),
+        "activation_verified": _activation_verified(manifest),
+        "task_outcome_status": task_outcome_status,
         "metrics": {
-            "task_success": 100.0 if status == "pass" else 0.0,
+            "task_success": 100.0 if task_outcome_status == "pass" else 0.0,
             "outcome_compliance": 100.0 if next((item for item in checks if item["id"] == "final_state_outcome"), {}).get("status") == "pass" else 0.0,
             "executable_outcome": 100.0 if next((item for item in checks if item["id"] == "executable_outcome"), {}).get("status") == "pass" else 0.0,
             "context_safety": 100.0 if next((item for item in checks if item["id"] == "forbidden_reads"), {}).get("status") == "pass" else 0.0,
             "trace_integrity": 100.0 if next((item for item in checks if item["id"] == "trace_integrity"), {}).get("status") == "pass" else 0.0,
         },
         "agent_review_used": False,
+        "read_attribution": read_attribution
+        or {
+            "actual_os_access_telemetry": "unavailable",
+            "forbidden_reads_are": "normalized_trace_events",
+            "forbidden": [],
+        },
         "executable_checks": executable_results or [],
         "checks": checks,
         "errors": errors,

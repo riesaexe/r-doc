@@ -22,6 +22,7 @@ MEASUREMENT_GATE_CHECKS = {
     "trace_integrity",
     "prompt_contract",
     "final_response",
+    "activation_evidence",
 }
 T_CRITICAL_95 = {1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571, 6: 2.447, 7: 2.365, 8: 2.306, 9: 2.262, 10: 2.228}
 
@@ -82,6 +83,57 @@ def _measurement_valid(result: dict[str, Any]) -> bool:
         if isinstance(check, dict)
     }
     return all(checks.get(check_id) == "pass" for check_id in MEASUREMENT_GATE_CHECKS)
+
+
+def _failure_analysis(records: list[dict[str, Any]]) -> dict[str, Any]:
+    status_counts = {"pass": 0, "fail": 0}
+    task_outcome_counts = {"pass": 0, "fail": 0}
+    failure_modes = {
+        "forbidden_read_only": 0,
+        "forbidden_read_and_activation_unverified": 0,
+        "activation_unverified_only": 0,
+        "other": 0,
+    }
+    forbidden_read_runs = 0
+    activation_unverified_runs = 0
+    for record in records:
+        status = str(record.get("status"))
+        if status in status_counts:
+            status_counts[status] += 1
+        task_outcome_status = str(record.get("task_outcome_status"))
+        if task_outcome_status in task_outcome_counts:
+            task_outcome_counts[task_outcome_status] += 1
+        has_forbidden_read = any(
+            isinstance(error, str) and error.startswith("forbidden reads:")
+            for error in record.get("errors", [])
+        )
+        has_activation_failure = not bool(record.get("activation_verified"))
+        if has_forbidden_read:
+            forbidden_read_runs += 1
+        if has_activation_failure:
+            activation_unverified_runs += 1
+        if status != "fail":
+            continue
+        if has_forbidden_read and has_activation_failure:
+            failure_modes["forbidden_read_and_activation_unverified"] += 1
+        elif has_forbidden_read:
+            failure_modes["forbidden_read_only"] += 1
+        elif has_activation_failure:
+            failure_modes["activation_unverified_only"] += 1
+        else:
+            failure_modes["other"] += 1
+    return {
+        "status_counts": status_counts,
+        "task_outcome_status_counts": task_outcome_counts,
+        "forbidden_read_runs": forbidden_read_runs,
+        "activation_unverified_runs": activation_unverified_runs,
+        "task_outcome_pass_but_overall_fail": sum(
+            1
+            for record in records
+            if record.get("status") == "fail" and record.get("task_outcome_status") == "pass"
+        ),
+        "failure_modes": failure_modes,
+    }
 
 
 def _find_tasks(tasks_root: Path) -> dict[str, Path]:
@@ -162,7 +214,12 @@ def _pair_comparisons(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return comparisons
 
 
-def aggregate(benchmarks_root: Path, tasks_root: Path) -> dict[str, Any]:
+def aggregate(
+    benchmarks_root: Path,
+    tasks_root: Path,
+    *,
+    write_results: bool = False,
+) -> dict[str, Any]:
     tasks = _find_tasks(tasks_root)
     errors: list[str] = []
     records: list[dict[str, Any]] = []
@@ -179,6 +236,11 @@ def aggregate(benchmarks_root: Path, tasks_root: Path) -> dict[str, Any]:
             if task_path is None:
                 raise ValueError(f"unknown naturalistic task_id: {task_id}")
             result = grader.grade(task_path, run_dir)
+            if write_results:
+                (run_dir / "result.json").write_text(
+                    json.dumps(result, ensure_ascii=False, indent=2) + "\n",
+                    encoding="utf-8",
+                )
         except (OSError, ValueError, json.JSONDecodeError) as error:
             errors.append(f"{run_dir}: {error}")
             continue
@@ -191,6 +253,8 @@ def aggregate(benchmarks_root: Path, tasks_root: Path) -> dict[str, Any]:
                 "agent": manifest.get("agent"),
                 "model": manifest.get("model"),
                 "status": result.get("status"),
+                "task_outcome_status": result.get("task_outcome_status", result.get("status")),
+                "activation_verified": bool(result.get("activation_verified")),
                 "measurement_valid": _measurement_valid(result),
                 "metrics": result.get("metrics", {}),
                 "result_path": run_dir.relative_to(benchmarks_root).joinpath("result.json").as_posix(),
@@ -199,6 +263,8 @@ def aggregate(benchmarks_root: Path, tasks_root: Path) -> dict[str, Any]:
         )
 
     valid = [record for record in records if record["measurement_valid"]]
+    failure_analysis = _failure_analysis(records)
+    activation_verified_runs = sum(1 for record in records if record["activation_verified"])
     profiles: dict[str, dict[str, Any]] = {}
     by_profile: dict[str, dict[str, list[dict[str, Any]]]] = {}
     for record in valid:
@@ -246,6 +312,8 @@ def aggregate(benchmarks_root: Path, tasks_root: Path) -> dict[str, Any]:
         "paired_task_count": len(paired_task_ids),
         "task_diversity_ready": len(paired_task_ids) >= 4,
         "coverage_pair_count": pair_count,
+        "activation_verified_run_count": activation_verified_runs,
+        "activation_unverified_run_count": len(records) - activation_verified_runs,
         "task_pair_counts": dict(sorted(task_pair_counts.items())),
         "replicated_task_count": sum(count >= 2 for count in task_pair_counts.values()),
         "min_pairs_per_task": min(task_pair_counts.values(), default=0),
@@ -283,7 +351,14 @@ def aggregate(benchmarks_root: Path, tasks_root: Path) -> dict[str, Any]:
             "outcome_compliance": "Narrow static contract assertions over the runner-generated final snapshot; runtime behavior is reported separately.",
             "executable_outcome": "Grader-owned pytest and behavior checks executed from the final snapshot.",
         },
+        "activation_evidence": {
+            "verified_runs": activation_verified_runs,
+            "unverified_runs": len(records) - activation_verified_runs,
+            "effect_comparisons_require_verified_activation": True,
+            "limitation": "Codex JSONL does not expose OS-level skill loading telemetry; raw-event signals are recorded per run.",
+        },
         "status": status,
+        "failure_analysis": failure_analysis,
         "coverage": coverage,
         "profiles": profiles,
         "paired_comparisons": comparisons,
@@ -303,9 +378,18 @@ def main() -> int:
     parser.add_argument("--root", type=Path, default=project_root / "benchmarks" / "naturalistic-runs")
     parser.add_argument("--tasks-root", type=Path, default=project_root / "benchmarks" / "naturalistic" / "tasks")
     parser.add_argument("--output", type=Path)
+    parser.add_argument(
+        "--write-results",
+        action="store_true",
+        help="rewrite each run's result.json from the current task specification",
+    )
     args = parser.parse_args()
     try:
-        summary = aggregate(args.root.resolve(), args.tasks_root.resolve())
+        summary = aggregate(
+            args.root.resolve(),
+            args.tasks_root.resolve(),
+            write_results=args.write_results,
+        )
         output = args.output.resolve() if args.output else args.root.resolve() / "summary.json"
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

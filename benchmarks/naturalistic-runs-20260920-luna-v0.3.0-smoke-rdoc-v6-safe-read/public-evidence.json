@@ -1,0 +1,3697 @@
+{
+  "schema_version": 1,
+  "benchmark_kind": "naturalistic-effectiveness",
+  "source_root": "<redacted-benchmark-root>",
+  "raw_artifacts_retained_locally": true,
+  "public_artifact_policy": "sanitized-manifest-critical-events-result-and-source-hashes",
+  "run_count": 8,
+  "summary": {
+    "schema_version": 3,
+    "benchmark_kind": "naturalistic-effectiveness",
+    "benchmark_name": "Naturalistic Effectiveness Benchmark",
+    "prompt_contract": "naturalistic-user-task",
+    "activation_ground_truth": "independent-task-spec",
+    "grader_kind": "independent-grader",
+    "review_provenance": "independent-grader",
+    "metric_semantics": {
+      "task_success": "Independent runner snapshot, executable outcome checks, and trace safety; not agent self-report.",
+      "outcome_compliance": "Narrow static contract assertions over the runner-generated final snapshot; runtime behavior is reported separately.",
+      "executable_outcome": "Grader-owned pytest and behavior checks executed from the final snapshot."
+    },
+    "activation_evidence": {
+      "verified_runs": 8,
+      "unverified_runs": 0,
+      "effect_comparisons_require_verified_activation": true,
+      "limitation": "Codex JSONL does not expose OS-level skill loading telemetry; raw-event signals are recorded per run."
+    },
+    "status": "partial",
+    "failure_analysis": {
+      "status_counts": {
+        "pass": 7,
+        "fail": 1
+      },
+      "task_outcome_status_counts": {
+        "pass": 7,
+        "fail": 1
+      },
+      "forbidden_read_runs": 0,
+      "activation_unverified_runs": 0,
+      "task_outcome_pass_but_overall_fail": 0,
+      "failure_modes": {
+        "forbidden_read_only": 0,
+        "forbidden_read_and_activation_unverified": 0,
+        "activation_unverified_only": 0,
+        "other": 1
+      }
+    },
+    "coverage": {
+      "models": [
+        "gpt-5.6-luna"
+      ],
+      "model_count": 1,
+      "multi_model": false,
+      "task_ids": [
+        "api-response-field-rename",
+        "cli-option-rename",
+        "event-payload-rename",
+        "sql-column-rename"
+      ],
+      "task_count": 4,
+      "paired_task_ids": [
+        "api-response-field-rename",
+        "cli-option-rename",
+        "event-payload-rename",
+        "sql-column-rename"
+      ],
+      "paired_task_count": 4,
+      "task_diversity_ready": true,
+      "coverage_pair_count": 4,
+      "activation_verified_run_count": 8,
+      "activation_unverified_run_count": 0,
+      "task_pair_counts": {
+        "api-response-field-rename": 1,
+        "cli-option-rename": 1,
+        "event-payload-rename": 1,
+        "sql-column-rename": 1
+      },
+      "replicated_task_count": 0,
+      "min_pairs_per_task": 1,
+      "tasks_with_trend_readiness": [],
+      "tasks_with_statistical_readiness": [],
+      "tasks_with_strong_evidence_readiness": [],
+      "sample_size_guidance": {
+        "replication_min_pairs": 2,
+        "trend_min_pairs": 3,
+        "statistical_min_pairs": 5,
+        "strong_evidence_min_pairs": 10,
+        "multi_model_min_models": 2,
+        "task_diversity_min_tasks": 4
+      }
+    },
+    "profiles": {
+      "baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read": {
+        "run_count": 4,
+        "conditions": {
+          "baseline-no-r-doc": {
+            "run_count": 4,
+            "task_success": 100.0,
+            "outcome_compliance": 100.0,
+            "executable_outcome": 100.0,
+            "context_safety": 100.0,
+            "trace_integrity": 100.0
+          }
+        }
+      },
+      "codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read": {
+        "run_count": 4,
+        "conditions": {
+          "with-r-doc": {
+            "run_count": 4,
+            "task_success": 75.0,
+            "outcome_compliance": 100.0,
+            "executable_outcome": 75.0,
+            "context_safety": 100.0,
+            "trace_integrity": 100.0
+          }
+        }
+      }
+    },
+    "paired_comparisons": [
+      {
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "task_id": "api-response-field-rename",
+        "paired_run_count": 1,
+        "paired_run_ids": [
+          "run-001"
+        ],
+        "unpaired_run_counts": {
+          "with-r-doc": 0,
+          "baseline-no-r-doc": 0
+        },
+        "trend_readiness": false,
+        "statistical_readiness": false,
+        "strong_evidence_readiness": false,
+        "conditions": {
+          "with-r-doc": {
+            "run_count": 1,
+            "task_success": 100.0,
+            "outcome_compliance": 100.0,
+            "executable_outcome": 100.0,
+            "context_safety": 100.0,
+            "trace_integrity": 100.0
+          },
+          "baseline-no-r-doc": {
+            "run_count": 1,
+            "task_success": 100.0,
+            "outcome_compliance": 100.0,
+            "executable_outcome": 100.0,
+            "context_safety": 100.0,
+            "trace_integrity": 100.0
+          }
+        },
+        "delta": {
+          "task_success": 0.0,
+          "outcome_compliance": 0.0,
+          "executable_outcome": 0.0,
+          "context_safety": 0.0,
+          "trace_integrity": 0.0
+        },
+        "delta_statistics": {
+          "task_success": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "outcome_compliance": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "executable_outcome": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "context_safety": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "trace_integrity": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          }
+        },
+        "per_run_deltas": [
+          {
+            "run_id": "run-001",
+            "delta": {
+              "task_success": 0.0,
+              "outcome_compliance": 0.0,
+              "executable_outcome": 0.0,
+              "context_safety": 0.0,
+              "trace_integrity": 0.0
+            }
+          }
+        ]
+      },
+      {
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "task_id": "cli-option-rename",
+        "paired_run_count": 1,
+        "paired_run_ids": [
+          "run-001"
+        ],
+        "unpaired_run_counts": {
+          "with-r-doc": 0,
+          "baseline-no-r-doc": 0
+        },
+        "trend_readiness": false,
+        "statistical_readiness": false,
+        "strong_evidence_readiness": false,
+        "conditions": {
+          "with-r-doc": {
+            "run_count": 1,
+            "task_success": 100.0,
+            "outcome_compliance": 100.0,
+            "executable_outcome": 100.0,
+            "context_safety": 100.0,
+            "trace_integrity": 100.0
+          },
+          "baseline-no-r-doc": {
+            "run_count": 1,
+            "task_success": 100.0,
+            "outcome_compliance": 100.0,
+            "executable_outcome": 100.0,
+            "context_safety": 100.0,
+            "trace_integrity": 100.0
+          }
+        },
+        "delta": {
+          "task_success": 0.0,
+          "outcome_compliance": 0.0,
+          "executable_outcome": 0.0,
+          "context_safety": 0.0,
+          "trace_integrity": 0.0
+        },
+        "delta_statistics": {
+          "task_success": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "outcome_compliance": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "executable_outcome": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "context_safety": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "trace_integrity": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          }
+        },
+        "per_run_deltas": [
+          {
+            "run_id": "run-001",
+            "delta": {
+              "task_success": 0.0,
+              "outcome_compliance": 0.0,
+              "executable_outcome": 0.0,
+              "context_safety": 0.0,
+              "trace_integrity": 0.0
+            }
+          }
+        ]
+      },
+      {
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "task_id": "event-payload-rename",
+        "paired_run_count": 1,
+        "paired_run_ids": [
+          "run-001"
+        ],
+        "unpaired_run_counts": {
+          "with-r-doc": 0,
+          "baseline-no-r-doc": 0
+        },
+        "trend_readiness": false,
+        "statistical_readiness": false,
+        "strong_evidence_readiness": false,
+        "conditions": {
+          "with-r-doc": {
+            "run_count": 1,
+            "task_success": 0.0,
+            "outcome_compliance": 100.0,
+            "executable_outcome": 0.0,
+            "context_safety": 100.0,
+            "trace_integrity": 100.0
+          },
+          "baseline-no-r-doc": {
+            "run_count": 1,
+            "task_success": 100.0,
+            "outcome_compliance": 100.0,
+            "executable_outcome": 100.0,
+            "context_safety": 100.0,
+            "trace_integrity": 100.0
+          }
+        },
+        "delta": {
+          "task_success": -100.0,
+          "outcome_compliance": 0.0,
+          "executable_outcome": -100.0,
+          "context_safety": 0.0,
+          "trace_integrity": 0.0
+        },
+        "delta_statistics": {
+          "task_success": {
+            "mean": -100.0,
+            "median": -100.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "outcome_compliance": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "executable_outcome": {
+            "mean": -100.0,
+            "median": -100.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "context_safety": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "trace_integrity": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          }
+        },
+        "per_run_deltas": [
+          {
+            "run_id": "run-001",
+            "delta": {
+              "task_success": -100.0,
+              "outcome_compliance": 0.0,
+              "executable_outcome": -100.0,
+              "context_safety": 0.0,
+              "trace_integrity": 0.0
+            }
+          }
+        ]
+      },
+      {
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "task_id": "sql-column-rename",
+        "paired_run_count": 1,
+        "paired_run_ids": [
+          "run-001"
+        ],
+        "unpaired_run_counts": {
+          "with-r-doc": 0,
+          "baseline-no-r-doc": 0
+        },
+        "trend_readiness": false,
+        "statistical_readiness": false,
+        "strong_evidence_readiness": false,
+        "conditions": {
+          "with-r-doc": {
+            "run_count": 1,
+            "task_success": 100.0,
+            "outcome_compliance": 100.0,
+            "executable_outcome": 100.0,
+            "context_safety": 100.0,
+            "trace_integrity": 100.0
+          },
+          "baseline-no-r-doc": {
+            "run_count": 1,
+            "task_success": 100.0,
+            "outcome_compliance": 100.0,
+            "executable_outcome": 100.0,
+            "context_safety": 100.0,
+            "trace_integrity": 100.0
+          }
+        },
+        "delta": {
+          "task_success": 0.0,
+          "outcome_compliance": 0.0,
+          "executable_outcome": 0.0,
+          "context_safety": 0.0,
+          "trace_integrity": 0.0
+        },
+        "delta_statistics": {
+          "task_success": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "outcome_compliance": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "executable_outcome": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "context_safety": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          },
+          "trace_integrity": {
+            "mean": 0.0,
+            "median": 0.0,
+            "stdev": 0.0,
+            "ci95_low": null,
+            "ci95_high": null,
+            "ci95_method": "unavailable-below-two-pairs"
+          }
+        },
+        "per_run_deltas": [
+          {
+            "run_id": "run-001",
+            "delta": {
+              "task_success": 0.0,
+              "outcome_compliance": 0.0,
+              "executable_outcome": 0.0,
+              "context_safety": 0.0,
+              "trace_integrity": 0.0
+            }
+          }
+        ]
+      }
+    ],
+    "runs": [
+      {
+        "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+        "run_id": "run-001",
+        "condition": "baseline-no-r-doc",
+        "task_id": "api-response-field-rename",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "status": "pass",
+        "task_outcome_status": "pass",
+        "activation_verified": true,
+        "measurement_valid": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "result_path": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001/result.json",
+        "errors": []
+      },
+      {
+        "profile": "codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+        "run_id": "run-001",
+        "condition": "with-r-doc",
+        "task_id": "api-response-field-rename",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "status": "pass",
+        "task_outcome_status": "pass",
+        "activation_verified": true,
+        "measurement_valid": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "result_path": "api-response-field-rename/codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001/result.json",
+        "errors": []
+      },
+      {
+        "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+        "run_id": "run-001",
+        "condition": "baseline-no-r-doc",
+        "task_id": "cli-option-rename",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "status": "pass",
+        "task_outcome_status": "pass",
+        "activation_verified": true,
+        "measurement_valid": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "result_path": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001/result.json",
+        "errors": []
+      },
+      {
+        "profile": "codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+        "run_id": "run-001",
+        "condition": "with-r-doc",
+        "task_id": "cli-option-rename",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "status": "pass",
+        "task_outcome_status": "pass",
+        "activation_verified": true,
+        "measurement_valid": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "result_path": "cli-option-rename/codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001/result.json",
+        "errors": []
+      },
+      {
+        "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+        "run_id": "run-001",
+        "condition": "baseline-no-r-doc",
+        "task_id": "event-payload-rename",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "status": "pass",
+        "task_outcome_status": "pass",
+        "activation_verified": true,
+        "measurement_valid": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "result_path": "event-payload-rename/baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001/result.json",
+        "errors": []
+      },
+      {
+        "profile": "codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+        "run_id": "run-001",
+        "condition": "with-r-doc",
+        "task_id": "event-payload-rename",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "status": "fail",
+        "task_outcome_status": "fail",
+        "activation_verified": true,
+        "measurement_valid": true,
+        "metrics": {
+          "task_success": 0.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 0.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "result_path": "event-payload-rename/codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001/result.json",
+        "errors": [
+          "event-runtime-contract: callable raised AttributeError: 'types.SimpleNamespace' object has no attribute 'display_name'"
+        ]
+      },
+      {
+        "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+        "run_id": "run-001",
+        "condition": "baseline-no-r-doc",
+        "task_id": "sql-column-rename",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "status": "pass",
+        "task_outcome_status": "pass",
+        "activation_verified": true,
+        "measurement_valid": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "result_path": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001/result.json",
+        "errors": []
+      },
+      {
+        "profile": "codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+        "run_id": "run-001",
+        "condition": "with-r-doc",
+        "task_id": "sql-column-rename",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "status": "pass",
+        "task_outcome_status": "pass",
+        "activation_verified": true,
+        "measurement_valid": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "result_path": "sql-column-rename/codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001/result.json",
+        "errors": []
+      }
+    ],
+    "errors": [],
+    "notes": "Naturalistic records are regenerated by the independent grader; structurally valid failed outcomes remain visible and are included as measured zero-success outcomes."
+  },
+  "runs": [
+    {
+      "schema_version": 2,
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+      "run_id": "run-001",
+      "condition": "baseline-no-r-doc",
+      "benchmark_kind": "naturalistic-effectiveness",
+      "prompt_contract": "naturalistic-user-task",
+      "activation_ground_truth": "independent-task-spec",
+      "grader_kind": "independent-grader",
+      "review_provenance": "independent-grader",
+      "skill_version": "0.3.0",
+      "activation_evidence": {
+        "schema_version": 1,
+        "skill": "r-doc",
+        "visibility": {
+          "status": "not_applicable",
+          "signals": [
+            "baseline-condition"
+          ]
+        },
+        "load": {
+          "status": "not_applicable",
+          "signals": [
+            "baseline-condition"
+          ]
+        },
+        "use": {
+          "status": "not_applicable",
+          "signals": [
+            "baseline-condition"
+          ]
+        },
+        "limitation": "baseline condition intentionally does not install or select r-doc"
+      },
+      "capture_environment": {
+        "codex_home_isolated": true,
+        "user_home_isolated": true,
+        "skill_scan": "workspace-and-isolated-user-home",
+        "reason": "auth_file_copied_to_ephemeral_home"
+      },
+      "task_id": "api-response-field-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "captured_at": "2026-09-20T04:09:26.812277+00:00",
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001",
+      "source_artifact_hashes": {
+        "schema_version": 2,
+        "algorithm": "sha256",
+        "canonicalization": "utf-8-lf",
+        "artifacts": {
+          "codex-events.jsonl": {
+            "sha256": "5fd91725c3570878ec7c2d58928c9dc344342668bb31aa69bc22a19993b081ed",
+            "canonicalization": "utf-8-lf"
+          },
+          "codex-stderr.log": {
+            "sha256": "22b8dce8355bfe039b3378a4eccf3661b9f16204056fd8718f9a4cdb2f253d8b",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-response.md": {
+            "sha256": "f38de6c4a56a56b1e77895f575488b23e082145f4dab81ffeef285b4a0c24272",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-state.json": {
+            "sha256": "851dc164447a41678e409f0c81c5711e4a84cd7e7ca3e32f5f6aec20afeb0f81",
+            "canonicalization": "utf-8-lf"
+          },
+          "run.json": {
+            "sha256": "6f9f3110a298e289d26c4b0c1d61edcceb70646680774296203f2e2fe03bec1b",
+            "canonicalization": "utf-8-lf"
+          },
+          "trace.jsonl": {
+            "sha256": "8c2c57c773d655c0eaaf3f545b79d28b1f358c547f478f3ce43e87ef8a097fb1",
+            "canonicalization": "utf-8-lf"
+          }
+        }
+      },
+      "critical_events": [
+        {
+          "sequence": 0,
+          "event": "prompt",
+          "text": "We changed the API response field from user_name to display_name. Synchronize the project so the implementation, API documentation, and tests agree."
+        },
+        {
+          "sequence": 2,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 3,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 5,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'Get-ChildItem -Force -Name | Where-Object { $_ -notmatch '\"'\"'^('\"<redacted-path>\"'$|'\"<redacted-path>\"'$'\"' }\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 6,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command '$roots = @('\"'src','docs','tests'); foreach (\"'$root in $roots) { Write-Output \"[$root]\"; if (Test-Path -LiteralPath $root) { Get-ChildItem -LiteralPath $root -Recurse -File -Force | Where-Object { $_.Name -notmatch '\"'\"'^('\"<redacted-path>\"'$|'\"<redacted-path>\"'$'\"' } | ForEach-Object { \"'$_.FullName.Substring((Get-Location).Path.Length + 1) } } }'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 7,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"rg -n --glob '\"'!*.env'\"' --glob '\"'!*.env.*'\"' --glob '\"'!secrets.*'\"' --glob '\"'!credentials*'\"' --glob '\"'!*.pem'\"' --glob '\"'!*.key'\"' --glob '\"'!*.crt'\"' --glob '\"'!*.cer'\"' --glob '\"'!*.p12'\"' --glob '\"'!*.pfx'\"' 'user_name|display_name' src docs tests\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 9,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'git status --short'",
+          "exit_code": 1
+        },
+        {
+          "sequence": 10,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw -LiteralPath 'docs<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 11,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw -LiteralPath 'src<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 12,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw -LiteralPath 'tests<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 14,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"rg -n --glob '\"'!*.env'\"' --glob '\"'!*.env.*'\"' --glob '\"'!secrets.*'\"' --glob '\"'!credentials*'\"' --glob '\"'!*.pem'\"' --glob '\"'!*.key'\"' --glob '\"'!*.crt'\"' --glob '\"'!*.cer'\"' --glob '\"'!*.p12'\"' --glob '\"'!*.pfx'\"' 'user_name|display_name' src docs tests\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 15,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'pytest -q'",
+          "exit_code": 1
+        },
+        {
+          "sequence": 17,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'python -m pytest -q'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 19,
+          "event": "file_read",
+          "path": "docs/api.md",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 20,
+          "event": "file_read",
+          "path": "src/handler.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 21,
+          "event": "file_read",
+          "path": "tests/test_api.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 22,
+          "event": "file_written",
+          "path": ".pytest_cache/.gitignore",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 23,
+          "event": "file_written",
+          "path": ".pytest_cache/CACHEDIR.TAG",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 24,
+          "event": "file_written",
+          "path": ".pytest_cache/README.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 25,
+          "event": "file_written",
+          "path": ".pytest_cache/v/cache/lastfailed",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 26,
+          "event": "file_written",
+          "path": ".pytest_cache/v/cache/nodeids",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 27,
+          "event": "file_written",
+          "path": "docs/api.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 28,
+          "event": "file_written",
+          "path": "src/__pycache__/__init__.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 29,
+          "event": "file_written",
+          "path": "src/__pycache__/handler.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 30,
+          "event": "file_written",
+          "path": "src/handler.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 31,
+          "event": "file_written",
+          "path": "tests/__pycache__/test_api.cpython-312-pytest-8.4.2.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 32,
+          "event": "file_written",
+          "path": "tests/test_api.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 34,
+          "event": "diff_snapshot",
+          "text": "changed_files=.pytest_cache/.gitignore,.pytest_cache/CACHEDIR.TAG,.pytest_cache/README.md,.pytest_cache/v/cache/lastfailed,.pytest_cache/v/cache/nodeids,docs/api.md,src/__pycache__/__init__.cpython-312.pyc,src/__pycache__/handler.cpython-312.pyc,src/handler.py,tests/__pycache__/test_api.cpython-312-pytest-8.4.2.pyc,tests/test_api.py"
+        }
+      ],
+      "result": {
+        "schema_version": 2,
+        "status": "pass",
+        "benchmark_kind": "naturalistic-effectiveness",
+        "grader_kind": "independent-grader",
+        "task_id": "api-response-field-rename",
+        "condition": "baseline-no-r-doc",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "activation_verified": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "checks": [
+          {
+            "id": "manifest",
+            "status": "pass",
+            "details": "naturalistic manifest identifies an independent-grader run"
+          },
+          {
+            "id": "activation_evidence",
+            "status": "pass",
+            "details": "raw Codex evidence records r-doc visibility, load, and use without claiming unavailable telemetry"
+          },
+          {
+            "id": "artifact_integrity",
+            "status": "pass",
+            "details": "runner artifacts match their recorded SHA-256 hashes"
+          },
+          {
+            "id": "artifact_paths",
+            "status": "pass",
+            "details": "trace, final-state, and final-response paths stay relative to the run"
+          },
+          {
+            "id": "trace_integrity",
+            "status": "pass",
+            "details": "normalized trace is valid and contiguous"
+          },
+          {
+            "id": "prompt_contract",
+            "status": "pass",
+            "details": "prompt contains only the naturalistic user task"
+          },
+          {
+            "id": "forbidden_reads",
+            "status": "pass",
+            "details": "trace did not read forbidden fixture paths"
+          },
+          {
+            "id": "final_state_outcome",
+            "status": "pass",
+            "details": "independent assertions pass on the final repository snapshot"
+          },
+          {
+            "id": "executable_outcome",
+            "status": "pass",
+            "details": "grader-owned tests and behavior checks pass on the final snapshot"
+          },
+          {
+            "id": "final_response",
+            "status": "pass",
+            "details": "final response artifact is present for audit only"
+          }
+        ],
+        "errors": [],
+        "read_attribution": {
+          "actual_os_access_telemetry": "unavailable",
+          "forbidden_reads_are": "normalized_trace_events",
+          "reads": [
+            {
+              "path": "docs/api.md",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "src/handler.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "tests/test_api.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            }
+          ],
+          "forbidden": []
+        }
+      },
+      "exported_hashes": {
+        "manifest": "46f8d29cdc5c9cd548db4489193d4d9caaa1c253afc9a11994f9a791d59613a3",
+        "result": "5c1bbcbcd851bf2559daf4f374252e67889113ca28fed766a084490e8637bda6",
+        "critical_events": "0c4240ea1ce8ffa757df7a282e10d5d3aafd5e321aec61b69b840179a61e97d5"
+      }
+    },
+    {
+      "schema_version": 2,
+      "profile": "codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+      "run_id": "run-001",
+      "condition": "with-r-doc",
+      "benchmark_kind": "naturalistic-effectiveness",
+      "prompt_contract": "naturalistic-user-task",
+      "activation_ground_truth": "independent-task-spec",
+      "grader_kind": "independent-grader",
+      "review_provenance": "independent-grader",
+      "skill_version": "0.3.0",
+      "activation_evidence": {
+        "schema_version": 1,
+        "skill": "r-doc",
+        "visibility": {
+          "status": "confirmed_degraded",
+          "signals": [
+            "context_budget_shortened_descriptions_but_retained_skills"
+          ]
+        },
+        "load": {
+          "status": "observed",
+          "signals": [
+            "raw_event_skill_file_read"
+          ]
+        },
+        "use": {
+          "status": "observed",
+          "signals": [
+            "raw_event_rdoc_bounded_protected_search",
+            "raw_event_rdoc_bounded_project_read"
+          ]
+        },
+        "limitation": "Codex JSONL exposes no system-level skill_loaded event; load/use are raw-event signals, not OS telemetry. Use includes named r-doc scripts or bounded project reads observed after the Skill file was read."
+      },
+      "capture_environment": {
+        "codex_home_isolated": true,
+        "user_home_isolated": true,
+        "skill_scan": "workspace-and-isolated-user-home",
+        "reason": "auth_file_copied_to_ephemeral_home"
+      },
+      "task_id": "api-response-field-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "captured_at": "2026-09-20T04:11:03.875188+00:00",
+      "run_dir": "api-response-field-rename/codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001",
+      "source_artifact_hashes": {
+        "schema_version": 2,
+        "algorithm": "sha256",
+        "canonicalization": "utf-8-lf",
+        "artifacts": {
+          "codex-events.jsonl": {
+            "sha256": "6f99bd75dc46a15bc8ce1738a2e5465aebe704db8e6ac9f94f5ccc1ba8664dda",
+            "canonicalization": "utf-8-lf"
+          },
+          "codex-stderr.log": {
+            "sha256": "036708ecf3b100bbeed5f616aa82a6075ff462821333c4c4677ebd5f74bea85e",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-response.md": {
+            "sha256": "d5af4c26705faa91c5115800f9e6bd492f67271e6a9e77e6f4a24aeef68bd8b6",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-state.json": {
+            "sha256": "851dc164447a41678e409f0c81c5711e4a84cd7e7ca3e32f5f6aec20afeb0f81",
+            "canonicalization": "utf-8-lf"
+          },
+          "run.json": {
+            "sha256": "0cdc1213707140f4c5f7879041b3465d3080483edc0a8fd8caafc80252cd7016",
+            "canonicalization": "utf-8-lf"
+          },
+          "trace.jsonl": {
+            "sha256": "d10def79184d9f4844d13674e1c151a1ad2d09a2966801ca867e24bb32dc1310",
+            "canonicalization": "utf-8-lf"
+          }
+        }
+      },
+      "critical_events": [
+        {
+          "sequence": 0,
+          "event": "prompt",
+          "text": "We changed the API response field from user_name to display_name. Synchronize the project so the implementation, API documentation, and tests agree."
+        },
+        {
+          "sequence": 2,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 3,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 5,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command '$root = (git rev-parse --show-toplevel 2>$null); if (-not $root) { $root = (Get-Location).Path }; Write-Output \"ROOT=$root\"; Get-ChildItem -Force -Name; Write-Output '\"'---FILES---'; rg --files -g '\"'!**/.env'\"' -g '\"'!**/.env.*'\"' -g '\"'!**/secrets.*'\"' -g '\"'!**/*credential*'\"' -g '\"'!**/*private*key*'\"' -g '\"'!**/*certificate*'\"' -g '\"'!**/*.pem'\"' -g '\"'!**/*.key'\"' -g '\"'!**/.git/**'\"' | Select-Object -First 300; Write-Output '---STATUS---'; git status --short\"",
+          "exit_code": 1
+        },
+        {
+          "sequence": 6,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Write-Output '---.agents---'; Get-ChildItem -Force '.agents' -Name -ErrorAction SilentlyContinue; Write-Output '---docs---'; Get-ChildItem -Force 'docs' -Name -ErrorAction SilentlyContinue; Write-Output '---src---'; Get-ChildItem -Force 'src' -Name -ErrorAction SilentlyContinue; Write-Output '---tests---'; Get-ChildItem -Force 'tests' -Name -ErrorAction SilentlyContinue\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 8,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw 'docs<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 9,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw 'src<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 10,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw 'tests<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 12,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'python -m pytest tests'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 13,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"rg -n --glob '\"'!*.env'\"' --glob '\"'!*.env.*'\"' --glob '\"'!secrets.*'\"' --glob '\"'!**/*credential*'\"' --glob '\"'!**/*private*key*'\"' --glob '\"'!**/*certificate*'\"' --glob '\"'!**/*.pem'\"' --glob '\"'!**/*.key'\"' 'user_name|display_name' src docs tests\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 15,
+          "event": "file_read",
+          "path": "docs/api.md",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 16,
+          "event": "file_read",
+          "path": "src/handler.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 17,
+          "event": "file_read",
+          "path": "tests/test_api.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 18,
+          "event": "file_written",
+          "path": ".pytest_cache/.gitignore",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 19,
+          "event": "file_written",
+          "path": ".pytest_cache/CACHEDIR.TAG",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 20,
+          "event": "file_written",
+          "path": ".pytest_cache/README.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 21,
+          "event": "file_written",
+          "path": ".pytest_cache/v/cache/nodeids",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 22,
+          "event": "file_written",
+          "path": "docs/api.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 23,
+          "event": "file_written",
+          "path": "src/__pycache__/__init__.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 24,
+          "event": "file_written",
+          "path": "src/__pycache__/handler.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 25,
+          "event": "file_written",
+          "path": "src/handler.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 26,
+          "event": "file_written",
+          "path": "tests/__pycache__/test_api.cpython-312-pytest-8.4.2.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 27,
+          "event": "file_written",
+          "path": "tests/test_api.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 29,
+          "event": "diff_snapshot",
+          "text": "changed_files=.pytest_cache/.gitignore,.pytest_cache/CACHEDIR.TAG,.pytest_cache/README.md,.pytest_cache/v/cache/nodeids,docs/api.md,src/__pycache__/__init__.cpython-312.pyc,src/__pycache__/handler.cpython-312.pyc,src/handler.py,tests/__pycache__/test_api.cpython-312-pytest-8.4.2.pyc,tests/test_api.py"
+        }
+      ],
+      "result": {
+        "schema_version": 2,
+        "status": "pass",
+        "benchmark_kind": "naturalistic-effectiveness",
+        "grader_kind": "independent-grader",
+        "task_id": "api-response-field-rename",
+        "condition": "with-r-doc",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "activation_verified": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "checks": [
+          {
+            "id": "manifest",
+            "status": "pass",
+            "details": "naturalistic manifest identifies an independent-grader run"
+          },
+          {
+            "id": "activation_evidence",
+            "status": "pass",
+            "details": "raw Codex evidence records r-doc visibility, load, and use without claiming unavailable telemetry"
+          },
+          {
+            "id": "artifact_integrity",
+            "status": "pass",
+            "details": "runner artifacts match their recorded SHA-256 hashes"
+          },
+          {
+            "id": "artifact_paths",
+            "status": "pass",
+            "details": "trace, final-state, and final-response paths stay relative to the run"
+          },
+          {
+            "id": "trace_integrity",
+            "status": "pass",
+            "details": "normalized trace is valid and contiguous"
+          },
+          {
+            "id": "prompt_contract",
+            "status": "pass",
+            "details": "prompt contains only the naturalistic user task"
+          },
+          {
+            "id": "forbidden_reads",
+            "status": "pass",
+            "details": "trace did not read forbidden fixture paths"
+          },
+          {
+            "id": "final_state_outcome",
+            "status": "pass",
+            "details": "independent assertions pass on the final repository snapshot"
+          },
+          {
+            "id": "executable_outcome",
+            "status": "pass",
+            "details": "grader-owned tests and behavior checks pass on the final snapshot"
+          },
+          {
+            "id": "final_response",
+            "status": "pass",
+            "details": "final response artifact is present for audit only"
+          }
+        ],
+        "errors": [],
+        "read_attribution": {
+          "actual_os_access_telemetry": "unavailable",
+          "forbidden_reads_are": "normalized_trace_events",
+          "reads": [
+            {
+              "path": "docs/api.md",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "src/handler.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "tests/test_api.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            }
+          ],
+          "forbidden": []
+        }
+      },
+      "exported_hashes": {
+        "manifest": "438c7112a649a85f88d3f225e7b63cbb965a1ef001fe7b074dd22023157df15f",
+        "result": "509135d3bb4c9f4b1155c0650d976da6b60754841c2bca7ee63881122a5ae90d",
+        "critical_events": "dd52ac02ec4e9d1498c5be0b95efa2bef43ac5972c0de90e127b53fcd23a8f1c"
+      }
+    },
+    {
+      "schema_version": 2,
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+      "run_id": "run-001",
+      "condition": "baseline-no-r-doc",
+      "benchmark_kind": "naturalistic-effectiveness",
+      "prompt_contract": "naturalistic-user-task",
+      "activation_ground_truth": "independent-task-spec",
+      "grader_kind": "independent-grader",
+      "review_provenance": "independent-grader",
+      "skill_version": "0.3.0",
+      "activation_evidence": {
+        "schema_version": 1,
+        "skill": "r-doc",
+        "visibility": {
+          "status": "not_applicable",
+          "signals": [
+            "baseline-condition"
+          ]
+        },
+        "load": {
+          "status": "not_applicable",
+          "signals": [
+            "baseline-condition"
+          ]
+        },
+        "use": {
+          "status": "not_applicable",
+          "signals": [
+            "baseline-condition"
+          ]
+        },
+        "limitation": "baseline condition intentionally does not install or select r-doc"
+      },
+      "capture_environment": {
+        "codex_home_isolated": true,
+        "user_home_isolated": true,
+        "skill_scan": "workspace-and-isolated-user-home",
+        "reason": "auth_file_copied_to_ephemeral_home"
+      },
+      "task_id": "cli-option-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "captured_at": "2026-09-20T04:13:02.115415+00:00",
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001",
+      "source_artifact_hashes": {
+        "schema_version": 2,
+        "algorithm": "sha256",
+        "canonicalization": "utf-8-lf",
+        "artifacts": {
+          "codex-events.jsonl": {
+            "sha256": "ddaa815086aaa5b20873f81e13c873d362b2fefd5fba7c2ea8958e29bdab305a",
+            "canonicalization": "utf-8-lf"
+          },
+          "codex-stderr.log": {
+            "sha256": "fd41cf4bf7ffc4f0eb1e8b5b825dbd973a287b84103a496bc4084672984ccfcd",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-response.md": {
+            "sha256": "4b330343d51cf9b8609a46d63f4fa3de3788c9488eacdd1a6dfdb447062dfb92",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-state.json": {
+            "sha256": "c8a34f30086dc2bc1490bf5a1f5d37bb35dc66a9626c623488f70d585dcf3261",
+            "canonicalization": "utf-8-lf"
+          },
+          "run.json": {
+            "sha256": "426c91234d5bee5355a9298795368d1a4075368979f65b1404d9161480d4d3eb",
+            "canonicalization": "utf-8-lf"
+          },
+          "trace.jsonl": {
+            "sha256": "5ff1d4b47c4444a12fce38db4f3b6a1e5ac68fb78eabd69862107ce5c081c495",
+            "canonicalization": "utf-8-lf"
+          }
+        }
+      },
+      "critical_events": [
+        {
+          "sequence": 0,
+          "event": "prompt",
+          "text": "The command-line option changed from --user-name to --display-name. Synchronize the parser, CLI documentation, and tests so the new option is the only supported spelling."
+        },
+        {
+          "sequence": 2,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 3,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 5,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'Get-ChildItem -Force | Select-Object Mode,Length,Name; Get-ChildItem -Force -Directory | Select-Object -ExpandProperty Name'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 6,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'rg --files src docs tests'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 7,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"rg -n --glob '\"'!*.env'\"' --glob '\"'!secrets.*'\"' --glob '\"'!credentials*'\"' --glob '\"'!*.key'\"' --glob '\"'!*.pem'\"' --glob '\"'!*.crt'\"' -- '--user-name|display-name|user_name|display_name' src docs tests\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 8,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<fixture-root><redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 9,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<fixture-root><redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 10,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<fixture-root><redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 12,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'pytest -q'",
+          "exit_code": 1
+        },
+        {
+          "sequence": 13,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"rg -n --glob '\"'!*.env'\"' --glob '\"'!secrets.*'\"' --glob '\"'!credentials*'\"' --glob '\"'!*.key'\"' --glob '\"'!*.pem'\"' --glob '\"'!*.crt'\"' -- '--user-name|--display-name' src docs tests\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 14,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'git diff -- src/cli.py tests/test_cli.py docs/cli.md; git status --short'",
+          "exit_code": 1
+        },
+        {
+          "sequence": 15,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'python -m pytest -q'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 17,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<fixture-root><redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 19,
+          "event": "file_read",
+          "path": "docs/cli.md",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 20,
+          "event": "file_read",
+          "path": "src/cli.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 21,
+          "event": "file_read",
+          "path": "tests/test_cli.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 22,
+          "event": "file_written",
+          "path": ".pytest_cache/.gitignore",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 23,
+          "event": "file_written",
+          "path": ".pytest_cache/CACHEDIR.TAG",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 24,
+          "event": "file_written",
+          "path": ".pytest_cache/README.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 25,
+          "event": "file_written",
+          "path": ".pytest_cache/v/cache/lastfailed",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 26,
+          "event": "file_written",
+          "path": ".pytest_cache/v/cache/nodeids",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 27,
+          "event": "file_written",
+          "path": "docs/cli.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 28,
+          "event": "file_written",
+          "path": "src/__pycache__/__init__.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 29,
+          "event": "file_written",
+          "path": "src/__pycache__/cli.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 30,
+          "event": "file_written",
+          "path": "src/cli.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 31,
+          "event": "file_written",
+          "path": "tests/__pycache__/test_cli.cpython-312-pytest-8.4.2.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 32,
+          "event": "file_written",
+          "path": "tests/test_cli.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 34,
+          "event": "diff_snapshot",
+          "text": "changed_files=.pytest_cache/.gitignore,.pytest_cache/CACHEDIR.TAG,.pytest_cache/README.md,.pytest_cache/v/cache/lastfailed,.pytest_cache/v/cache/nodeids,docs/cli.md,src/__pycache__/__init__.cpython-312.pyc,src/__pycache__/cli.cpython-312.pyc,src/cli.py,tests/__pycache__/test_cli.cpython-312-pytest-8.4.2.pyc,tests/test_cli.py"
+        }
+      ],
+      "result": {
+        "schema_version": 2,
+        "status": "pass",
+        "benchmark_kind": "naturalistic-effectiveness",
+        "grader_kind": "independent-grader",
+        "task_id": "cli-option-rename",
+        "condition": "baseline-no-r-doc",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "activation_verified": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "checks": [
+          {
+            "id": "manifest",
+            "status": "pass",
+            "details": "naturalistic manifest identifies an independent-grader run"
+          },
+          {
+            "id": "activation_evidence",
+            "status": "pass",
+            "details": "raw Codex evidence records r-doc visibility, load, and use without claiming unavailable telemetry"
+          },
+          {
+            "id": "artifact_integrity",
+            "status": "pass",
+            "details": "runner artifacts match their recorded SHA-256 hashes"
+          },
+          {
+            "id": "artifact_paths",
+            "status": "pass",
+            "details": "trace, final-state, and final-response paths stay relative to the run"
+          },
+          {
+            "id": "trace_integrity",
+            "status": "pass",
+            "details": "normalized trace is valid and contiguous"
+          },
+          {
+            "id": "prompt_contract",
+            "status": "pass",
+            "details": "prompt contains only the naturalistic user task"
+          },
+          {
+            "id": "forbidden_reads",
+            "status": "pass",
+            "details": "trace did not read forbidden fixture paths"
+          },
+          {
+            "id": "final_state_outcome",
+            "status": "pass",
+            "details": "independent assertions pass on the final repository snapshot"
+          },
+          {
+            "id": "executable_outcome",
+            "status": "pass",
+            "details": "grader-owned tests and behavior checks pass on the final snapshot"
+          },
+          {
+            "id": "final_response",
+            "status": "pass",
+            "details": "final response artifact is present for audit only"
+          }
+        ],
+        "errors": [],
+        "read_attribution": {
+          "actual_os_access_telemetry": "unavailable",
+          "forbidden_reads_are": "normalized_trace_events",
+          "reads": [
+            {
+              "path": "docs/cli.md",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "src/cli.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "tests/test_cli.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            }
+          ],
+          "forbidden": []
+        }
+      },
+      "exported_hashes": {
+        "manifest": "72ae0bcc23d74b4da9b977dcf0bff79ff81ec22607bf90492c9acd9b72c4680b",
+        "result": "60852f17af6e0fa365d9da9ad31461fb4717777342d3cf14b122b581c8023264",
+        "critical_events": "9e20b70f1e30bea6b2eb41489c676624718e6d8015ad0e7bbf56edbb38602922"
+      }
+    },
+    {
+      "schema_version": 2,
+      "profile": "codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+      "run_id": "run-001",
+      "condition": "with-r-doc",
+      "benchmark_kind": "naturalistic-effectiveness",
+      "prompt_contract": "naturalistic-user-task",
+      "activation_ground_truth": "independent-task-spec",
+      "grader_kind": "independent-grader",
+      "review_provenance": "independent-grader",
+      "skill_version": "0.3.0",
+      "activation_evidence": {
+        "schema_version": 1,
+        "skill": "r-doc",
+        "visibility": {
+          "status": "confirmed_degraded",
+          "signals": [
+            "context_budget_shortened_descriptions_but_retained_skills"
+          ]
+        },
+        "load": {
+          "status": "observed",
+          "signals": [
+            "raw_event_skill_file_read"
+          ]
+        },
+        "use": {
+          "status": "observed",
+          "signals": [
+            "raw_event_rdoc_script_command",
+            "raw_event_rdoc_bounded_protected_search",
+            "raw_event_rdoc_bounded_project_read"
+          ]
+        },
+        "limitation": "Codex JSONL exposes no system-level skill_loaded event; load/use are raw-event signals, not OS telemetry. Use includes named r-doc scripts or bounded project reads observed after the Skill file was read."
+      },
+      "capture_environment": {
+        "codex_home_isolated": true,
+        "user_home_isolated": true,
+        "skill_scan": "workspace-and-isolated-user-home",
+        "reason": "auth_file_copied_to_ephemeral_home"
+      },
+      "task_id": "cli-option-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "captured_at": "2026-09-20T04:14:55.585814+00:00",
+      "run_dir": "cli-option-rename/codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001",
+      "source_artifact_hashes": {
+        "schema_version": 2,
+        "algorithm": "sha256",
+        "canonicalization": "utf-8-lf",
+        "artifacts": {
+          "codex-events.jsonl": {
+            "sha256": "35167ffb141d11d391bfa082b18dd69c7e6be55817b1d90c15501cb508b1d39f",
+            "canonicalization": "utf-8-lf"
+          },
+          "codex-stderr.log": {
+            "sha256": "72235af3ace5945e084b2717316760d6172ec6a061191fdd203746cb5c9da54f",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-response.md": {
+            "sha256": "04d1a2e837d4f4b7469d0339b6b411c6947c596a9781a7f32d51a89ae7567633",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-state.json": {
+            "sha256": "37adb9121f44796fbfed97a345544d8d7eb589d50d4464b0c7b1595cef66a8ad",
+            "canonicalization": "utf-8-lf"
+          },
+          "run.json": {
+            "sha256": "c3158e2bd8f9d438fa5097acca5388ff319e0593c7f5b16ed2e076a3b39a9fa1",
+            "canonicalization": "utf-8-lf"
+          },
+          "trace.jsonl": {
+            "sha256": "ebbe5fa32a86fc460afd788538146133c0a4fa07b37bd3bacf8784baf289dbd4",
+            "canonicalization": "utf-8-lf"
+          }
+        }
+      },
+      "critical_events": [
+        {
+          "sequence": 0,
+          "event": "prompt",
+          "text": "The command-line option changed from --user-name to --display-name. Synchronize the parser, CLI documentation, and tests so the new option is the only supported spelling."
+        },
+        {
+          "sequence": 2,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<fixture-root><redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 3,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 5,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-ChildItem -LiteralPath '<fixture-root>' -Recurse -Force -File | Where-Object { \"'$_.Name -notmatch '\"'\"'^('\"<redacted-path>\"'$|'\"<redacted-path>\"'$'\"' -and \"'$_.FullName -notmatch '\"'<redacted-path>\"'$_.FullName }'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 6,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Write-Output '--- root paths ---'; Get-ChildItem -LiteralPath '<fixture-root>' -Force | Where-Object { \"'$_.Name -notmatch '\"'\"'^('\"<redacted-path>\"'$|'\"<redacted-path>\"'$'\"' } | ForEach-Object { \"'$_.FullName }; Write-Output '\"'--- option references ---'; rg -n --glob '\"'!**/.env'\"' --glob '\"'!**/.env.*'\"' --glob '\"'!**/secrets.*'\"' --glob '\"'!**/credentials.*'\"' --glob '\"'!**/*.{pem,key,p12,pfx,crt,cer}'\"' -- '--user-name|--display-name' src docs tests; Write-Output '--- git status ---'; git status --short\"",
+          "exit_code": 1
+        },
+        {
+          "sequence": 8,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<fixture-root><redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 9,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<fixture-root><redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 10,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<fixture-root><redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 12,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"rg -n --glob '\"'!**/.env'\"' --glob '\"'!**/.env.*'\"' --glob '\"'!**/secrets.*'\"' --glob '\"'!**/credentials.*'\"' --glob '\"'!**/*.{pem,key,p12,pfx,crt,cer}'\"' -- '--user-name|--display-name|user_name|display_name' src docs tests\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 13,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'pytest -q'",
+          "exit_code": 1
+        },
+        {
+          "sequence": 15,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command '$env:PYTHONPATH = (Get-Location).Path; pytest -q'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 16,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"python '<fixture-root><redacted-path>\"",
+          "exit_code": 1
+        },
+        {
+          "sequence": 18,
+          "event": "file_read",
+          "path": "docs/cli.md",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 19,
+          "event": "file_read",
+          "path": "src/cli.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 20,
+          "event": "file_read",
+          "path": "tests/test_cli.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 21,
+          "event": "file_written",
+          "path": ".pytest_cache/.gitignore",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 22,
+          "event": "file_written",
+          "path": ".pytest_cache/CACHEDIR.TAG",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 23,
+          "event": "file_written",
+          "path": ".pytest_cache/README.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 24,
+          "event": "file_written",
+          "path": ".pytest_cache/v/cache/lastfailed",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 25,
+          "event": "file_written",
+          "path": ".pytest_cache/v/cache/nodeids",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 26,
+          "event": "file_written",
+          "path": "docs/cli.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 27,
+          "event": "file_written",
+          "path": "src/__pycache__/__init__.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 28,
+          "event": "file_written",
+          "path": "src/__pycache__/cli.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 29,
+          "event": "file_written",
+          "path": "src/cli.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 30,
+          "event": "file_written",
+          "path": "tests/__pycache__/test_cli.cpython-312-pytest-8.4.2.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 31,
+          "event": "file_written",
+          "path": "tests/test_cli.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 33,
+          "event": "diff_snapshot",
+          "text": "changed_files=.pytest_cache/.gitignore,.pytest_cache/CACHEDIR.TAG,.pytest_cache/README.md,.pytest_cache/v/cache/lastfailed,.pytest_cache/v/cache/nodeids,docs/cli.md,src/__pycache__/__init__.cpython-312.pyc,src/__pycache__/cli.cpython-312.pyc,src/cli.py,tests/__pycache__/test_cli.cpython-312-pytest-8.4.2.pyc,tests/test_cli.py"
+        }
+      ],
+      "result": {
+        "schema_version": 2,
+        "status": "pass",
+        "benchmark_kind": "naturalistic-effectiveness",
+        "grader_kind": "independent-grader",
+        "task_id": "cli-option-rename",
+        "condition": "with-r-doc",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "activation_verified": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "checks": [
+          {
+            "id": "manifest",
+            "status": "pass",
+            "details": "naturalistic manifest identifies an independent-grader run"
+          },
+          {
+            "id": "activation_evidence",
+            "status": "pass",
+            "details": "raw Codex evidence records r-doc visibility, load, and use without claiming unavailable telemetry"
+          },
+          {
+            "id": "artifact_integrity",
+            "status": "pass",
+            "details": "runner artifacts match their recorded SHA-256 hashes"
+          },
+          {
+            "id": "artifact_paths",
+            "status": "pass",
+            "details": "trace, final-state, and final-response paths stay relative to the run"
+          },
+          {
+            "id": "trace_integrity",
+            "status": "pass",
+            "details": "normalized trace is valid and contiguous"
+          },
+          {
+            "id": "prompt_contract",
+            "status": "pass",
+            "details": "prompt contains only the naturalistic user task"
+          },
+          {
+            "id": "forbidden_reads",
+            "status": "pass",
+            "details": "trace did not read forbidden fixture paths"
+          },
+          {
+            "id": "final_state_outcome",
+            "status": "pass",
+            "details": "independent assertions pass on the final repository snapshot"
+          },
+          {
+            "id": "executable_outcome",
+            "status": "pass",
+            "details": "grader-owned tests and behavior checks pass on the final snapshot"
+          },
+          {
+            "id": "final_response",
+            "status": "pass",
+            "details": "final response artifact is present for audit only"
+          }
+        ],
+        "errors": [],
+        "read_attribution": {
+          "actual_os_access_telemetry": "unavailable",
+          "forbidden_reads_are": "normalized_trace_events",
+          "reads": [
+            {
+              "path": "docs/cli.md",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "src/cli.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "tests/test_cli.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            }
+          ],
+          "forbidden": []
+        }
+      },
+      "exported_hashes": {
+        "manifest": "6eabcbe89877ee03cb644f365187d180bbe6d809bbbeee73f134bef7b372bae6",
+        "result": "ad5064692a462e35b30969f5cd8209869c5725afc9afe5bd77b638f83f21fc40",
+        "critical_events": "993274e898ee20c90763a55b85a547daf6f73216cd493c4bfea9cda9796f665a"
+      }
+    },
+    {
+      "schema_version": 2,
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+      "run_id": "run-001",
+      "condition": "baseline-no-r-doc",
+      "benchmark_kind": "naturalistic-effectiveness",
+      "prompt_contract": "naturalistic-user-task",
+      "activation_ground_truth": "independent-task-spec",
+      "grader_kind": "independent-grader",
+      "review_provenance": "independent-grader",
+      "skill_version": "0.3.0",
+      "activation_evidence": {
+        "schema_version": 1,
+        "skill": "r-doc",
+        "visibility": {
+          "status": "not_applicable",
+          "signals": [
+            "baseline-condition"
+          ]
+        },
+        "load": {
+          "status": "not_applicable",
+          "signals": [
+            "baseline-condition"
+          ]
+        },
+        "use": {
+          "status": "not_applicable",
+          "signals": [
+            "baseline-condition"
+          ]
+        },
+        "limitation": "baseline condition intentionally does not install or select r-doc"
+      },
+      "capture_environment": {
+        "codex_home_isolated": true,
+        "user_home_isolated": true,
+        "skill_scan": "workspace-and-isolated-user-home",
+        "reason": "auth_file_copied_to_ephemeral_home"
+      },
+      "task_id": "event-payload-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "captured_at": "2026-09-20T04:16:06.613716+00:00",
+      "run_dir": "event-payload-rename/baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001",
+      "source_artifact_hashes": {
+        "schema_version": 2,
+        "algorithm": "sha256",
+        "canonicalization": "utf-8-lf",
+        "artifacts": {
+          "codex-events.jsonl": {
+            "sha256": "865dd9499b7f14db1861d6a8937b2c2a906ed8373b70442f1d7705ece00689bc",
+            "canonicalization": "utf-8-lf"
+          },
+          "codex-stderr.log": {
+            "sha256": "57c3c02dd79e850fcdb8e28ab428a1a67a7dbcec0414a99e936ad66d98139a7e",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-response.md": {
+            "sha256": "174e23f315b66db242427f96c955262c12a90a93295e1036b7a92343ef25a5e6",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-state.json": {
+            "sha256": "eb6701da552ff6eb9d75a3eb1b3e9c73a4fb6f94f7369a76026055cf0e3d69bd",
+            "canonicalization": "utf-8-lf"
+          },
+          "run.json": {
+            "sha256": "a70a4fa10757bdb8e7e3655ca6bdfcd08ea338867b1d6dc22544d531aff55373",
+            "canonicalization": "utf-8-lf"
+          },
+          "trace.jsonl": {
+            "sha256": "dd92f061052c0ec15b76f287856f05e7890baf609cbebb9346818255a949c905",
+            "canonicalization": "utf-8-lf"
+          }
+        }
+      },
+      "critical_events": [
+        {
+          "sequence": 0,
+          "event": "prompt",
+          "text": "The user-created event payload changed from user_name to display_name. Synchronize the event producer, event documentation, and tests so the payload contract is consistent."
+        },
+        {
+          "sequence": 2,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 4,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'Get-ChildItem -Force | Where-Object { $_.Name -notmatch '\"'\"'^('\"<redacted-path>\"'$|'\"<redacted-path>\"'$|'\"<redacted-path>\"'$).*)$'\"' } | Select-Object Mode,Length,Name; Get-ChildItem -Directory -Force | Where-Object { \"'$_.Name -notmatch '\"'\"'^('\"<redacted-path>\"'$'\"' } | ForEach-Object { Write-Output (\\\"DIR \\\" + \"'$_.FullName); Get-ChildItem -LiteralPath $_.FullName -File -Force -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.FullName -notmatch '\"'(?i)(\"'^|['\"<redacted-path>\"'$|'\"<redacted-path>\"'$|'\"<redacted-path>\"'$'\"' } | Select-Object -ExpandProperty FullName }\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 5,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"rg -n --glob '\"'!**/.env'\"' --glob '\"'!**/.env.*'\"' --glob '\"'!**/secrets.*'\"' --glob '\"'!**/*credential*'\"' --glob '\"'!**/*private*'\"' --glob '\"'!**/*secret*'\"' --glob '\"'!**/*certificate*'\"' --glob '\"'!**/*.pem'\"' --glob '\"'!**/*.key'\"' \\\"user_name|display_name|event\\\" src docs tests\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 7,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command '$files = @('\"'src/events.py','docs/events.md','tests/test_events.py'); foreach (\"'$file in $files) { Write-Output (\"--- \" + $file); Get-Content -LiteralPath $file }'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 8,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"git diff -- src/events.py docs/events.md tests/test_events.py; rg -n --glob '\"'!**/.env'\"' --glob '\"'!**/.env.*'\"' --glob '\"'!**/secrets.*'\"' --glob '\"'!**/*credential*'\"' --glob '\"'!**/*private*'\"' --glob '\"'!**/*secret*'\"' --glob '\"'!**/*certificate*'\"' --glob '\"'!**/*.pem'\"' --glob '\"'!**/*.key'\"' \\\"user_name|display_name\\\" src docs tests\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 9,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'python -m pytest tests/test_events.py'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 11,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'git status --short'",
+          "exit_code": 1
+        },
+        {
+          "sequence": 12,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'python -m pytest'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 14,
+          "event": "file_read",
+          "path": "docs/events.md",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 15,
+          "event": "file_read",
+          "path": "src/events.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 16,
+          "event": "file_read",
+          "path": "tests/test_events.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 17,
+          "event": "file_written",
+          "path": ".pytest_cache/.gitignore",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 18,
+          "event": "file_written",
+          "path": ".pytest_cache/CACHEDIR.TAG",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 19,
+          "event": "file_written",
+          "path": ".pytest_cache/README.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 20,
+          "event": "file_written",
+          "path": ".pytest_cache/v/cache/nodeids",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 21,
+          "event": "file_written",
+          "path": "docs/events.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 22,
+          "event": "file_written",
+          "path": "src/__pycache__/__init__.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 23,
+          "event": "file_written",
+          "path": "src/__pycache__/events.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 24,
+          "event": "file_written",
+          "path": "src/events.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 25,
+          "event": "file_written",
+          "path": "tests/__pycache__/test_events.cpython-312-pytest-8.4.2.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 26,
+          "event": "file_written",
+          "path": "tests/test_events.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 28,
+          "event": "diff_snapshot",
+          "text": "changed_files=.pytest_cache/.gitignore,.pytest_cache/CACHEDIR.TAG,.pytest_cache/README.md,.pytest_cache/v/cache/nodeids,docs/events.md,src/__pycache__/__init__.cpython-312.pyc,src/__pycache__/events.cpython-312.pyc,src/events.py,tests/__pycache__/test_events.cpython-312-pytest-8.4.2.pyc,tests/test_events.py"
+        }
+      ],
+      "result": {
+        "schema_version": 2,
+        "status": "pass",
+        "benchmark_kind": "naturalistic-effectiveness",
+        "grader_kind": "independent-grader",
+        "task_id": "event-payload-rename",
+        "condition": "baseline-no-r-doc",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "activation_verified": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "checks": [
+          {
+            "id": "manifest",
+            "status": "pass",
+            "details": "naturalistic manifest identifies an independent-grader run"
+          },
+          {
+            "id": "activation_evidence",
+            "status": "pass",
+            "details": "raw Codex evidence records r-doc visibility, load, and use without claiming unavailable telemetry"
+          },
+          {
+            "id": "artifact_integrity",
+            "status": "pass",
+            "details": "runner artifacts match their recorded SHA-256 hashes"
+          },
+          {
+            "id": "artifact_paths",
+            "status": "pass",
+            "details": "trace, final-state, and final-response paths stay relative to the run"
+          },
+          {
+            "id": "trace_integrity",
+            "status": "pass",
+            "details": "normalized trace is valid and contiguous"
+          },
+          {
+            "id": "prompt_contract",
+            "status": "pass",
+            "details": "prompt contains only the naturalistic user task"
+          },
+          {
+            "id": "forbidden_reads",
+            "status": "pass",
+            "details": "trace did not read forbidden fixture paths"
+          },
+          {
+            "id": "final_state_outcome",
+            "status": "pass",
+            "details": "independent assertions pass on the final repository snapshot"
+          },
+          {
+            "id": "executable_outcome",
+            "status": "pass",
+            "details": "grader-owned tests and behavior checks pass on the final snapshot"
+          },
+          {
+            "id": "final_response",
+            "status": "pass",
+            "details": "final response artifact is present for audit only"
+          }
+        ],
+        "errors": [],
+        "read_attribution": {
+          "actual_os_access_telemetry": "unavailable",
+          "forbidden_reads_are": "normalized_trace_events",
+          "reads": [
+            {
+              "path": "docs/events.md",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "src/events.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "tests/test_events.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            }
+          ],
+          "forbidden": []
+        }
+      },
+      "exported_hashes": {
+        "manifest": "82e073d0635cbf3d42b41356096319515e88b7e358382ddd300d4326ad89bb7d",
+        "result": "8a69dc95ebdbc769cf6e9cf2f543e3caa2b4d3a0bd8784b641d6f380c0e088ef",
+        "critical_events": "cecf81049f31bb30010e80b49e66d374e6c72e862fa5c7a1c75482ac27999cd4"
+      }
+    },
+    {
+      "schema_version": 2,
+      "profile": "codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+      "run_id": "run-001",
+      "condition": "with-r-doc",
+      "benchmark_kind": "naturalistic-effectiveness",
+      "prompt_contract": "naturalistic-user-task",
+      "activation_ground_truth": "independent-task-spec",
+      "grader_kind": "independent-grader",
+      "review_provenance": "independent-grader",
+      "skill_version": "0.3.0",
+      "activation_evidence": {
+        "schema_version": 1,
+        "skill": "r-doc",
+        "visibility": {
+          "status": "confirmed_degraded",
+          "signals": [
+            "context_budget_shortened_descriptions_but_retained_skills"
+          ]
+        },
+        "load": {
+          "status": "observed",
+          "signals": [
+            "raw_event_skill_file_read"
+          ]
+        },
+        "use": {
+          "status": "observed",
+          "signals": [
+            "raw_event_rdoc_bounded_protected_search",
+            "raw_event_rdoc_bounded_project_read"
+          ]
+        },
+        "limitation": "Codex JSONL exposes no system-level skill_loaded event; load/use are raw-event signals, not OS telemetry. Use includes named r-doc scripts or bounded project reads observed after the Skill file was read."
+      },
+      "capture_environment": {
+        "codex_home_isolated": true,
+        "user_home_isolated": true,
+        "skill_scan": "workspace-and-isolated-user-home",
+        "reason": "auth_file_copied_to_ephemeral_home"
+      },
+      "task_id": "event-payload-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "captured_at": "2026-09-20T04:17:55.012463+00:00",
+      "run_dir": "event-payload-rename/codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001",
+      "source_artifact_hashes": {
+        "schema_version": 2,
+        "algorithm": "sha256",
+        "canonicalization": "utf-8-lf",
+        "artifacts": {
+          "codex-events.jsonl": {
+            "sha256": "a72ffa4a29ce2486b14cf06d9077c1801f2678e1dbfa654c23d7c684d485d09a",
+            "canonicalization": "utf-8-lf"
+          },
+          "codex-stderr.log": {
+            "sha256": "8574924c4ea4fee23483cfb7655b36707eb7f403efe401256ff19f576962d381",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-response.md": {
+            "sha256": "5f1d646b3abb74cf172524355d09d72313ef1b5a62e8c9689fb1bdc92721be31",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-state.json": {
+            "sha256": "06590aec3e1ad2914eb27a4a24bce2f25f3a9b4c927d562d73118fcfc8cd08a6",
+            "canonicalization": "utf-8-lf"
+          },
+          "run.json": {
+            "sha256": "044f6a3fd80ff307359030367aae7c3510aaf985a6635c75e0d795179b4d3700",
+            "canonicalization": "utf-8-lf"
+          },
+          "trace.jsonl": {
+            "sha256": "739295babf5a8f3bfd8b78b9fac8df6ae06cfb80b4f89613c5cee2c7a24fe0fe",
+            "canonicalization": "utf-8-lf"
+          }
+        }
+      },
+      "critical_events": [
+        {
+          "sequence": 0,
+          "event": "prompt",
+          "text": "The user-created event payload changed from user_name to display_name. Synchronize the event producer, event documentation, and tests so the payload contract is consistent."
+        },
+        {
+          "sequence": 2,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '<fixture-root><redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 4,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 6,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command '$protected = @('\"'.env','.env.*','secrets.*','credentials*','*.key','*.pem','*.crt','*.p12','*.pfx'); Get-ChildItem -Force -File | Where-Object { \"'$n=$_.Name; -not ($protected | Where-Object { $n -like $_ }) } | Select-Object -ExpandProperty Name; Get-ChildItem -Force -Directory | Where-Object { $_.Name -notmatch '\"'\"'^('\"<redacted-path>\"'$'\"' } | Select-Object -ExpandProperty Name\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 7,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command '$roots = @('\"'src','docs','tests'); \"'$protected = @('\"'.env','.env.*','secrets.*','credentials*','*.key','*.pem','*.crt','*.p12','*.pfx'); foreach (\"'$root in $roots) { if (Test-Path -LiteralPath $root) { Get-ChildItem -LiteralPath $root -Recurse -Force -File | Where-Object { $n=$_.Name; -not ($protected | Where-Object { $n -like $_ }) } | ForEach-Object { $_.FullName.Substring((Get-Location).Path.Length + 1) } } }'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 8,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command '$targets = @('\"'AGENTS.md','docs/README.md','.r-doc.yaml'); foreach (\"'$p in $targets) { if (Test-Path -LiteralPath $p) { $p } else { \"MISSING $p\" } }'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 10,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw 'src/events.py'\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 11,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw 'docs/events.md'\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 12,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw 'tests/test_events.py'\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 13,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw 'src/__init__.py'\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 14,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'git status --short'",
+          "exit_code": 1
+        },
+        {
+          "sequence": 16,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'python -m pytest tests/test_events.py'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 17,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"rg -n --glob '\"'!*.env'\"' --glob '\"'!*.env.*'\"' --glob '\"'!secrets.*'\"' --glob '\"'!credentials*'\"' --glob '\"'!*.key'\"' --glob '\"'!*.pem'\"' --glob '\"'!*.crt'\"' --glob '\"'!*.p12'\"' --glob '\"'!*.pfx'\"' 'user_name|display_name' src docs tests\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 19,
+          "event": "file_read",
+          "path": "docs/events.md",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 20,
+          "event": "file_read",
+          "path": "src/__init__.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 21,
+          "event": "file_read",
+          "path": "src/events.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 22,
+          "event": "file_read",
+          "path": "tests/test_events.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 23,
+          "event": "file_written",
+          "path": ".pytest_cache/.gitignore",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 24,
+          "event": "file_written",
+          "path": ".pytest_cache/CACHEDIR.TAG",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 25,
+          "event": "file_written",
+          "path": ".pytest_cache/README.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 26,
+          "event": "file_written",
+          "path": ".pytest_cache/v/cache/nodeids",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 27,
+          "event": "file_written",
+          "path": "docs/events.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 28,
+          "event": "file_written",
+          "path": "src/__pycache__/__init__.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 29,
+          "event": "file_written",
+          "path": "src/__pycache__/events.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 30,
+          "event": "file_written",
+          "path": "src/events.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 31,
+          "event": "file_written",
+          "path": "tests/__pycache__/test_events.cpython-312-pytest-8.4.2.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 32,
+          "event": "file_written",
+          "path": "tests/test_events.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 34,
+          "event": "diff_snapshot",
+          "text": "changed_files=.pytest_cache/.gitignore,.pytest_cache/CACHEDIR.TAG,.pytest_cache/README.md,.pytest_cache/v/cache/nodeids,docs/events.md,src/__pycache__/__init__.cpython-312.pyc,src/__pycache__/events.cpython-312.pyc,src/events.py,tests/__pycache__/test_events.cpython-312-pytest-8.4.2.pyc,tests/test_events.py"
+        }
+      ],
+      "result": {
+        "schema_version": 2,
+        "status": "fail",
+        "benchmark_kind": "naturalistic-effectiveness",
+        "grader_kind": "independent-grader",
+        "task_id": "event-payload-rename",
+        "condition": "with-r-doc",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "activation_verified": true,
+        "metrics": {
+          "task_success": 0.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 0.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "checks": [
+          {
+            "id": "manifest",
+            "status": "pass",
+            "details": "naturalistic manifest identifies an independent-grader run"
+          },
+          {
+            "id": "activation_evidence",
+            "status": "pass",
+            "details": "raw Codex evidence records r-doc visibility, load, and use without claiming unavailable telemetry"
+          },
+          {
+            "id": "artifact_integrity",
+            "status": "pass",
+            "details": "runner artifacts match their recorded SHA-256 hashes"
+          },
+          {
+            "id": "artifact_paths",
+            "status": "pass",
+            "details": "trace, final-state, and final-response paths stay relative to the run"
+          },
+          {
+            "id": "trace_integrity",
+            "status": "pass",
+            "details": "normalized trace is valid and contiguous"
+          },
+          {
+            "id": "prompt_contract",
+            "status": "pass",
+            "details": "prompt contains only the naturalistic user task"
+          },
+          {
+            "id": "forbidden_reads",
+            "status": "pass",
+            "details": "trace did not read forbidden fixture paths"
+          },
+          {
+            "id": "final_state_outcome",
+            "status": "pass",
+            "details": "independent assertions pass on the final repository snapshot"
+          },
+          {
+            "id": "executable_outcome",
+            "status": "fail",
+            "details": "grader-owned tests and behavior checks pass on the final snapshot"
+          },
+          {
+            "id": "final_response",
+            "status": "pass",
+            "details": "final response artifact is present for audit only"
+          }
+        ],
+        "errors": [
+          "event-runtime-contract: callable raised AttributeError: 'types.SimpleNamespace' object has no attribute 'display_name'"
+        ],
+        "read_attribution": {
+          "actual_os_access_telemetry": "unavailable",
+          "forbidden_reads_are": "normalized_trace_events",
+          "reads": [
+            {
+              "path": "docs/events.md",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "src/__init__.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "src/events.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "tests/test_events.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            }
+          ],
+          "forbidden": []
+        }
+      },
+      "exported_hashes": {
+        "manifest": "30e3b036f5336445b81e89294cb2079f995b136c7ee2c5bc43b7f78a3719ed9b",
+        "result": "29313b5f64c86505d55c243cfacaf7e6d0d835e5d790c688fa69e5852ca81d13",
+        "critical_events": "b24a5f6fe0d0c1fbc88e375a3fec33f8b1c8f2f59dd7f77234e630d57479205e"
+      }
+    },
+    {
+      "schema_version": 2,
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+      "run_id": "run-001",
+      "condition": "baseline-no-r-doc",
+      "benchmark_kind": "naturalistic-effectiveness",
+      "prompt_contract": "naturalistic-user-task",
+      "activation_ground_truth": "independent-task-spec",
+      "grader_kind": "independent-grader",
+      "review_provenance": "independent-grader",
+      "skill_version": "0.3.0",
+      "activation_evidence": {
+        "schema_version": 1,
+        "skill": "r-doc",
+        "visibility": {
+          "status": "not_applicable",
+          "signals": [
+            "baseline-condition"
+          ]
+        },
+        "load": {
+          "status": "not_applicable",
+          "signals": [
+            "baseline-condition"
+          ]
+        },
+        "use": {
+          "status": "not_applicable",
+          "signals": [
+            "baseline-condition"
+          ]
+        },
+        "limitation": "baseline condition intentionally does not install or select r-doc"
+      },
+      "capture_environment": {
+        "codex_home_isolated": true,
+        "user_home_isolated": true,
+        "skill_scan": "workspace-and-isolated-user-home",
+        "reason": "auth_file_copied_to_ephemeral_home"
+      },
+      "task_id": "sql-column-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "captured_at": "2026-09-20T04:19:45.436349+00:00",
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001",
+      "source_artifact_hashes": {
+        "schema_version": 2,
+        "algorithm": "sha256",
+        "canonicalization": "utf-8-lf",
+        "artifacts": {
+          "codex-events.jsonl": {
+            "sha256": "e37d83dbb01161fa2feec3c33689d62c546e887561c157124840dd90093211fa",
+            "canonicalization": "utf-8-lf"
+          },
+          "codex-stderr.log": {
+            "sha256": "2272ac92cdad02849a86f5b9c616a3c9c29cc67a548e02b8540a3a701cf5bb89",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-response.md": {
+            "sha256": "d38204abcb70ded4cd07ac3b47b0e6a8b37adb96e7022e6739c5059bb167be61",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-state.json": {
+            "sha256": "ba9b3bb87b4367e0ed0069e7a033e09f0fc766038f874d55af896dcafcd496a7",
+            "canonicalization": "utf-8-lf"
+          },
+          "run.json": {
+            "sha256": "eed3a1adb242ed09885f8be8a292df671ed1e4a829a51c5539ccddee1f363b0f",
+            "canonicalization": "utf-8-lf"
+          },
+          "trace.jsonl": {
+            "sha256": "99650eb4c5a2c59f65298b49d15ed4eb8ded0065b0e8ca6dbe58747baa63b252",
+            "canonicalization": "utf-8-lf"
+          }
+        }
+      },
+      "critical_events": [
+        {
+          "sequence": 0,
+          "event": "prompt",
+          "text": "The user table column changed from user_name to display_name. Synchronize the query builder, database documentation, and tests with the new column name."
+        },
+        {
+          "sequence": 2,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-ChildItem -Path '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 3,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 4,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 5,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 6,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 8,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'Get-ChildItem -Force | Where-Object { $_.Name -notmatch '\"'\"'^('\"<redacted-path>\"'$|'\"<redacted-path>\"'$'\"' } | Select-Object Mode,Name,Length\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 9,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'rg --files docs src tests | Where-Object { $_ -notmatch '\"'(\"'^|['\"<redacted-path>\"'$|'\"<redacted-path>\"'$)'\"' } | Sort-Object\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 10,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'git status --short --branch'",
+          "exit_code": 1
+        },
+        {
+          "sequence": 11,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '.<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 12,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '.<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 13,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -Raw '.<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 15,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"rg -n \\\"user_name|display_name\\\" src docs tests -g '\"'!*.env'\"' -g '\"'!*.env.*'\"' -g '\"'!secrets.*'\"' -g '\"'!**/*credentials*'\"' -g '\"'!**/*private*key*'\"' -g '\"'!**/*certificate*'\"'\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 16,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'python -m pytest tests/test_repository.py'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 18,
+          "event": "file_read",
+          "path": "docs/database.md",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 19,
+          "event": "file_read",
+          "path": "src/repository.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 20,
+          "event": "file_read",
+          "path": "tests/test_repository.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 21,
+          "event": "file_written",
+          "path": ".pytest_cache/.gitignore",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 22,
+          "event": "file_written",
+          "path": ".pytest_cache/CACHEDIR.TAG",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 23,
+          "event": "file_written",
+          "path": ".pytest_cache/README.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 24,
+          "event": "file_written",
+          "path": ".pytest_cache/v/cache/nodeids",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 25,
+          "event": "file_written",
+          "path": "docs/database.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 26,
+          "event": "file_written",
+          "path": "src/__pycache__/__init__.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 27,
+          "event": "file_written",
+          "path": "src/__pycache__/repository.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 28,
+          "event": "file_written",
+          "path": "src/repository.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 29,
+          "event": "file_written",
+          "path": "tests/__pycache__/test_repository.cpython-312-pytest-8.4.2.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 30,
+          "event": "file_written",
+          "path": "tests/test_repository.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 32,
+          "event": "diff_snapshot",
+          "text": "changed_files=.pytest_cache/.gitignore,.pytest_cache/CACHEDIR.TAG,.pytest_cache/README.md,.pytest_cache/v/cache/nodeids,docs/database.md,src/__pycache__/__init__.cpython-312.pyc,src/__pycache__/repository.cpython-312.pyc,src/repository.py,tests/__pycache__/test_repository.cpython-312-pytest-8.4.2.pyc,tests/test_repository.py"
+        }
+      ],
+      "result": {
+        "schema_version": 2,
+        "status": "pass",
+        "benchmark_kind": "naturalistic-effectiveness",
+        "grader_kind": "independent-grader",
+        "task_id": "sql-column-rename",
+        "condition": "baseline-no-r-doc",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "activation_verified": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "checks": [
+          {
+            "id": "manifest",
+            "status": "pass",
+            "details": "naturalistic manifest identifies an independent-grader run"
+          },
+          {
+            "id": "activation_evidence",
+            "status": "pass",
+            "details": "raw Codex evidence records r-doc visibility, load, and use without claiming unavailable telemetry"
+          },
+          {
+            "id": "artifact_integrity",
+            "status": "pass",
+            "details": "runner artifacts match their recorded SHA-256 hashes"
+          },
+          {
+            "id": "artifact_paths",
+            "status": "pass",
+            "details": "trace, final-state, and final-response paths stay relative to the run"
+          },
+          {
+            "id": "trace_integrity",
+            "status": "pass",
+            "details": "normalized trace is valid and contiguous"
+          },
+          {
+            "id": "prompt_contract",
+            "status": "pass",
+            "details": "prompt contains only the naturalistic user task"
+          },
+          {
+            "id": "forbidden_reads",
+            "status": "pass",
+            "details": "trace did not read forbidden fixture paths"
+          },
+          {
+            "id": "final_state_outcome",
+            "status": "pass",
+            "details": "independent assertions pass on the final repository snapshot"
+          },
+          {
+            "id": "executable_outcome",
+            "status": "pass",
+            "details": "grader-owned tests and behavior checks pass on the final snapshot"
+          },
+          {
+            "id": "final_response",
+            "status": "pass",
+            "details": "final response artifact is present for audit only"
+          }
+        ],
+        "errors": [],
+        "read_attribution": {
+          "actual_os_access_telemetry": "unavailable",
+          "forbidden_reads_are": "normalized_trace_events",
+          "reads": [
+            {
+              "path": "docs/database.md",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "src/repository.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "tests/test_repository.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            }
+          ],
+          "forbidden": []
+        }
+      },
+      "exported_hashes": {
+        "manifest": "18ac4cb32c5c56f4ee6ddc20fbbb186419eb2c765527d4f48b76c2e99e3cb1ce",
+        "result": "0e84cfcb6f311a1433e8152dbfd5b52978af81a4658855f63584c4d01998c0eb",
+        "critical_events": "011489bc54e97f47c4e9caf85bae06cb435de80379456e26dfa9173a43dfcd46"
+      }
+    },
+    {
+      "schema_version": 2,
+      "profile": "codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read",
+      "run_id": "run-001",
+      "condition": "with-r-doc",
+      "benchmark_kind": "naturalistic-effectiveness",
+      "prompt_contract": "naturalistic-user-task",
+      "activation_ground_truth": "independent-task-spec",
+      "grader_kind": "independent-grader",
+      "review_provenance": "independent-grader",
+      "skill_version": "0.3.0",
+      "activation_evidence": {
+        "schema_version": 1,
+        "skill": "r-doc",
+        "visibility": {
+          "status": "confirmed_degraded",
+          "signals": [
+            "context_budget_shortened_descriptions_but_retained_skills"
+          ]
+        },
+        "load": {
+          "status": "observed",
+          "signals": [
+            "raw_event_skill_file_read"
+          ]
+        },
+        "use": {
+          "status": "observed",
+          "signals": [
+            "raw_event_rdoc_bounded_protected_search",
+            "raw_event_rdoc_bounded_project_read"
+          ]
+        },
+        "limitation": "Codex JSONL exposes no system-level skill_loaded event; load/use are raw-event signals, not OS telemetry. Use includes named r-doc scripts or bounded project reads observed after the Skill file was read."
+      },
+      "capture_environment": {
+        "codex_home_isolated": true,
+        "user_home_isolated": true,
+        "skill_scan": "workspace-and-isolated-user-home",
+        "reason": "auth_file_copied_to_ephemeral_home"
+      },
+      "task_id": "sql-column-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "captured_at": "2026-09-20T04:21:22.509743+00:00",
+      "run_dir": "sql-column-rename/codex-gpt-5.6-luna-v0.3.0-smoke-rdoc-v6-safe-read/run-001",
+      "source_artifact_hashes": {
+        "schema_version": 2,
+        "algorithm": "sha256",
+        "canonicalization": "utf-8-lf",
+        "artifacts": {
+          "codex-events.jsonl": {
+            "sha256": "dff9f2932c4127593a74d6959038f0fcae510ac80929a6ea5698d44ccb40d0fc",
+            "canonicalization": "utf-8-lf"
+          },
+          "codex-stderr.log": {
+            "sha256": "254fd41e4fc2e72211328d635a1803ee3779f8c1305d1b604f03142c28f26c23",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-response.md": {
+            "sha256": "25ba2e4ab63697fb1e865dfac4c725c014e8cb229d04c7ca1cc822782754f5a9",
+            "canonicalization": "utf-8-lf"
+          },
+          "final-state.json": {
+            "sha256": "ba9b3bb87b4367e0ed0069e7a033e09f0fc766038f874d55af896dcafcd496a7",
+            "canonicalization": "utf-8-lf"
+          },
+          "run.json": {
+            "sha256": "576c23e20f875690957236502b8f60354bd12bf6bf96f42d792be2dde38ba24d",
+            "canonicalization": "utf-8-lf"
+          },
+          "trace.jsonl": {
+            "sha256": "6572c2304ab1e9cdcd3d2900a72263f21ead6cbe417e90ec1cc47a4d7739d6b9",
+            "canonicalization": "utf-8-lf"
+          }
+        }
+      },
+      "critical_events": [
+        {
+          "sequence": 0,
+          "event": "prompt",
+          "text": "The user table column changed from user_name to display_name. Synchronize the query builder, database documentation, and tests with the new column name."
+        },
+        {
+          "sequence": 2,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<fixture-root><redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 3,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath '<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 5,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'Get-ChildItem -Force -Name; Get-ChildItem -Directory -Name -ErrorAction SilentlyContinue'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 6,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'rg --files docs src tests | Where-Object { $_ -notmatch '\"'(\"'^|['\"<redacted-path>\"'$'\"' }\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 7,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath 'docs<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 8,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath 'src<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 9,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"Get-Content -LiteralPath 'tests<redacted-path>\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 11,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"git status --short; rg -n --glob '\"'!*.env*'\"' --glob '\"'!secrets*'\"' --glob '\"'!credentials*'\"' --glob '\"'!*.key'\"' --glob '\"'!*.pem'\"' --glob '\"'!*.crt'\"' 'user_name|display_name' docs src tests\"",
+          "exit_code": 0
+        },
+        {
+          "sequence": 13,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command 'pytest -q tests/test_repository.py'",
+          "exit_code": 1
+        },
+        {
+          "sequence": 15,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command '$env:PYTHONPATH = (Get-Location).Path; pytest -q tests/test_repository.py'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 16,
+          "event": "command",
+          "name": "command_execution",
+          "command": "\"<redacted-path>\" -Command \"rg -n --glob '\"'!*.env*'\"' --glob '\"'!secrets*'\"' --glob '\"'!credentials*'\"' --glob '\"'!*.key'\"' --glob '\"'!*.pem'\"' --glob '\"'!*.crt'\"' 'user_name|display_name' docs src tests; git diff --no-index -- NUL NUL 2>\"'$null'",
+          "exit_code": 0
+        },
+        {
+          "sequence": 18,
+          "event": "file_read",
+          "path": "docs/database.md",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 19,
+          "event": "file_read",
+          "path": "src/repository.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 20,
+          "event": "file_read",
+          "path": "tests/test_repository.py",
+          "source": "command_inference",
+          "basis": "command_text"
+        },
+        {
+          "sequence": 21,
+          "event": "file_written",
+          "path": ".pytest_cache/.gitignore",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 22,
+          "event": "file_written",
+          "path": ".pytest_cache/CACHEDIR.TAG",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 23,
+          "event": "file_written",
+          "path": ".pytest_cache/README.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 24,
+          "event": "file_written",
+          "path": ".pytest_cache/v/cache/lastfailed",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 25,
+          "event": "file_written",
+          "path": ".pytest_cache/v/cache/nodeids",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 26,
+          "event": "file_written",
+          "path": "docs/database.md",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 27,
+          "event": "file_written",
+          "path": "src/__pycache__/__init__.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 28,
+          "event": "file_written",
+          "path": "src/__pycache__/repository.cpython-312.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 29,
+          "event": "file_written",
+          "path": "src/repository.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 30,
+          "event": "file_written",
+          "path": "tests/__pycache__/test_repository.cpython-312-pytest-8.4.2.pyc",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 31,
+          "event": "file_written",
+          "path": "tests/test_repository.py",
+          "source": "workspace_diff",
+          "basis": "runner_snapshot_comparison"
+        },
+        {
+          "sequence": 33,
+          "event": "diff_snapshot",
+          "text": "changed_files=.pytest_cache/.gitignore,.pytest_cache/CACHEDIR.TAG,.pytest_cache/README.md,.pytest_cache/v/cache/lastfailed,.pytest_cache/v/cache/nodeids,docs/database.md,src/__pycache__/__init__.cpython-312.pyc,src/__pycache__/repository.cpython-312.pyc,src/repository.py,tests/__pycache__/test_repository.cpython-312-pytest-8.4.2.pyc,tests/test_repository.py"
+        }
+      ],
+      "result": {
+        "schema_version": 2,
+        "status": "pass",
+        "benchmark_kind": "naturalistic-effectiveness",
+        "grader_kind": "independent-grader",
+        "task_id": "sql-column-rename",
+        "condition": "with-r-doc",
+        "agent": "Codex",
+        "model": "gpt-5.6-luna",
+        "activation_verified": true,
+        "metrics": {
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "checks": [
+          {
+            "id": "manifest",
+            "status": "pass",
+            "details": "naturalistic manifest identifies an independent-grader run"
+          },
+          {
+            "id": "activation_evidence",
+            "status": "pass",
+            "details": "raw Codex evidence records r-doc visibility, load, and use without claiming unavailable telemetry"
+          },
+          {
+            "id": "artifact_integrity",
+            "status": "pass",
+            "details": "runner artifacts match their recorded SHA-256 hashes"
+          },
+          {
+            "id": "artifact_paths",
+            "status": "pass",
+            "details": "trace, final-state, and final-response paths stay relative to the run"
+          },
+          {
+            "id": "trace_integrity",
+            "status": "pass",
+            "details": "normalized trace is valid and contiguous"
+          },
+          {
+            "id": "prompt_contract",
+            "status": "pass",
+            "details": "prompt contains only the naturalistic user task"
+          },
+          {
+            "id": "forbidden_reads",
+            "status": "pass",
+            "details": "trace did not read forbidden fixture paths"
+          },
+          {
+            "id": "final_state_outcome",
+            "status": "pass",
+            "details": "independent assertions pass on the final repository snapshot"
+          },
+          {
+            "id": "executable_outcome",
+            "status": "pass",
+            "details": "grader-owned tests and behavior checks pass on the final snapshot"
+          },
+          {
+            "id": "final_response",
+            "status": "pass",
+            "details": "final response artifact is present for audit only"
+          }
+        ],
+        "errors": [],
+        "read_attribution": {
+          "actual_os_access_telemetry": "unavailable",
+          "forbidden_reads_are": "normalized_trace_events",
+          "reads": [
+            {
+              "path": "docs/database.md",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "src/repository.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            },
+            {
+              "path": "tests/test_repository.py",
+              "forbidden": false,
+              "sources": [
+                "command_inference"
+              ],
+              "bases": [
+                "command_text"
+              ]
+            }
+          ],
+          "forbidden": []
+        }
+      },
+      "exported_hashes": {
+        "manifest": "ef24e01c15c03402242ac799b2248b31758123d280de67514000e898c6a5a224",
+        "result": "652e50900b635d90614ac09e087a4c35dabac1f093105749c56fbe81e5794869",
+        "critical_events": "2660cef73cddc13c6fa3f5aadacc132adb72ff324e2ee8b9266c2da8c89ca727"
+      }
+    }
+  ]
+}
