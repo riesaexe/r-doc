@@ -74,6 +74,8 @@ The grader checks the final repository state and trace safety independently. It 
 
 Task specifications may also declare grader-owned executable checks. The current contract supports a pytest invocation, a Python callable return/attribute/exception check, and a documentation assertion. These checks run against a temporary materialization of the runner snapshot, so a string-only snapshot assertion cannot make a broken implementation pass.
 
+Callable checks accept an optional `argument_mode`: `namespace` remains the default for existing fixtures, while `mapping` passes JSON objects to dict-indexing callables without silently changing the fixture contract. Documentation assertions remain literal by default; task specifications may opt into `case-insensitive` or `natural-language` matching, and `contains_any` for explicitly enumerated equivalent wording. Natural-language matching folds case, Unicode width, common dash variants, and whitespace, but it does not weaken path or code-contract checks unless the task opts in.
+
 Capture a real run with:
 
 ```bash
@@ -117,6 +119,30 @@ The follow-up full batch is `benchmarks/naturalistic-runs-20260920-luna-v0.3.0-f
 This Event v2 failure is a task-contract false negative rather than an agent-state failure: the final test correctly contains `display_name` and a runtime assertion that `user_name` is absent, while the old raw `not_contains` rule incorrectly rejected that test file. The task contract is corrected, the original v8 result remains unchanged, and regrading the captured snapshot with the corrected contract passes all checks. The corrected derived aggregate is `benchmarks/naturalistic-runs-20260920-luna-v0.3.0-full-v8-command-glob-event-v2/summary-regraded-event-contract.json` and reports 80/80 passing runs.
 
 返回：[benchmark 总说明](../README.md) · [开发文档](../../docs/development/benchmarks.md)
+
+### Grader 契约修复
+
+callable 检查可通过可选的 `argument_mode` 声明参数形状：默认 `namespace` 保持现有 fixture 行为，需要字典下标访问的 fixture 使用 `mapping`，避免 grader 静默改变参数契约。文档断言默认仍是字面匹配；任务可以显式选择 `case-insensitive` 或 `natural-language`，并用 `contains_any` 声明有限的等价措辞。`natural-language` 只归一化大小写、Unicode 宽度、常见连字符和空白，不会自动放宽路径或代码契约。
+
+对 v0.4.0 Luna 完整批次的派生重评分位于 `benchmarks/naturalistic-runs-20260920-luna-v0.4.0-full-v1-complex-regraded-v1/`。原始 140 个 run 保持不变；修复后的 grader 把 20 个 cross-module runtime 假失败移除，并把自然语言断言改为显式的归一化规则。该结果为 115/140 通过、25/140 失败。随后在不改变旧 trace prompt 的前提下，使用修正任务契约重评分于 `benchmarks/naturalistic-runs-20260920-luna-v0.4.0-full-v2-contracts-regraded-v1/`，结果为 128/140 通过、12/140 失败；剩余 11 个是决策索引遗漏，1 个是 producer 仍访问旧字段。两者都是已有采集的描述性重评分，不是新的 Agent 采集。
+
+## 当前证据状态与扩展任务
+
+v0.4.0 复核后，正式 naturalistic 根汇总已回到明确的 pending 状态：历史的 44 条记录保存在 benchmarks/naturalistic-runs/summary-unverified-v0.4.0.json，仅供审计，不再冒充当前公开测量。它包含 24 条 gpt-5.5 和 20 条 gpt-5.6-sol 记录；在 v0.4.0 发布树中有 36 条 result_path 悬空，其中 gpt-5.5 为 16 条、gpt-5.6-sol 为 20 条。因此 sol 不是已批准的独立批次，不能继续出现在正式效果汇总中。
+
+v8 的 public-evidence.json 仍保留为可审阅证据。公开树上的验证命令和边界见 public-evidence-verification.md；它能验证结构、摘要身份和导出哈希，但没有原始字节时不能声称完成哈希重放。capture runner 现在记录 wall-clock duration，并在 Codex JSONL 明确提供 usage 时记录 input/output/total token 字段；字段缺失会保留为 unavailable，不会猜算。
+
+当前 task portfolio 另外加入三类复杂任务：v1 规格用于解释已完成的 v0.4.0 采集，v2 规格位于 `benchmarks/naturalistic/tasks-v2/`，明确了历史迁移语境、决策索引更新和可复用发布清单的契约。v2 只用于后续独立采集，不改写 v1 trace；开始真实采集仍需先确认准确模型、A/B 配对、重复次数和范围。
+
+aggregate.py 输出 effect_attribution，若两种条件共享 safe-read preflight，配对差异只标为 descriptive-only，不把安全收益归因给 r-doc。要建立独立增量结论，还需要每次 treatment 的 visible/load/use 证据、非天花板任务，以及单独随机化或测量安全读取策略。
+
+验证入口：[公开证据校验](public-evidence-verification.md) · [benchmark 总说明](../README.md)
+
+v0.4.0 的 Luna 完整批次已完成：gpt-5.6-luna、7 类任务、每类 10 对 matched A/B、共 140 次运行。一次 baseline API timeout 已按原 task、condition、profile、model 和 run_id 补跑，最终 140/140 有效产物、70 个完整配对。独立重判结果为 93 次 task outcome 通过、47 次失败；with-r-doc 为 47/70，baseline 为 46/70；命令级 forbidden read 为 0/140，with-r-doc visible/load/use activation 为 70/70，baseline activation 不适用。summary 的 pass 表示测量门通过，不表示任务全部通过；由于两组共享 safe-read preflight，effect attribution 仍是 descriptive-only。逐次脱敏证据和重放说明见 benchmarks/naturalistic-runs-20260920-luna-v0.4.0-full-v1-complex/。
+
+## v0.4.1 recapture status
+
+The latest approved capture uses `benchmarks/naturalistic/tasks-v2/` and gpt-5.6-luna. A 14-run smoke gate passed 14/14; the subsequent seven-task, ten-pair-per-task batch produced 140 run artifacts, 133 task-outcome passes, 7 measured failures, zero runner exceptions, and 140 verified activation records. Public evidence cross-validation passes. The failures remain visible in the batch summary and are not silently regraded: two are command-attribution `.env` false positives, four are cross-module producer input-contract mistakes, and one is a release-baseline confirmation pause.
 
 ## 中文说明
 

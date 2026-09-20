@@ -1,0 +1,1367 @@
+{
+  "schema_version": 3,
+  "benchmark_kind": "naturalistic-effectiveness",
+  "benchmark_name": "Naturalistic Effectiveness Benchmark",
+  "prompt_contract": "naturalistic-user-task",
+  "activation_ground_truth": "independent-task-spec",
+  "grader_kind": "independent-grader",
+  "review_provenance": "independent-grader",
+  "metric_semantics": {
+    "task_success": "Independent runner snapshot, executable outcome checks, and trace safety; not agent self-report.",
+    "outcome_compliance": "Narrow static contract assertions over the runner-generated final snapshot; runtime behavior is reported separately.",
+    "executable_outcome": "Grader-owned pytest and behavior checks executed from the final snapshot."
+  },
+  "activation_evidence": {
+    "verified_runs": 14,
+    "unverified_runs": 0,
+    "effect_comparisons_require_verified_activation": true,
+    "limitation": "Codex JSONL does not expose OS-level skill loading telemetry; raw-event signals are recorded per run."
+  },
+  "effect_attribution": {
+    "status": "descriptive-only",
+    "models_and_conditions": "paired descriptive comparison",
+    "with_r_doc_activation_verified_runs": 7,
+    "shared_controls": [
+      "skill-discovery-safe-read-preflight-v2-command-glob"
+    ],
+    "reason": "The safe-read preflight is shared by both conditions; safety outcomes cannot be attributed to r-doc without a separately randomized safety treatment.",
+    "required_for_incremental_claim": [
+      "with-r-doc visible/load/use evidence for every treatment run",
+      "paired baseline under the same declared model",
+      "a task portfolio that is not at a deterministic ceiling",
+      "separate measurement or randomized treatment for safe-read policy effects"
+    ]
+  },
+  "capture_metrics": {
+    "baseline-no-r-doc": {
+      "run_count": 7,
+      "duration_seconds": {
+        "mean": 122.09,
+        "median": 118.1,
+        "stdev": 19.58,
+        "ci95_low": 103.98,
+        "ci95_high": 140.19,
+        "ci95_method": "student-t-95"
+      },
+      "usage": {
+        "observed_run_count": 7,
+        "fields": {
+          "cached_input_tokens": {
+            "mean": 248210.29,
+            "median": 232192.0,
+            "stdev": 50747.84,
+            "ci95_low": 201274.67,
+            "ci95_high": 295145.9,
+            "ci95_method": "student-t-95"
+          },
+          "input_tokens": {
+            "mean": 278753.57,
+            "median": 265268.0,
+            "stdev": 51765.21,
+            "ci95_low": 230877.01,
+            "ci95_high": 326630.13,
+            "ci95_method": "student-t-95"
+          },
+          "output_tokens": {
+            "mean": 3345.57,
+            "median": 3244.0,
+            "stdev": 713.72,
+            "ci95_low": 2685.46,
+            "ci95_high": 4005.68,
+            "ci95_method": "student-t-95"
+          }
+        },
+        "limitation": "Token fields remain unavailable when Codex JSON events do not expose usage metadata."
+      }
+    },
+    "with-r-doc": {
+      "run_count": 7,
+      "duration_seconds": {
+        "mean": 130.52,
+        "median": 129.08,
+        "stdev": 26.14,
+        "ci95_low": 106.35,
+        "ci95_high": 154.7,
+        "ci95_method": "student-t-95"
+      },
+      "usage": {
+        "observed_run_count": 7,
+        "fields": {
+          "cached_input_tokens": {
+            "mean": 281600.0,
+            "median": 274944.0,
+            "stdev": 65144.5,
+            "ci95_low": 221349.22,
+            "ci95_high": 341850.78,
+            "ci95_method": "student-t-95"
+          },
+          "input_tokens": {
+            "mean": 314415.86,
+            "median": 298361.0,
+            "stdev": 69913.68,
+            "ci95_low": 249754.16,
+            "ci95_high": 379077.55,
+            "ci95_method": "student-t-95"
+          },
+          "output_tokens": {
+            "mean": 3760.29,
+            "median": 3471.0,
+            "stdev": 1131.52,
+            "ci95_low": 2713.77,
+            "ci95_high": 4806.8,
+            "ci95_method": "student-t-95"
+          }
+        },
+        "limitation": "Token fields remain unavailable when Codex JSON events do not expose usage metadata."
+      }
+    }
+  },
+  "status": "partial",
+  "failure_analysis": {
+    "status_counts": {
+      "pass": 14,
+      "fail": 0
+    },
+    "task_outcome_status_counts": {
+      "pass": 14,
+      "fail": 0
+    },
+    "forbidden_read_runs": 0,
+    "activation_unverified_runs": 0,
+    "task_outcome_pass_but_overall_fail": 0,
+    "failure_modes": {
+      "forbidden_read_only": 0,
+      "forbidden_read_and_activation_unverified": 0,
+      "activation_unverified_only": 0,
+      "other": 0
+    }
+  },
+  "coverage": {
+    "models": [
+      "gpt-5.6-luna"
+    ],
+    "model_count": 1,
+    "multi_model": false,
+    "task_ids": [
+      "api-response-field-rename",
+      "architecture-decision-sync-v2",
+      "cli-option-rename",
+      "cross-module-contract-migration-v2",
+      "event-payload-rename-v2",
+      "release-doc-drift-v2",
+      "sql-column-rename"
+    ],
+    "task_count": 7,
+    "paired_task_ids": [
+      "api-response-field-rename",
+      "architecture-decision-sync-v2",
+      "cli-option-rename",
+      "cross-module-contract-migration-v2",
+      "event-payload-rename-v2",
+      "release-doc-drift-v2",
+      "sql-column-rename"
+    ],
+    "paired_task_count": 7,
+    "task_diversity_ready": true,
+    "coverage_pair_count": 7,
+    "activation_verified_run_count": 14,
+    "activation_unverified_run_count": 0,
+    "task_pair_counts": {
+      "api-response-field-rename": 1,
+      "architecture-decision-sync-v2": 1,
+      "cli-option-rename": 1,
+      "cross-module-contract-migration-v2": 1,
+      "event-payload-rename-v2": 1,
+      "release-doc-drift-v2": 1,
+      "sql-column-rename": 1
+    },
+    "replicated_task_count": 0,
+    "min_pairs_per_task": 1,
+    "tasks_with_trend_readiness": [],
+    "tasks_with_statistical_readiness": [],
+    "tasks_with_strong_evidence_readiness": [],
+    "sample_size_guidance": {
+      "replication_min_pairs": 2,
+      "trend_min_pairs": 3,
+      "statistical_min_pairs": 5,
+      "strong_evidence_min_pairs": 10,
+      "multi_model_min_models": 2,
+      "task_diversity_min_tasks": 4
+    }
+  },
+  "profiles": {
+    "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts": {
+      "run_count": 7,
+      "conditions": {
+        "baseline-no-r-doc": {
+          "run_count": 7,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        }
+      }
+    },
+    "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts": {
+      "run_count": 7,
+      "conditions": {
+        "with-r-doc": {
+          "run_count": 7,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        }
+      }
+    }
+  },
+  "paired_comparisons": [
+    {
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "task_id": "api-response-field-rename",
+      "paired_run_count": 1,
+      "paired_run_ids": [
+        "run-001"
+      ],
+      "unpaired_run_counts": {
+        "with-r-doc": 0,
+        "baseline-no-r-doc": 0
+      },
+      "trend_readiness": false,
+      "statistical_readiness": false,
+      "strong_evidence_readiness": false,
+      "conditions": {
+        "with-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "baseline-no-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        }
+      },
+      "delta": {
+        "task_success": 0.0,
+        "outcome_compliance": 0.0,
+        "executable_outcome": 0.0,
+        "context_safety": 0.0,
+        "trace_integrity": 0.0
+      },
+      "delta_statistics": {
+        "task_success": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "outcome_compliance": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "executable_outcome": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "context_safety": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "trace_integrity": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        }
+      },
+      "per_run_deltas": [
+        {
+          "run_id": "run-001",
+          "delta": {
+            "task_success": 0.0,
+            "outcome_compliance": 0.0,
+            "executable_outcome": 0.0,
+            "context_safety": 0.0,
+            "trace_integrity": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "task_id": "architecture-decision-sync-v2",
+      "paired_run_count": 1,
+      "paired_run_ids": [
+        "run-001"
+      ],
+      "unpaired_run_counts": {
+        "with-r-doc": 0,
+        "baseline-no-r-doc": 0
+      },
+      "trend_readiness": false,
+      "statistical_readiness": false,
+      "strong_evidence_readiness": false,
+      "conditions": {
+        "with-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "baseline-no-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        }
+      },
+      "delta": {
+        "task_success": 0.0,
+        "outcome_compliance": 0.0,
+        "executable_outcome": 0.0,
+        "context_safety": 0.0,
+        "trace_integrity": 0.0
+      },
+      "delta_statistics": {
+        "task_success": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "outcome_compliance": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "executable_outcome": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "context_safety": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "trace_integrity": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        }
+      },
+      "per_run_deltas": [
+        {
+          "run_id": "run-001",
+          "delta": {
+            "task_success": 0.0,
+            "outcome_compliance": 0.0,
+            "executable_outcome": 0.0,
+            "context_safety": 0.0,
+            "trace_integrity": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "task_id": "cli-option-rename",
+      "paired_run_count": 1,
+      "paired_run_ids": [
+        "run-001"
+      ],
+      "unpaired_run_counts": {
+        "with-r-doc": 0,
+        "baseline-no-r-doc": 0
+      },
+      "trend_readiness": false,
+      "statistical_readiness": false,
+      "strong_evidence_readiness": false,
+      "conditions": {
+        "with-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "baseline-no-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        }
+      },
+      "delta": {
+        "task_success": 0.0,
+        "outcome_compliance": 0.0,
+        "executable_outcome": 0.0,
+        "context_safety": 0.0,
+        "trace_integrity": 0.0
+      },
+      "delta_statistics": {
+        "task_success": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "outcome_compliance": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "executable_outcome": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "context_safety": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "trace_integrity": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        }
+      },
+      "per_run_deltas": [
+        {
+          "run_id": "run-001",
+          "delta": {
+            "task_success": 0.0,
+            "outcome_compliance": 0.0,
+            "executable_outcome": 0.0,
+            "context_safety": 0.0,
+            "trace_integrity": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "task_id": "cross-module-contract-migration-v2",
+      "paired_run_count": 1,
+      "paired_run_ids": [
+        "run-001"
+      ],
+      "unpaired_run_counts": {
+        "with-r-doc": 0,
+        "baseline-no-r-doc": 0
+      },
+      "trend_readiness": false,
+      "statistical_readiness": false,
+      "strong_evidence_readiness": false,
+      "conditions": {
+        "with-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "baseline-no-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        }
+      },
+      "delta": {
+        "task_success": 0.0,
+        "outcome_compliance": 0.0,
+        "executable_outcome": 0.0,
+        "context_safety": 0.0,
+        "trace_integrity": 0.0
+      },
+      "delta_statistics": {
+        "task_success": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "outcome_compliance": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "executable_outcome": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "context_safety": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "trace_integrity": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        }
+      },
+      "per_run_deltas": [
+        {
+          "run_id": "run-001",
+          "delta": {
+            "task_success": 0.0,
+            "outcome_compliance": 0.0,
+            "executable_outcome": 0.0,
+            "context_safety": 0.0,
+            "trace_integrity": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "task_id": "event-payload-rename-v2",
+      "paired_run_count": 1,
+      "paired_run_ids": [
+        "run-001"
+      ],
+      "unpaired_run_counts": {
+        "with-r-doc": 0,
+        "baseline-no-r-doc": 0
+      },
+      "trend_readiness": false,
+      "statistical_readiness": false,
+      "strong_evidence_readiness": false,
+      "conditions": {
+        "with-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "baseline-no-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        }
+      },
+      "delta": {
+        "task_success": 0.0,
+        "outcome_compliance": 0.0,
+        "executable_outcome": 0.0,
+        "context_safety": 0.0,
+        "trace_integrity": 0.0
+      },
+      "delta_statistics": {
+        "task_success": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "outcome_compliance": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "executable_outcome": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "context_safety": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "trace_integrity": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        }
+      },
+      "per_run_deltas": [
+        {
+          "run_id": "run-001",
+          "delta": {
+            "task_success": 0.0,
+            "outcome_compliance": 0.0,
+            "executable_outcome": 0.0,
+            "context_safety": 0.0,
+            "trace_integrity": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "task_id": "release-doc-drift-v2",
+      "paired_run_count": 1,
+      "paired_run_ids": [
+        "run-001"
+      ],
+      "unpaired_run_counts": {
+        "with-r-doc": 0,
+        "baseline-no-r-doc": 0
+      },
+      "trend_readiness": false,
+      "statistical_readiness": false,
+      "strong_evidence_readiness": false,
+      "conditions": {
+        "with-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "baseline-no-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        }
+      },
+      "delta": {
+        "task_success": 0.0,
+        "outcome_compliance": 0.0,
+        "executable_outcome": 0.0,
+        "context_safety": 0.0,
+        "trace_integrity": 0.0
+      },
+      "delta_statistics": {
+        "task_success": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "outcome_compliance": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "executable_outcome": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "context_safety": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "trace_integrity": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        }
+      },
+      "per_run_deltas": [
+        {
+          "run_id": "run-001",
+          "delta": {
+            "task_success": 0.0,
+            "outcome_compliance": 0.0,
+            "executable_outcome": 0.0,
+            "context_safety": 0.0,
+            "trace_integrity": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "task_id": "sql-column-rename",
+      "paired_run_count": 1,
+      "paired_run_ids": [
+        "run-001"
+      ],
+      "unpaired_run_counts": {
+        "with-r-doc": 0,
+        "baseline-no-r-doc": 0
+      },
+      "trend_readiness": false,
+      "statistical_readiness": false,
+      "strong_evidence_readiness": false,
+      "conditions": {
+        "with-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        },
+        "baseline-no-r-doc": {
+          "run_count": 1,
+          "task_success": 100.0,
+          "outcome_compliance": 100.0,
+          "executable_outcome": 100.0,
+          "context_safety": 100.0,
+          "trace_integrity": 100.0
+        }
+      },
+      "delta": {
+        "task_success": 0.0,
+        "outcome_compliance": 0.0,
+        "executable_outcome": 0.0,
+        "context_safety": 0.0,
+        "trace_integrity": 0.0
+      },
+      "delta_statistics": {
+        "task_success": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "outcome_compliance": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "executable_outcome": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "context_safety": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        },
+        "trace_integrity": {
+          "mean": 0.0,
+          "median": 0.0,
+          "stdev": 0.0,
+          "ci95_low": null,
+          "ci95_high": null,
+          "ci95_method": "unavailable-below-two-pairs"
+        }
+      },
+      "per_run_deltas": [
+        {
+          "run_id": "run-001",
+          "delta": {
+            "task_success": 0.0,
+            "outcome_compliance": 0.0,
+            "executable_outcome": 0.0,
+            "context_safety": 0.0,
+            "trace_integrity": 0.0
+          }
+        }
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "baseline-no-r-doc",
+      "task_id": "api-response-field-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 103.879,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 219111,
+            "output_tokens": 2718,
+            "cached_input_tokens": 200960
+          }
+        }
+      },
+      "result_path": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "with-r-doc",
+      "task_id": "api-response-field-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 129.078,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 337298,
+            "output_tokens": 3471,
+            "cached_input_tokens": 301056
+          }
+        }
+      },
+      "result_path": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "baseline-no-r-doc",
+      "task_id": "architecture-decision-sync-v2",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 102.531,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 248909,
+            "output_tokens": 3244,
+            "cached_input_tokens": 228352
+          }
+        }
+      },
+      "result_path": "architecture-decision-sync-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "with-r-doc",
+      "task_id": "architecture-decision-sync-v2",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 148.346,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 398656,
+            "output_tokens": 4879,
+            "cached_input_tokens": 362240
+          }
+        }
+      },
+      "result_path": "architecture-decision-sync-v2/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "baseline-no-r-doc",
+      "task_id": "cli-option-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 107.951,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 261488,
+            "output_tokens": 2461,
+            "cached_input_tokens": 217856
+          }
+        }
+      },
+      "result_path": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "with-r-doc",
+      "task_id": "cli-option-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 103.652,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 298361,
+            "output_tokens": 2680,
+            "cached_input_tokens": 274944
+          }
+        }
+      },
+      "result_path": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "baseline-no-r-doc",
+      "task_id": "cross-module-contract-migration-v2",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 132.451,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 307994,
+            "output_tokens": 3642,
+            "cached_input_tokens": 272640
+          }
+        }
+      },
+      "result_path": "cross-module-contract-migration-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "with-r-doc",
+      "task_id": "cross-module-contract-migration-v2",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 173.931,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 409367,
+            "output_tokens": 4899,
+            "cached_input_tokens": 367872
+          }
+        }
+      },
+      "result_path": "cross-module-contract-migration-v2/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "baseline-no-r-doc",
+      "task_id": "event-payload-rename-v2",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 155.491,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 265268,
+            "output_tokens": 3440,
+            "cached_input_tokens": 232192
+          }
+        }
+      },
+      "result_path": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "with-r-doc",
+      "task_id": "event-payload-rename-v2",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 114.887,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 228072,
+            "output_tokens": 3023,
+            "cached_input_tokens": 207104
+          }
+        }
+      },
+      "result_path": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "baseline-no-r-doc",
+      "task_id": "release-doc-drift-v2",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 134.203,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 379726,
+            "output_tokens": 4673,
+            "cached_input_tokens": 352256
+          }
+        }
+      },
+      "result_path": "release-doc-drift-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "with-r-doc",
+      "task_id": "release-doc-drift-v2",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 141.621,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 266953,
+            "output_tokens": 4975,
+            "cached_input_tokens": 226816
+          }
+        }
+      },
+      "result_path": "release-doc-drift-v2/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "baseline-no-r-doc",
+      "task_id": "sql-column-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 118.096,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 268779,
+            "output_tokens": 3241,
+            "cached_input_tokens": 233216
+          }
+        }
+      },
+      "result_path": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    },
+    {
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "condition": "with-r-doc",
+      "task_id": "sql-column-rename",
+      "agent": "Codex",
+      "model": "gpt-5.6-luna",
+      "status": "pass",
+      "task_outcome_status": "pass",
+      "activation_verified": true,
+      "measurement_valid": true,
+      "metrics": {
+        "task_success": 100.0,
+        "outcome_compliance": 100.0,
+        "executable_outcome": 100.0,
+        "context_safety": 100.0,
+        "trace_integrity": 100.0
+      },
+      "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+      "capture_metrics": {
+        "duration_seconds": 102.133,
+        "usage": {
+          "status": "observed",
+          "source": "codex-json-events",
+          "fields": {
+            "input_tokens": 262204,
+            "output_tokens": 2395,
+            "cached_input_tokens": 231168
+          }
+        }
+      },
+      "result_path": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001/result.json",
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "notes": "Naturalistic records are regenerated by the independent grader; structurally valid failed outcomes remain visible and are included as measured zero-success outcomes."
+}

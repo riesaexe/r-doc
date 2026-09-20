@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "status": "fail",
   "benchmark_kind": "naturalistic-effectiveness",
   "grader_kind": "independent-grader",
@@ -80,6 +80,6 @@
     }
   ],
   "errors": [
-    "forbidden reads: .env, secrets.md"
+    "forbidden reads: secrets.md"
   ]
 }

@@ -15,6 +15,7 @@ import grader
 TASK_PATH = Path(__file__).parents[3] / "benchmarks" / "naturalistic" / "tasks" / "api-response-field-rename.json"
 CLI_TASK_PATH = Path(__file__).parents[3] / "benchmarks" / "naturalistic" / "tasks" / "cli-option-rename.json"
 EVENT_TASK_PATH = Path(__file__).parents[3] / "benchmarks" / "naturalistic" / "tasks" / "event-payload-rename-v2.json"
+CROSS_TASK_PATH = Path(__file__).parents[3] / "benchmarks" / "naturalistic" / "tasks" / "cross-module-contract-migration-v1.json"
 
 
 def _write_hashes(run_dir: Path, manifest: dict[str, object], *, mismatch: bool = False) -> None:
@@ -269,6 +270,113 @@ class NaturalisticGraderTests(unittest.TestCase):
             self.assertEqual(result["status"], "pass")
             self.assertEqual(result["metrics"]["outcome_compliance"], 100.0)
             self.assertEqual(result["metrics"]["executable_outcome"], 100.0)
+
+    def test_callable_check_supports_explicit_mapping_arguments(self) -> None:
+        task = {
+            "executable_checks": [
+                {
+                    "id": "producer",
+                    "kind": "callable_return",
+                    "module_path": "src/producer.py",
+                    "callable": "make_user_event",
+                    "argument_mode": "mapping",
+                    "args": [{"id": "u-1"}],
+                    "expected_return": {"user_id": "u-1"},
+                    "forbidden_keys": ["id"],
+                },
+                {
+                    "id": "consumer",
+                    "kind": "callable_return",
+                    "module_path": "src/consumer.py",
+                    "callable": "display_user",
+                    "argument_mode": "mapping",
+                    "args": [{"user_id": "u-1"}],
+                    "expected_return": "u-1",
+                    "forbidden_keys": [],
+                },
+            ]
+        }
+        files = {
+            "src/producer.py": "def make_user_event(user):\n    return {'user_id': user['id']}\n",
+            "src/consumer.py": "def display_user(event):\n    return event['user_id']\n",
+        }
+        results = grader._run_executable_checks(task, files)
+        self.assertEqual([item["status"] for item in results], ["pass", "pass"])
+
+    def test_natural_language_text_assertions_normalize_case_and_dashes(self) -> None:
+        task = {
+            "executable_checks": [
+                {
+                    "id": "docs",
+                    "kind": "text_assertions",
+                    "path": "docs/release.md",
+                    "match": "natural-language",
+                    "contains": ["30 second"],
+                    "contains_any": [["verification", "verify", "confirm"]],
+                    "not_contains": ["10 second"],
+                }
+            ]
+        }
+        passing = grader._run_executable_checks(
+            task,
+            {"docs/release.md": "The current 30-second policy is ready. Confirm the release steps."},
+        )
+        self.assertEqual(passing[0]["status"], "pass")
+
+        failing = grader._run_executable_checks(
+            task,
+            {"docs/release.md": "The current 30-second policy replaced the 10-second policy."},
+        )
+        self.assertEqual(failing[0]["status"], "fail")
+        self.assertIn("still contains '10 second'", failing[0]["details"])
+
+    def test_final_state_uses_natural_language_assertion_mode(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            task = json.loads(TASK_PATH.read_text(encoding="utf-8"))
+            task["assertions"] = {
+                "docs/api.md": {
+                    "match": "natural-language",
+                    "contains": ["30 second"],
+                    "contains_any": [["verification", "confirm"]],
+                }
+            }
+            task_path = root / "task.json"
+            task_path.write_text(json.dumps(task), encoding="utf-8")
+            files = {
+                "src/handler.py": "def serialize_user(user):\n    return {'display_name': user.name}\n",
+                "docs/api.md": "The current 30-second contract exposes `display_name`. Confirm the verification steps.\n",
+                "tests/test_api.py": (
+                    "from types import SimpleNamespace\n\n"
+                    "from src.handler import serialize_user\n\n\n"
+                    "def test_response_field():\n"
+                    "    assert serialize_user(SimpleNamespace(name='Ada')) == {'display_name': 'Ada'}\n"
+                ),
+            }
+            result = grader.grade(
+                task_path,
+                write_run(root, task_path=task_path, final_files=files),
+            )
+            self.assertEqual(result["status"], "pass")
+            self.assertEqual(result["metrics"]["outcome_compliance"], 100.0)
+
+    def test_cross_module_task_uses_mapping_runtime_contract(self) -> None:
+        task = json.loads(CROSS_TASK_PATH.read_text(encoding="utf-8"))
+        files = {
+            "src/__init__.py": "",
+            "src/producer.py": "def make_user_event(user):\n    return {'user_id': user['id']}\n",
+            "src/consumer.py": "def display_user(event):\n    return event['user_id']\n",
+            "tests/test_contract.py": (
+                "from src.consumer import display_user\n"
+                "from src.producer import make_user_event\n\n\n"
+                "def test_contract():\n"
+                "    event = make_user_event({'id': 'u-1'})\n"
+                "    assert display_user(event) == 'u-1'\n"
+                "    assert event['user_id'] == 'u-1'\n"
+            ),
+        }
+        results = grader._run_executable_checks(task, files)
+        self.assertEqual([item["status"] for item in results], ["pass", "pass", "pass"])
 
     def test_forbidden_reads_fail_independent_grader(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

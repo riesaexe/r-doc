@@ -24,6 +24,18 @@ The follow-up full batch is `naturalistic-runs-20260920-luna-v0.3.0-full-v8-comm
 
 The Event v2 failure is now classified as a task-contract false negative: the final test correctly contains `display_name` and a runtime assertion that `user_name` is absent, so the raw static `not_contains` rule was invalid for that test file. The v8 result artifact remains unchanged; regrading the captured snapshot with the corrected contract passes all grader checks. The corrected derived aggregate is `naturalistic-runs-20260920-luna-v0.3.0-full-v8-command-glob-event-v2/summary-regraded-event-contract.json` and reports 80/80 passing runs.
 
+The v0.4.0 Luna full batch is complete at benchmarks/naturalistic-runs-20260920-luna-v0.4.0-full-v1-complex/: gpt-5.6-luna, seven task families, ten matched A/B pairs per task, and 140 runs. One baseline API timeout was retried under the same manifest identity, producing 140/140 run artifacts and 70 complete pairs. The final independent regrade has 93 task-outcome passes and 47 failures; command-level forbidden-read evidence is 0/140 and with-r-doc visible/load/use activation evidence is 70/70, while baseline activation is not applicable. The aggregate status pass is a measurement-gate result, not an all-task-success claim. Since both conditions share the safe-read preflight, effect attribution remains descriptive-only. Sanitized evidence and verification instructions are in the batch directory.
+
+The 93/47 figure above is the immutable original grader result. A separate deterministic regrade at `naturalistic-runs-20260920-luna-v0.4.0-full-v1-complex-regraded-v1/` applies the repaired callable argument contract and explicit natural-language assertion modes, producing 115/140 task-outcome passes and 25 remaining task failures. A second contract-only regrade at `naturalistic-runs-20260920-luna-v0.4.0-full-v2-contracts-regraded-v1/` preserves the old trace prompts while removing two over-strict text requirements, producing 128/140 passes and 12 remaining cross-module failures. Both are derived interpretations of the same captures, not new Agent samples; the original evidence chain remains unchanged.
+
+## v0.4.1 Luna 复采
+
+新的 `gpt-5.6-luna` 完整 A/B 批次位于 `naturalistic-runs-20260921-luna-v0.4.0-full-v3-contracts/`，使用 `tasks-v2`、7 类任务、每类 10 对，共 140 次运行；小批次先以 14/14 通过作为门禁。完整批次为 133/140 task outcome 通过、7/140 失败、0 个 runner 异常、140/140 激活证据已验证，公开证据校验通过。7 个失败包含 2 个命令排除规则导致的 `.env` 归因误报、4 个 cross-module producer 输入字段错误和 1 个 release baseline 停在确认计划阶段。由于两组共享 safe-read preflight，结果仍是 descriptive-only，不证明 r-doc 独立增量收益。
+
+## v0.4.1 Luna recapture
+
+The new `gpt-5.6-luna` full A/B batch is recorded under `naturalistic-runs-20260921-luna-v0.4.0-full-v3-contracts/`. It uses `tasks-v2`, seven task families, ten matched pairs per task, and 140 runs; a 14-run smoke batch passed 14/14 first. The full batch has 133/140 task-outcome passes, 7/140 failures, zero runner exceptions, 140/140 verified activation records, and passing public-evidence verification. The seven failures comprise two `.env` attribution false positives from exclusion globs, four cross-module producer-input mistakes, and one release-baseline run that paused for confirmation. Because both conditions share the safe-read preflight, this remains descriptive-only evidence rather than an independent r-doc-effect claim.
+
 ## 中文说明
 
 开始新的真实 Agent benchmark 批次前，必须先向用户确认准确模型名称、配对条件、重复次数和采集范围。不得把默认模型、当前可用模型或工具列表中的模型当作授权；确认后的模型名必须原样记录在每个 manifest 和汇总中。更换模型或只补跑部分批次时，必须使用可区分的新批次，不能静默混入既有数据。
@@ -188,3 +200,11 @@ python skills/r-doc/scripts/benchmark_audit.py \
 The stored wall-clock values are local trend data with Python and platform metadata. The default is now ten measured iterations; the report includes a linearly interpolated empirical p95, `max_seconds`, and a low-sample flag. With fewer than ten samples the p95 remains a noisy estimate, so the maximum is retained for transparent inspection. These values are not a CI pass/fail threshold; rerun them on representative machines before making scale claims. The refreshed local snapshot has 100→1000 median growth of about 12.2x and p95 growth of about 14.5x; 1000→5000 median growth is about 4.1x. The spread reinforces that scale behavior needs repeated, representative measurements; any mild super-linear interpretation remains an observation, not a complexity guarantee.
 
 返回：[开发文档索引](../docs/development/README.md) · [Agent 评测契约](../skills/r-doc/references/agent-evaluation.md)
+
+## v0.4.0 证据链修正
+
+正式 naturalistic 根汇总 benchmarks/naturalistic-runs/summary.json 现在明确为 pending。含 44 条历史记录的旧文件没有删除，而是保存在 benchmarks/naturalistic-runs/summary-unverified-v0.4.0.json；在发布树中它有 36 条悬空 result_path，构成为 16 条 gpt-5.5 和 20 条 gpt-5.6-sol。后者没有独立批次证据，因此不再作为正式测量参与汇总。
+
+v8 的脱敏证据可使用 benchmarks/naturalistic/verify_public_evidence.py 校验。public-only 模式确认结构、身份、事件顺序和导出哈希，source-root 模式才会读取本地原始工件并重放 artifact-hashes.json。两种模式的命令、输出含义和限制写在 benchmarks/naturalistic/public-evidence-verification.md。
+
+架构决策冲突、跨模块契约迁移和发布文档漂移三类复杂任务已经包含在 v0.4.0 Luna 批次中；原始 140 次运行保留在对应批次目录，修复 grader 后的 115/140 派生重评分保留在 `naturalistic-runs-20260920-luna-v0.4.0-full-v1-complex-regraded-v1/`，修正任务契约后的 128/140 派生重评分保留在 `naturalistic-runs-20260920-luna-v0.4.0-full-v2-contracts-regraded-v1/`。runner 也已记录 duration 和可观察 token usage；无法从 Codex JSONL 获得的 token 字段会标记 unavailable。共享 safe-read preflight 的 A/B 结果只提供 descriptive comparison，不自动宣称 r-doc 的独立安全收益。

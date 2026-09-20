@@ -32,16 +32,8 @@
 {"sequence": 31, "event": "file_read", "path": "src/__init__.py"}
 {"sequence": 32, "event": "file_read", "path": "src/cli.py"}
 {"sequence": 33, "event": "file_read", "path": "tests/test_cli.py"}
-{"sequence": 34, "event": "file_written", "path": ".pytest_cache/.gitignore"}
-{"sequence": 35, "event": "file_written", "path": ".pytest_cache/CACHEDIR.TAG"}
-{"sequence": 36, "event": "file_written", "path": ".pytest_cache/README.md"}
-{"sequence": 37, "event": "file_written", "path": ".pytest_cache/v/cache/lastfailed"}
-{"sequence": 38, "event": "file_written", "path": ".pytest_cache/v/cache/nodeids"}
-{"sequence": 39, "event": "file_written", "path": "docs/cli.md"}
-{"sequence": 40, "event": "file_written", "path": "src/__pycache__/__init__.cpython-312.pyc"}
-{"sequence": 41, "event": "file_written", "path": "src/__pycache__/cli.cpython-312.pyc"}
-{"sequence": 42, "event": "file_written", "path": "src/cli.py"}
-{"sequence": 43, "event": "file_written", "path": "tests/__pycache__/test_cli.cpython-312-pytest-8.4.2.pyc"}
-{"sequence": 44, "event": "file_written", "path": "tests/test_cli.py"}
-{"sequence": 45, "event": "response", "text": "已同步完成：\n\n- [src/cli.py](<fixture-root>/src/cli.py:5) 现在只注册 `--display-name`\n- [docs/cli.md](<fixture-root>/docs/cli.md:3) 已更新为新参数\n- [tests/test_cli.py](<fixture-root>/tests/test_cli.py:4) 测试新拼写，并验证旧的 `--user-name` 会被拒绝\n\n验证：`python -m pytest -q` 通过，`2 passed`。\n\n补充：这个目录不是 Git 仓库，所以没法用 `git diff/status` 展示变更。裸 `pytest -q` 在当前环境里有导入路径问题，但 `python -m pytest -q` 正常通过。"}
-{"sequence": 46, "event": "diff_snapshot", "text": "changed_files=.pytest_cache/.gitignore,.pytest_cache/CACHEDIR.TAG,.pytest_cache/README.md,.pytest_cache/v/cache/lastfailed,.pytest_cache/v/cache/nodeids,docs/cli.md,src/__pycache__/__init__.cpython-312.pyc,src/__pycache__/cli.cpython-312.pyc,src/cli.py,tests/__pycache__/test_cli.cpython-312-pytest-8.4.2.pyc,tests/test_cli.py"}
+{"sequence": 34, "event": "file_written", "path": "docs/cli.md"}
+{"sequence": 35, "event": "file_written", "path": "src/cli.py"}
+{"sequence": 36, "event": "file_written", "path": "tests/test_cli.py"}
+{"sequence": 37, "event": "response", "text": "已同步完成：\n\n- [src/cli.py](<fixture-root>/src/cli.py:5) 现在只注册 `--display-name`\n- [docs/cli.md](<fixture-root>/docs/cli.md:3) 已更新为新参数\n- [tests/test_cli.py](<fixture-root>/tests/test_cli.py:4) 测试新拼写，并验证旧的 `--user-name` 会被拒绝\n\n验证：`python -m pytest -q` 通过，`2 passed`。\n\n补充：这个目录不是 Git 仓库，所以没法用 `git diff/status` 展示变更。裸 `pytest -q` 在当前环境里有导入路径问题，但 `python -m pytest -q` 正常通过。"}
+{"sequence": 38, "event": "diff_snapshot", "text": "changed_files=docs/cli.md,src/cli.py,tests/test_cli.py"}

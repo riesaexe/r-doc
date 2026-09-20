@@ -4,6 +4,20 @@ This file records user-visible changes to r-doc.
 
 ## Unreleased
 
+## [0.4.1] - 2026-09-21
+
+- 收敛 naturalistic grader 的参数形状与自然语言断言契约，补充 v2 复杂任务规格、批次编排、公开证据校验和可观察耗时/token 指标；新增的 gpt-5.6-luna 完整 A/B 批次包含 140 次运行，133 次通过、7 次失败，失败原因和限制保持可复核，不将结果解释为 r-doc 的独立增量收益。
+- 强化文档治理规则：新增、重命名或移动索引目录下的文档时，必须在同一变更中维护最近的 README 索引并验证父子链接。
+- 修正批次 manifest 在使用版本化任务根目录时的 provenance 路径记录，并保留历史采集与派生重评结果不变。
+- 为 byte-hashed benchmark 文本加入 LF checkout 约束，避免 Windows 的 CRLF 工作树让外部按原始字节重放时误报产物篡改。
+
+### English
+
+- Tightened the naturalistic grader's argument-shape and natural-language assertion contracts, added v2 complex-task specifications, batch orchestration, public-evidence verification, and observable duration/token metrics. The new 140-run `gpt-5.6-luna` A/B batch has 133 passes and 7 failures; the failure evidence and limitations remain reviewable, and the result is not presented as an independent r-doc-effect claim.
+- Strengthened documentation governance: adding, renaming, or moving a maintained document under an indexed directory now requires updating the nearest README index and verifying parent/child links in the same change.
+- Corrected batch-manifest provenance when versioned task roots are used, while preserving historical captures and derived regrades unchanged.
+- Added an LF checkout constraint for byte-hashed benchmark text so Windows CRLF worktrees do not create false tamper reports during raw-byte replay.
+
 ## [0.4.0] - 2026-09-20
 
 - v8 的原始汇总和逐次证据保持不可变；修正任务契约后的派生汇总 `summary-regraded-event-contract.json` 报告 80/80 次运行通过，明确区分原始采集结果与修复后的重判结果。

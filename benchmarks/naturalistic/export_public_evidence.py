@@ -101,6 +101,8 @@ def _public_run(root: Path, run_dir: Path) -> dict[str, Any]:
             )
         }
     )
+    if "capture_metrics" in manifest:
+        public_run["capture_metrics"] = _sanitize(manifest["capture_metrics"])
     public_run["run_dir"] = relative_dir
     public_run["source_artifact_hashes"] = _sanitize(hashes)
     public_run["critical_events"] = trace
@@ -128,6 +130,11 @@ def export_manifest(source_root: Path, output: Path) -> dict[str, Any]:
         "source_root": "<redacted-benchmark-root>",
         "raw_artifacts_retained_locally": True,
         "public_artifact_policy": "sanitized-manifest-critical-events-result-and-source-hashes",
+        "verification": {
+            "verifier": "benchmarks/naturalistic/verify_public_evidence.py",
+            "scope": "public-structure-and-cross-summary",
+            "source_hash_replay": "requires-source-root",
+        },
         "run_count": len(runs),
         "summary": summary,
         "runs": runs,

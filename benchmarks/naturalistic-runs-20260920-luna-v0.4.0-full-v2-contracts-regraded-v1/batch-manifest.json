@@ -1,0 +1,1166 @@
+{
+  "schema_version": 1,
+  "batch_kind": "naturalistic-effectiveness-full",
+  "scope": "paired naturalistic effectiveness with existing rename tasks and complex governance tasks",
+  "skill_version": "0.4.0",
+  "model": "gpt-5.6-luna",
+  "runner": "benchmarks/naturalistic/capture_codex.py",
+  "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+  "root": "benchmarks/naturalistic-runs-20260920-luna-v0.4.0-full-v1-complex",
+  "tasks_root": "benchmarks/naturalistic/tasks-regrade-v2",
+  "task_ids": [
+    "api-response-field-rename",
+    "cli-option-rename",
+    "event-payload-rename-v2",
+    "sql-column-rename",
+    "architecture-decision-sync-v1",
+    "cross-module-contract-migration-v1",
+    "release-doc-drift-v1"
+  ],
+  "run_ids": [
+    "run-001",
+    "run-002",
+    "run-003",
+    "run-004",
+    "run-005",
+    "run-006",
+    "run-007",
+    "run-008",
+    "run-009",
+    "run-010"
+  ],
+  "conditions": [
+    "with-r-doc",
+    "baseline-no-r-doc"
+  ],
+  "expected_run_count": 140,
+  "max_workers": 6,
+  "timeout_seconds": 900,
+  "started_at": "2026-09-20T09:04:16.195219+00:00",
+  "user_confirmation": "confirmed-in-conversation",
+  "shared_safe_read_preflight": true,
+  "jobs": [
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/api-response-field-rename.json",
+      "source_task_id": "api-response-field-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cli-option-rename.json",
+      "source_task_id": "cli-option-rename"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/event-payload-rename-v2.json",
+      "source_task_id": "event-payload-rename-v2"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/sql-column-rename.json",
+      "source_task_id": "sql-column-rename"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/architecture-decision-sync-v1.json",
+      "source_task_id": "architecture-decision-sync-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/cross-module-contract-migration-v1.json",
+      "source_task_id": "cross-module-contract-migration-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-001",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-002",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-003",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-004",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-005",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-006",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-007",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-008",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-009",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    },
+    {
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex",
+      "run_id": "run-010",
+      "task_path": "benchmarks/naturalistic/tasks-regrade-v2/release-doc-drift-v1.json",
+      "source_task_id": "release-doc-drift-v1"
+    }
+  ],
+  "source_task_contract_revision": "v1",
+  "task_contract_revision": "regrade-v2"
+}

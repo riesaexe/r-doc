@@ -1,0 +1,5 @@
+# Byte-hashed benchmark artifacts must keep their canonical UTF-8 LF bytes.
+benchmarks/**/*.json text eol=lf
+benchmarks/**/*.jsonl text eol=lf
+benchmarks/**/*.md text eol=lf
+benchmarks/**/*.log text eol=lf

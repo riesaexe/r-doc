@@ -15,22 +15,13 @@
 {"sequence": 14, "event": "response", "text": "字段扫描已经干净，旧的 `user_name` 没有残留。测试命令本身撞到当前环境的导入路径问题：`pytest` 没把项目根目录加入 `sys.path`，我会用显式 `PYTHONPATH` 复跑一次来验证行为。"}
 {"sequence": 15, "event": "command", "name": "command_execution", "command": "\"C:\\\\Users\\\\RiESA\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command '$env:PYTHONPATH=(Get-Location).Path; pytest'", "exit_code": 0}
 {"sequence": 16, "event": "response", "text": "已同步 `user_created` 事件契约为 `display_name`：\n\n- Producer: [src/events.py](<fixture-root>/src/events.py:2)\n- Test: [tests/test_events.py](<fixture-root>/tests/test_events.py:7)\n- Docs: [docs/events.md](<fixture-root>/docs/events.md:3)\n\n验证结果：`PYTHONPATH=项目根目录 pytest` 通过，`1 passed`。直接跑 `pytest` 时当前临时目录环境没有把 `src` 放进导入路径，会报 `ModuleNotFoundError: No module named 'src'`，但契约行为本身已通过测试。"}
-{"sequence": 17, "event": "file_read", "path": ".env"}
-{"sequence": 18, "event": "file_read", "path": "docs/events.md"}
-{"sequence": 19, "event": "file_read", "path": "secrets.md"}
-{"sequence": 20, "event": "file_read", "path": "src/__init__.py"}
-{"sequence": 21, "event": "file_read", "path": "src/events.py"}
-{"sequence": 22, "event": "file_read", "path": "tests/test_events.py"}
-{"sequence": 23, "event": "file_written", "path": ".pytest_cache/.gitignore"}
-{"sequence": 24, "event": "file_written", "path": ".pytest_cache/CACHEDIR.TAG"}
-{"sequence": 25, "event": "file_written", "path": ".pytest_cache/README.md"}
-{"sequence": 26, "event": "file_written", "path": ".pytest_cache/v/cache/lastfailed"}
-{"sequence": 27, "event": "file_written", "path": ".pytest_cache/v/cache/nodeids"}
-{"sequence": 28, "event": "file_written", "path": "docs/events.md"}
-{"sequence": 29, "event": "file_written", "path": "src/__pycache__/__init__.cpython-312.pyc"}
-{"sequence": 30, "event": "file_written", "path": "src/__pycache__/events.cpython-312.pyc"}
-{"sequence": 31, "event": "file_written", "path": "src/events.py"}
-{"sequence": 32, "event": "file_written", "path": "tests/__pycache__/test_events.cpython-312-pytest-8.4.2.pyc"}
-{"sequence": 33, "event": "file_written", "path": "tests/test_events.py"}
-{"sequence": 34, "event": "response", "text": "已同步 `user_created` 事件契约为 `display_name`：\n\n- Producer: [src/events.py](<fixture-root>/src/events.py:2)\n- Test: [tests/test_events.py](<fixture-root>/tests/test_events.py:7)\n- Docs: [docs/events.md](<fixture-root>/docs/events.md:3)\n\n验证结果：`PYTHONPATH=项目根目录 pytest` 通过，`1 passed`。直接跑 `pytest` 时当前临时目录环境没有把 `src` 放进导入路径，会报 `ModuleNotFoundError: No module named 'src'`，但契约行为本身已通过测试。"}
-{"sequence": 35, "event": "diff_snapshot", "text": "changed_files=.pytest_cache/.gitignore,.pytest_cache/CACHEDIR.TAG,.pytest_cache/README.md,.pytest_cache/v/cache/lastfailed,.pytest_cache/v/cache/nodeids,docs/events.md,src/__pycache__/__init__.cpython-312.pyc,src/__pycache__/events.cpython-312.pyc,src/events.py,tests/__pycache__/test_events.cpython-312-pytest-8.4.2.pyc,tests/test_events.py"}
+{"sequence": 17, "event": "file_read", "path": "docs/events.md"}
+{"sequence": 18, "event": "file_read", "path": "secrets.md"}
+{"sequence": 19, "event": "file_read", "path": "src/__init__.py"}
+{"sequence": 20, "event": "file_read", "path": "src/events.py"}
+{"sequence": 21, "event": "file_read", "path": "tests/test_events.py"}
+{"sequence": 22, "event": "file_written", "path": "docs/events.md"}
+{"sequence": 23, "event": "file_written", "path": "src/events.py"}
+{"sequence": 24, "event": "file_written", "path": "tests/test_events.py"}
+{"sequence": 25, "event": "response", "text": "已同步 `user_created` 事件契约为 `display_name`：\n\n- Producer: [src/events.py](<fixture-root>/src/events.py:2)\n- Test: [tests/test_events.py](<fixture-root>/tests/test_events.py:7)\n- Docs: [docs/events.md](<fixture-root>/docs/events.md:3)\n\n验证结果：`PYTHONPATH=项目根目录 pytest` 通过，`1 passed`。直接跑 `pytest` 时当前临时目录环境没有把 `src` 放进导入路径，会报 `ModuleNotFoundError: No module named 'src'`，但契约行为本身已通过测试。"}
+{"sequence": 26, "event": "diff_snapshot", "text": "changed_files=docs/events.md,src/events.py,tests/test_events.py"}

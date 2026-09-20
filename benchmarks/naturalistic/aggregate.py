@@ -76,6 +76,73 @@ def _metric_summary(records: list[dict[str, Any]]) -> dict[str, Any]:
     return summary
 
 
+def _capture_metric_summary(records: list[dict[str, Any]]) -> dict[str, Any]:
+    durations = [
+        float(record["capture_metrics"]["duration_seconds"])
+        for record in records
+        if isinstance(record.get("capture_metrics"), dict)
+        and isinstance(record["capture_metrics"].get("duration_seconds"), (int, float))
+    ]
+    usage_values: dict[str, list[float]] = {}
+    usage_observed_runs = 0
+    for record in records:
+        capture_metrics = record.get("capture_metrics")
+        usage = capture_metrics.get("usage") if isinstance(capture_metrics, dict) else None
+        fields = usage.get("fields") if isinstance(usage, dict) else None
+        if not isinstance(fields, dict) or not fields:
+            continue
+        usage_observed_runs += 1
+        for field, value in fields.items():
+            if isinstance(value, (int, float)) and not isinstance(value, bool):
+                usage_values.setdefault(str(field), []).append(float(value))
+    return {
+        "run_count": len(records),
+        "duration_seconds": _stats(durations),
+        "usage": {
+            "observed_run_count": usage_observed_runs,
+            "fields": {
+                field: _stats(values)
+                for field, values in sorted(usage_values.items())
+            },
+            "limitation": "Token fields remain unavailable when Codex JSON events do not expose usage metadata.",
+        },
+    }
+
+
+def _effect_attribution(records: list[dict[str, Any]]) -> dict[str, Any]:
+    preflights = sorted(
+        {
+            str(record.get("runner_preflight"))
+            for record in records
+            if record.get("runner_preflight")
+        }
+    )
+    with_r_doc_use = sum(
+        1
+        for record in records
+        if record.get("condition") == "with-r-doc" and record.get("activation_verified")
+    )
+    if not records:
+        status = "pending"
+    elif len(preflights) == 1:
+        status = "descriptive-only"
+    else:
+        status = "requires-protocol-review"
+    return {
+        "status": status,
+        "models_and_conditions": "paired descriptive comparison",
+        "with_r_doc_activation_verified_runs": with_r_doc_use,
+        "shared_controls": preflights,
+        "reason": "The safe-read preflight is shared by both conditions; safety outcomes cannot be attributed to r-doc without a separately randomized safety treatment.",
+        "required_for_incremental_claim": [
+            "with-r-doc visible/load/use evidence for every treatment run",
+            "paired baseline under the same declared model",
+            "a task portfolio that is not at a deterministic ceiling",
+            "separate measurement or randomized treatment for safe-read policy effects",
+        ],
+    }
+
+
 def _measurement_valid(result: dict[str, Any]) -> bool:
     checks = {
         check.get("id"): check.get("status")
@@ -257,6 +324,8 @@ def aggregate(
                 "activation_verified": bool(result.get("activation_verified")),
                 "measurement_valid": _measurement_valid(result),
                 "metrics": result.get("metrics", {}),
+                "runner_preflight": manifest.get("runner_preflight"),
+                "capture_metrics": manifest.get("capture_metrics", {}),
                 "result_path": run_dir.relative_to(benchmarks_root).joinpath("result.json").as_posix(),
                 "errors": result.get("errors", []),
             }
@@ -356,6 +425,20 @@ def aggregate(
             "unverified_runs": len(records) - activation_verified_runs,
             "effect_comparisons_require_verified_activation": True,
             "limitation": "Codex JSONL does not expose OS-level skill loading telemetry; raw-event signals are recorded per run.",
+        },
+        "effect_attribution": _effect_attribution(records),
+        "capture_metrics": {
+            condition: _capture_metric_summary(items)
+            for condition, items in sorted(
+                {
+                    condition: [
+                        record
+                        for record in records
+                        if record.get("condition") == condition
+                    ]
+                    for condition in {str(record.get("condition")) for record in records}
+                }.items()
+            )
         },
         "status": status,
         "failure_analysis": failure_analysis,

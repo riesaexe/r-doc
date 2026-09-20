@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "skill_version": "0.4.0",
+  "skill_version": "0.4.1",
   "dimensions": [
     "activation_boundary",
     "context_economy",

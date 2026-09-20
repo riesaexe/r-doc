@@ -2,7 +2,7 @@
 name: r-doc
 description: "Govern documentation with bounded safe reads for public, interface, config, architecture, release, or docs changes; protect .env/secrets and skip unrelated code-only refactors."
 metadata:
-  version: "0.4.0"
+  version: "0.4.1"
 ---
 
 # r-doc: Project documentation governance
@@ -96,7 +96,7 @@ docs/
 └── README.md
 ```
 
-Add topic directories such as `requirements/`, `design/`, `decisions/`, `api/`, `testing/`, `releases/`, or `operations/` only when needed. Each topic directory's `README.md` must define its scope, list its documents, state the recommended reading order, and link to the parent index and specific documents. Use [references/templates/AGENTS.md](references/templates/AGENTS.md) when the project needs a new root entrypoint, and use [references/templates/README.template.md](references/templates/README.template.md) for nested indexes. The root `AGENTS.md` must link to `docs/README.md`.
+Add topic directories such as `requirements/`, `design/`, `decisions/`, `api/`, `testing/`, `releases/`, or `operations/` only when needed. Each topic directory's `README.md` must define its scope, list its documents, state the recommended reading order, and link to the parent index and specific documents. When adding, renaming, or moving a maintained document under an indexed directory, update the nearest applicable `README.md` index in the same change and verify both the index entry and the document's parent link. Do not treat creating the document alone as complete. Use [references/templates/AGENTS.md](references/templates/AGENTS.md) when the project needs a new root entrypoint, and use [references/templates/README.template.md](references/templates/README.template.md) for nested indexes. The root `AGENTS.md` must link to `docs/README.md`.
 
 The recommended context-loading order is:
 

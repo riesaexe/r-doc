@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "status": "completed",
+  "batch_kind": "naturalistic-effectiveness-full",
+  "model": "gpt-5.6-luna",
+  "skill_version": "0.4.0",
+  "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+  "expected_run_count": 14,
+  "completed_jobs": 14,
+  "exception_count": 0,
+  "result_status_counts": {
+    "pass": 14
+  },
+  "started_at": "2026-09-20T16:00:33.804276+00:00",
+  "duration_seconds": 511.318,
+  "summary_status": "partial",
+  "jobs": [
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-smoke-v3-contracts/run-001"
+    }
+  ],
+  "summary_run_count": 14,
+  "public_evidence_run_count": 14
+}

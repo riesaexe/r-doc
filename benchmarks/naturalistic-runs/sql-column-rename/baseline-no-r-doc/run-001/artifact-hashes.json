@@ -2,11 +2,11 @@
   "schema_version": 1,
   "algorithm": "sha256",
   "artifacts": {
-    "codex-events.jsonl": "7111c735257fcab2fe142bfe794f2612ed69b1b19797540c6d3378e80cf008c1",
-    "codex-stderr.log": "c76393954e114f859747628a851678e684a97cd9efec4fa8d3406ea302fef196",
-    "final-response.md": "c8786665c5f93e81346617281f80e61083d7d4e98d6287bdeba672cb87d83712",
-    "final-state.json": "29aedb2fd464d7a08516c727d9ef66559cd0730a689b7c40a7ef30f9a707affa",
-    "run.json": "b9755f724f7cb6a96a541aca47234f490de534f5fedc22664f7e4c72b3939d01",
-    "trace.jsonl": "001c5aa6c26d94bd033c53c7350ab4ab98ecf84a4abcc1001ad6ae1d3de32673"
+    "codex-events.jsonl": "fc0a8a68fc69c5e571f5460d8e9bb14e5147359759affb2c557187a786d6d316",
+    "codex-stderr.log": "3d908c13901af7d6717796497a06260abbd9bf06d254c5d8ebea587d51cf7fe9",
+    "final-response.md": "338d9ba6aeb781a5042dc3f97d11c5b44a541904101b2724a6a9f3f03c270d16",
+    "final-state.json": "ba9b3bb87b4367e0ed0069e7a033e09f0fc766038f874d55af896dcafcd496a7",
+    "run.json": "bb892a390b60986a4d11061680c50459167c2d6bfa8eb01281233179f5e3452c",
+    "trace.jsonl": "e3f226496f8d1952183863e8b409118f5a3376d8fc3ca2b9606b973bd3935ab4"
   }
 }

@@ -50,6 +50,11 @@ class NaturalisticCaptureTests(unittest.TestCase):
             )
             raw = {
                 "type": "item.completed",
+                "usage": {
+                    "input_tokens": 12,
+                    "output_tokens": 7,
+                    "total_tokens": 19,
+                },
                 "item": {
                     "type": "error",
                     "message": "Skill descriptions were shortened to fit the skills context budget. Codex can still see every skill, but some descriptions are shorter.",
@@ -104,6 +109,9 @@ class NaturalisticCaptureTests(unittest.TestCase):
             manifest = json.loads((run_dir / "run.json").read_text(encoding="utf-8"))
             self.assertEqual(manifest["runner_preflight"], capture_codex.RUNNER_PREFLIGHT_VERSION)
             self.assertEqual(manifest["activation_evidence"]["use"]["status"], "observed")
+            self.assertGreaterEqual(manifest["capture_metrics"]["duration_seconds"], 0)
+            self.assertEqual(manifest["capture_metrics"]["usage"]["status"], "observed")
+            self.assertEqual(manifest["capture_metrics"]["usage"]["fields"]["total_tokens"], 19)
             snapshot = json.loads((run_dir / "final-state.json").read_text(encoding="utf-8"))
             self.assertEqual(snapshot["source"], grader.NATURALISTIC_FINAL_STATE_PROVENANCE)
             self.assertIn("display_name", snapshot["files"]["src/handler.py"])
@@ -192,6 +200,24 @@ class NaturalisticCaptureTests(unittest.TestCase):
         self.assertEqual(
             capture_codex._read_paths_from_command("Get-ChildItem -Recurse .", workspace, candidates),
             [],
+        )
+        self.assertEqual(
+            capture_codex._read_paths_from_command(
+                "Get-ChildItem -Force . | Where-Object { $_.Name -notmatch '^\\.env' } | "
+                "Select-Object Mode,Length,LastWriteTime,Name -PathType Container",
+                workspace,
+                candidates,
+            ),
+            [],
+        )
+        self.assertEqual(
+            capture_codex._read_paths_from_command(
+                "Get-Content -Raw docs/architecture.md; "
+                "Write-Output '.env'; Write-Output 'secrets.md'",
+                workspace,
+                {".env", "secrets.md", "docs/architecture.md"},
+            ),
+            ["docs/architecture.md"],
         )
         self.assertEqual(
             capture_codex._read_paths_from_command(

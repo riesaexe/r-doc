@@ -1,0 +1,1417 @@
+{
+  "schema_version": 1,
+  "runner_fix": "command-segment read attribution excludes PowerShell -PathType and Write-Output path labels",
+  "replayed_run_count": 140,
+  "retried_jobs": [],
+  "remaining_run_count": 140,
+  "forbidden_read_corrections": 1,
+  "replayed": [
+    {
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [
+        ".env",
+        "secrets.md"
+      ],
+      "new_forbidden_reads": [],
+      "changed": true,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "architecture-decision-sync-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "architecture-decision-sync-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "cross-module-contract-migration-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "cross-module-contract-migration-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "release-doc-drift-v1",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "release-doc-drift-v1/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "release-doc-drift-v1",
+      "condition": "with-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "fail"
+    },
+    {
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-001",
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-001",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-002",
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-002",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-003",
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-003",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-004",
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-004",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-005",
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-005",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-006",
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-006",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-007",
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-007",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-008",
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-008",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-009",
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-009",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    },
+    {
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v1-complex/run-010",
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "run_id": "run-010",
+      "old_forbidden_reads": [],
+      "new_forbidden_reads": [],
+      "changed": false,
+      "result_status": "pass"
+    }
+  ],
+  "summary_status": "pass",
+  "summary_run_count": 140,
+  "public_evidence_run_count": 140,
+  "public_verifier_fix": "absolute-path detection no longer flags relative separator text"
+}

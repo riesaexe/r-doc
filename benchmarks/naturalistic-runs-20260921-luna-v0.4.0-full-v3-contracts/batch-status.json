@@ -1,0 +1,1282 @@
+{
+  "schema_version": 1,
+  "status": "completed",
+  "batch_kind": "naturalistic-effectiveness-full",
+  "model": "gpt-5.6-luna",
+  "skill_version": "0.4.0",
+  "runner_preflight": "skill-discovery-safe-read-preflight-v2-command-glob",
+  "expected_run_count": 140,
+  "completed_jobs": 140,
+  "exception_count": 0,
+  "result_status_counts": {
+    "fail": 7,
+    "pass": 133
+  },
+  "started_at": "2026-09-20T16:10:31.815862+00:00",
+  "duration_seconds": 2821.982,
+  "summary_status": "pass",
+  "jobs": [
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "fail",
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "api-response-field-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "api-response-field-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "architecture-decision-sync-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "architecture-decision-sync-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "cli-option-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cli-option-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "fail",
+      "run_dir": "cross-module-contract-migration-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "fail",
+      "run_dir": "cross-module-contract-migration-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "fail",
+      "run_dir": "cross-module-contract-migration-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "fail",
+      "run_dir": "cross-module-contract-migration-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "fail",
+      "run_dir": "cross-module-contract-migration-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "cross-module-contract-migration-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "cross-module-contract-migration-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "event-payload-rename-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "event-payload-rename-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "fail",
+      "run_dir": "release-doc-drift-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "release-doc-drift-v2",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "release-doc-drift-v2/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "baseline-no-r-doc",
+      "profile": "baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/baseline-no-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-001",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-001"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-002",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-002"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-003",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-003"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-004",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-004"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-005",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-005"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-006",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-006"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-007",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-007"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-008",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-008"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-009",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-009"
+    },
+    {
+      "task_id": "sql-column-rename",
+      "condition": "with-r-doc",
+      "profile": "with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts",
+      "run_id": "run-010",
+      "status": "completed",
+      "result_status": "pass",
+      "run_dir": "sql-column-rename/with-r-doc-gpt-5.6-luna-v0.4.0-full-v3-contracts/run-010"
+    }
+  ],
+  "summary_run_count": 140,
+  "public_evidence_run_count": 140
+}

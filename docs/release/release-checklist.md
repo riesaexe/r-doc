@@ -39,6 +39,7 @@ updated: 2026-09-19
 - [ ] CHANGELOG.md 已记录本次变更
 - [ ] 发布说明包含兼容性和已知限制
 - [ ] 发布包只包含运行所需的 r-doc 文件
+- [ ] byte-hashed benchmark 文本由 `.gitattributes` 固定为 UTF-8 LF，避免 Windows checkout 造成原始字节重放失配
 
 ## 安装副本
 
@@ -82,6 +83,7 @@ updated: 2026-09-19
 - [ ] `CHANGELOG.md` contains English entries and Chinese summaries for the current and every historical release
 - [ ] Release notes include compatibility, verification status, and known limitations
 - [ ] The package contains only required r-doc files
+- [ ] `.gitattributes` keeps byte-hashed benchmark text in UTF-8 LF form so Windows checkouts do not change raw-byte replay results
 - [ ] The validated source was synchronized to the global installation copy
 
 ### Platform and repository governance

@@ -4,6 +4,11 @@
   "source_root": "<redacted-benchmark-root>",
   "raw_artifacts_retained_locally": true,
   "public_artifact_policy": "sanitized-manifest-critical-events-result-and-source-hashes",
+  "verification": {
+    "verifier": "benchmarks/naturalistic/verify_public_evidence.py",
+    "scope": "public-structure-and-cross-summary",
+    "source_hash_replay": "requires-source-root"
+  },
   "run_count": 80,
   "summary": {
     "schema_version": 3,

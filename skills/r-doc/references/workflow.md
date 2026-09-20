@@ -29,7 +29,8 @@ When entry points already exist:
 1. Preserve existing facts, constraints, and historical links;
 2. Fill missing navigation and indexes;
 3. Keep reverse links when moving detail into `docs/`;
-4. Report conflicts, duplication, or uncertain facts instead of deleting or rewriting them.
+4. When adding, renaming, or moving a maintained document inside an indexed directory, update the nearest `README.md` index in the same change and verify the parent and child links;
+5. Report conflicts, duplication, or uncertain facts instead of deleting or rewriting them.
 
 ## 4. Analyze change impact
 

@@ -7,9 +7,11 @@ import importlib.util
 import io
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
+import unicodedata
 import uuid
 from pathlib import Path, PurePosixPath, PureWindowsPath
 from types import SimpleNamespace
@@ -246,12 +248,73 @@ def _activation_verified(manifest: dict[str, Any]) -> bool:
     return not _activation_evidence_errors(manifest)
 
 
-def _materialize_argument(value: object) -> object:
+_ARGUMENT_MODES = {"namespace", "mapping"}
+_TEXT_MATCH_MODES = {"literal", "case-insensitive", "natural-language"}
+_NATURAL_LANGUAGE_DASHES = re.compile(r"[-\u2010\u2011\u2012\u2013\u2014\u2015\u2212]+")
+_NATURAL_LANGUAGE_WHITESPACE = re.compile(r"\s+")
+
+
+def _materialize_argument(value: object, *, mode: str = "namespace") -> object:
+    if mode not in _ARGUMENT_MODES:
+        raise ValueError(f"callable check argument_mode must be one of {sorted(_ARGUMENT_MODES)}")
     if isinstance(value, dict):
-        return SimpleNamespace(**{str(key): _materialize_argument(item) for key, item in value.items()})
+        materialized = {
+            str(key): _materialize_argument(item, mode=mode) for key, item in value.items()
+        }
+        if mode == "mapping":
+            return materialized
+        return SimpleNamespace(**materialized)
     if isinstance(value, list):
-        return [_materialize_argument(item) for item in value]
+        return [_materialize_argument(item, mode=mode) for item in value]
     return value
+
+
+def _normalize_assertion_text(value: str, match_mode: str) -> str:
+    if match_mode not in _TEXT_MATCH_MODES:
+        raise ValueError(f"text assertion match must be one of {sorted(_TEXT_MATCH_MODES)}")
+    normalized = unicodedata.normalize("NFKC", value)
+    if match_mode == "literal":
+        return normalized
+    normalized = normalized.casefold()
+    if match_mode == "natural-language":
+        normalized = _NATURAL_LANGUAGE_DASHES.sub(" ", normalized)
+        normalized = _NATURAL_LANGUAGE_WHITESPACE.sub(" ", normalized).strip()
+    return normalized
+
+
+def _text_assertion_errors(path: str, content: str, rules: dict[str, Any]) -> list[str]:
+    match_mode = rules.get("match", "literal")
+    if not isinstance(match_mode, str) or match_mode not in _TEXT_MATCH_MODES:
+        return [f"{path} has an unsupported text assertion match mode: {match_mode!r}"]
+    normalized_content = _normalize_assertion_text(content, match_mode)
+    errors: list[str] = []
+    for expected in rules.get("contains", []):
+        if not isinstance(expected, str):
+            errors.append(f"{path} contains assertion is not a string: {expected!r}")
+            continue
+        if _normalize_assertion_text(expected, match_mode) not in normalized_content:
+            errors.append(f"{path} does not contain {expected!r}")
+    for alternatives in rules.get("contains_any", []):
+        if (
+            not isinstance(alternatives, list)
+            or not alternatives
+            or any(not isinstance(item, str) for item in alternatives)
+        ):
+            errors.append(f"{path} contains_any assertion is invalid")
+            continue
+        if not any(
+            _normalize_assertion_text(item, match_mode) in normalized_content
+            for item in alternatives
+        ):
+            formatted = ", ".join(repr(item) for item in alternatives)
+            errors.append(f"{path} does not contain any of [{formatted}]")
+    for forbidden in rules.get("not_contains", []):
+        if not isinstance(forbidden, str):
+            errors.append(f"{path} not_contains assertion is not a string: {forbidden!r}")
+            continue
+        if _normalize_assertion_text(forbidden, match_mode) in normalized_content:
+            errors.append(f"{path} still contains {forbidden!r}")
+    return errors
 
 
 def _load_callable(root: Path, module_path: str, callable_name: str) -> Any:
@@ -346,9 +409,17 @@ def _run_executable_checks(task: dict[str, Any], files: dict[str, str]) -> list[
                     if module_path is None or not isinstance(callable_name, str) or not callable_name.strip():
                         raise ValueError("callable check requires a safe module_path and callable")
                     function = _load_callable(workspace, module_path, callable_name)
-                    args = [_materialize_argument(value) for value in check.get("args", [])]
+                    argument_mode = check.get("argument_mode", "namespace")
+                    if not isinstance(argument_mode, str) or argument_mode not in _ARGUMENT_MODES:
+                        raise ValueError(
+                            f"callable check argument_mode must be one of {sorted(_ARGUMENT_MODES)}"
+                        )
+                    args = [
+                        _materialize_argument(value, mode=argument_mode)
+                        for value in check.get("args", [])
+                    ]
                     kwargs = {
-                        str(key): _materialize_argument(value)
+                        str(key): _materialize_argument(value, mode=argument_mode)
                         for key, value in check.get("kwargs", {}).items()
                     }
                     raised = False
@@ -380,12 +451,9 @@ def _run_executable_checks(task: dict[str, Any], files: dict[str, str]) -> list[
                     if path is None or path not in files:
                         raise ValueError("text assertion path is missing or unsafe")
                     content = files[path]
-                    for expected in check.get("contains", []):
-                        if expected not in content:
-                            raise ValueError(f"text does not contain {expected!r}")
-                    for forbidden in check.get("not_contains", []):
-                        if forbidden in content:
-                            raise ValueError(f"text still contains {forbidden!r}")
+                    assertion_errors = _text_assertion_errors(path, content, check)
+                    if assertion_errors:
+                        raise ValueError("; ".join(assertion_errors))
                 else:
                     raise ValueError(f"unsupported executable check kind: {kind}")
             except (OSError, RuntimeError, TypeError, ValueError, subprocess.TimeoutExpired) as error:
@@ -543,12 +611,7 @@ def grade(task_path: Path, run_dir: Path) -> dict[str, Any]:
             if not isinstance(content, str) or not isinstance(rules, dict):
                 outcome_errors.append(f"cannot grade assertions for {path}")
                 continue
-            for expected in rules.get("contains", []):
-                if expected not in content:
-                    outcome_errors.append(f"{path} does not contain {expected!r}")
-            for forbidden_text in rules.get("not_contains", []):
-                if forbidden_text in content:
-                    outcome_errors.append(f"{path} still contains {forbidden_text!r}")
+            outcome_errors.extend(_text_assertion_errors(path, content, rules))
     errors.extend(outcome_errors)
     checks.append(_check(not outcome_errors, "final_state_outcome", "independent assertions pass on the final repository snapshot"))
 

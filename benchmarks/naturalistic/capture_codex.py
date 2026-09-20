@@ -3,12 +3,14 @@ from __future__ import annotations
 import argparse
 import fnmatch
 import json
+import math
 import os
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -42,6 +44,15 @@ OUTPUT_ARTIFACTS = {
     "final_state_path": "final-state.json",
     "final_response_path": "final-response.md",
 }
+USAGE_FIELDS = (
+    "input_tokens",
+    "output_tokens",
+    "total_tokens",
+    "prompt_tokens",
+    "completion_tokens",
+    "cached_input_tokens",
+    "reasoning_tokens",
+)
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -49,6 +60,43 @@ def _load_json(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError(f"JSON root must be an object: {path}")
     return value
+
+
+def _collect_usage(value: Any, fields: dict[str, int | float]) -> None:
+    if isinstance(value, dict):
+        for key in ("usage", "token_usage", "usage_metrics"):
+            usage = value.get(key)
+            if not isinstance(usage, dict):
+                continue
+            for field in USAGE_FIELDS:
+                numeric = usage.get(field)
+                if isinstance(numeric, (int, float)) and not isinstance(numeric, bool):
+                    if math.isfinite(float(numeric)) and field not in fields:
+                        fields[field] = numeric
+        for item in value.values():
+            _collect_usage(item, fields)
+    elif isinstance(value, list):
+        for item in value:
+            _collect_usage(item, fields)
+
+
+def _capture_metrics(raw_output: str, duration_seconds: float) -> dict[str, Any]:
+    usage_fields: dict[str, int | float] = {}
+    for line in raw_output.splitlines():
+        if not line.strip():
+            continue
+        try:
+            _collect_usage(json.loads(line), usage_fields)
+        except json.JSONDecodeError:
+            continue
+    return {
+        "duration_seconds": round(duration_seconds, 3),
+        "usage": {
+            "status": "observed" if usage_fields else "unavailable",
+            "source": "codex-json-events",
+            "fields": usage_fields,
+        },
+    }
 
 
 def _safe_component(value: str, label: str) -> str:
@@ -439,35 +487,9 @@ def _rg_excluded_candidates(
     }
 
 
-def _read_paths_from_command(
-    command: str,
-    workspace: Path,
-    candidates: set[str],
-) -> list[str]:
-    lower = command.casefold()
-    if re.search(r"\bgit(?:\.exe)?\s+status(?:\s|$)", lower):
-        return []
-    rg_match = re.search(r"(?<![\w.-])rg(?:\.exe)?(?=\s|$)", lower)
-    if rg_match:
-        rg_tokens = _shell_tokens(command[rg_match.end() :])
-        if "--files" in rg_tokens:
-            return []
-        excluded_candidates = _rg_excluded_candidates(rg_tokens, candidates, command=command)
-        searchable_candidates = candidates - excluded_candidates
-        includes_hidden = "--hidden" in rg_tokens or "-uu" in rg_tokens or "-uuu" in rg_tokens
-        recursive_rg = any(token in {".", "./"} for token in rg_tokens)
-        if recursive_rg:
-            return sorted(
-                path
-                for path in searchable_candidates
-                if includes_hidden or not _is_hidden_path(path)
-            )
-    else:
-        excluded_candidates = set()
-        searchable_candidates = candidates
+def _has_read_marker(lower: str) -> bool:
     read_markers = (
         "cat ",
-        "type ",
         "get-content",
         " gc ",
         "more ",
@@ -487,26 +509,80 @@ def _read_paths_from_command(
         "git diff",
         "git show",
     )
-    if not any(marker in lower for marker in read_markers):
-        return []
-    normalized_command = re.sub(r"/+", "/", command.replace("\\", "/")).casefold()
-    recursive_read = (
-        ("rg " in lower and re.search(r"\s\.\s*(?:[}'\"]|$)", normalized_command) is not None)
-        or "select-string -path *" in lower
-        or "grep -r" in lower
-        or "grep -R" in command
+    return (
+        re.search(r"(?<![\w-])type\s+", lower) is not None
+        or any(marker in lower for marker in read_markers)
     )
-    if recursive_read:
-        return sorted(candidates)
-    paths: list[str] = []
-    for candidate in sorted(searchable_candidates):
-        variants = {
-            candidate.replace("\\", "/"),
-            str(workspace / candidate).replace("\\", "/"),
-        }
-        if any(re.sub(r"/+", "/", variant).casefold() in normalized_command for variant in variants):
-            paths.append(candidate)
-    return paths
+
+
+def _read_paths_from_command(
+    command: str,
+    workspace: Path,
+    candidates: set[str],
+) -> list[str]:
+    lower = command.casefold()
+    if re.search(r"\bgit(?:\.exe)?\s+status(?:\s|$)", lower):
+        return []
+    paths: set[str] = set()
+    segments = [
+        segment
+        for segment in re.split(r"[;\r\n]+", command)
+        if segment.strip()
+    ]
+    for segment in segments:
+        segment_lower = segment.casefold()
+        rg_match = re.search(r"(?<![\w.-])rg(?:\.exe)?(?=\s|$)", segment_lower)
+        candidate_pool = candidates
+        if rg_match:
+            rg_tokens = _shell_tokens(segment[rg_match.end() :])
+            if "--files" in rg_tokens:
+                continue
+            excluded_candidates = _rg_excluded_candidates(
+                rg_tokens,
+                candidates,
+                command=segment,
+            )
+            searchable_candidates = candidates - excluded_candidates
+            includes_hidden = (
+                "--hidden" in rg_tokens
+                or "-uu" in rg_tokens
+                or "-uuu" in rg_tokens
+            )
+            candidate_pool = searchable_candidates
+            normalized_segment = re.sub(
+                r"/+",
+                "/",
+                segment.replace("\\", "/"),
+            ).casefold()
+            recursive_rg = re.search(
+                r"\s\.\s*(?:[}'\"]|$)",
+                normalized_segment,
+            ) is not None or any(token in {".", "./"} for token in rg_tokens)
+            if recursive_rg:
+                paths.update(
+                    path
+                    for path in searchable_candidates
+                    if includes_hidden or not _is_hidden_path(path)
+                )
+                continue
+        if not _has_read_marker(segment_lower):
+            continue
+        normalized_segment = re.sub(
+            r"/+",
+            "/",
+            segment.replace("\\", "/"),
+        ).casefold()
+        for candidate in sorted(candidate_pool):
+            variants = {
+                candidate.replace("\\", "/"),
+                str(workspace / candidate).replace("\\", "/"),
+            }
+            if any(
+                re.sub(r"/+", "/", variant).casefold() in normalized_segment
+                for variant in variants
+            ):
+                paths.add(candidate)
+    return sorted(paths)
 
 
 def _normalize_trace(
@@ -690,6 +766,8 @@ def capture_run(
             str(final_response_path),
             _runner_prompt(task["user_prompt"]),
         ]
+        capture_started_at = datetime.now(timezone.utc)
+        capture_start_clock = time.perf_counter()
         completed = subprocess.run(
             command,
             stdin=subprocess.DEVNULL,
@@ -700,6 +778,11 @@ def capture_run(
             timeout=timeout,
             check=False,
             env=codex_environment,
+        )
+        capture_finished_at = datetime.now(timezone.utc)
+        capture_metrics = _capture_metrics(
+            completed.stdout,
+            time.perf_counter() - capture_start_clock,
         )
         final_files = _workspace_files(workspace, excluded={"naturalistic-final-response.md"})
         snapshot = _snapshot(workspace, task)
@@ -735,7 +818,9 @@ def capture_run(
             "task_spec_path": task_spec_path,
             "agent": "Codex",
             "model": model,
-            "captured_at": datetime.now(timezone.utc).isoformat(),
+            "captured_at": capture_finished_at.isoformat(),
+            "capture_started_at": capture_started_at.isoformat(),
+            "capture_metrics": capture_metrics,
             "source": "codex-cli",
             "agent_exit_code": completed.returncode,
             "trace_path": OUTPUT_ARTIFACTS["trace_path"],
