@@ -40,7 +40,7 @@ Git 推送、标签推送和 npx 验证同样从本机命令行完成。使用�
 
 ## v1.0.0 发布记录
 
-- 仓库与发布页：[riesaexe/r-doc](https://github.com/riesaexe/r-doc) · [GitHub Release v1.0.0](https://github.com/riesaexe/r-doc/releases/tag/v1.0.0)。签名提交与注释标签均已在本机验证。
+- 仓库与发布页：[riesaexe/r-doc](https://github.com/riesaexe/r-doc) · [GitHub Release v1.0.0](https://github.com/riesaexe/r-doc/releases/tag/v1.0.0)。签名提交与注释标签本机验证通过；GitHub API 对发布提交返回 `verification.verified=true`。
 - 发布包：[r-doc-v1.0.0.zip](https://github.com/riesaexe/r-doc/releases/download/v1.0.0/r-doc-v1.0.0.zip)，121,276 字节，SHA-256：`f10b2ee47ae14c9393e38486f009dfd8bff16468b1c435605df140939f93281e`。包内顶层目录为 `r-doc/`。
 - 校验：Skill 校验器、文档严格审计、136 项单元测试、官方 Skill 校验器和公开仓库 npx 发现均通过；公开 npx 全局安装已完成，安装器报告 PromptScript 不支持全局安装。安装副本的 61 个受版本控制文件与发布提交内容逐一匹配（忽略平台换行差异）。
 - 评测记录：[naturalistic benchmark 总览](../development/benchmarks.md)记录用户确认的 `gpt-6-luna` 七类任务、每类 10 对、共 140 次运行。124/140 项任务 outcome 通过、forbidden read 为 0/140；但 70 个 treatment 的 visibility 均为 `unknown`，有效配对比较为 0，因此结果仅作描述性证据。
@@ -103,7 +103,7 @@ Git pushes, tag pushes, and npx verification also run from the local command lin
 
 ### v1.0.0 publication record
 
-- Repository and release: [riesaexe/r-doc](https://github.com/riesaexe/r-doc) · [GitHub Release v1.0.0](https://github.com/riesaexe/r-doc/releases/tag/v1.0.0). The signed commit and annotated tag were verified locally.
+- Repository and release: [riesaexe/r-doc](https://github.com/riesaexe/r-doc) · [GitHub Release v1.0.0](https://github.com/riesaexe/r-doc/releases/tag/v1.0.0). The signed commit and annotated tag were verified locally; the GitHub API returned `verification.verified=true` for the release commit.
 - Package: [r-doc-v1.0.0.zip](https://github.com/riesaexe/r-doc/releases/download/v1.0.0/r-doc-v1.0.0.zip), 121,276 bytes, SHA-256 `f10b2ee47ae14c9393e38486f009dfd8bff16468b1c435605df140939f93281e`; the archive has a top-level `r-doc/` directory.
 - Validation: Skill validation, strict documentation audit, 136 unit tests, the official Skill validator, and public-repository npx discovery passed. Public npx global installation completed; the installer reports that PromptScript does not support global installation. All 61 version-controlled installed files match the release commit after normalizing platform line endings.
 - Benchmark: [Naturalistic benchmark overview](../development/benchmarks.md) records the user-approved `gpt-6-luna` run: seven task classes, 10 pairs per class, 140 runs. Task outcomes passed 124/140 and forbidden reads were 0/140; all 70 treatment visibility values are `unknown`, leaving zero valid paired comparisons, so the result is descriptive evidence only.
