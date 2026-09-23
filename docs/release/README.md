@@ -17,7 +17,7 @@ updated: 2026-09-23
 
 - 版本文件：[VERSION](../../VERSION)
 - 变更记录：[CHANGELOG.md](../../CHANGELOG.md)
-- 当前发布版本：0.4.1；源代码候选版本：1.0.0
+- 当前发布版本：1.0.0（GitHub tag `v1.0.0`）；源提交：`eb920fe493da22a909773867842336498c62af1d`
 
 ## 发布步骤
 
@@ -37,6 +37,14 @@ Git 推送、标签推送和 npx 验证同样从本机命令行完成。使用�
 8. 将验证通过的发布内容同步到全局安装目录。
 9. 验证全局副本的版本、文件树和入口文件。
 10. 发布后记录仓库地址、标签、实际包路径、校验结果和已知限制。
+
+## v1.0.0 发布记录
+
+- 仓库与发布页：[riesaexe/r-doc](https://github.com/riesaexe/r-doc) · [GitHub Release v1.0.0](https://github.com/riesaexe/r-doc/releases/tag/v1.0.0)。签名提交与注释标签均已在本机验证。
+- 发布包：[r-doc-v1.0.0.zip](https://github.com/riesaexe/r-doc/releases/download/v1.0.0/r-doc-v1.0.0.zip)，121,276 字节，SHA-256：`f10b2ee47ae14c9393e38486f009dfd8bff16468b1c435605df140939f93281e`。包内顶层目录为 `r-doc/`。
+- 校验：Skill 校验器、文档严格审计、136 项单元测试、官方 Skill 校验器和公开仓库 npx 发现均通过；公开 npx 全局安装已完成，安装器报告 PromptScript 不支持全局安装。安装副本的 61 个受版本控制文件与发布提交内容逐一匹配（忽略平台换行差异）。
+- 评测记录：[naturalistic benchmark 总览](../development/benchmarks.md)记录用户确认的 `gpt-6-luna` 七类任务、每类 10 对、共 140 次运行。124/140 项任务 outcome 通过、forbidden read 为 0/140；但 70 个 treatment 的 visibility 均为 `unknown`，有效配对比较为 0，因此结果仅作描述性证据。
+- SkillHub 导入暂缓：当前 [SkillHub registry](https://skillhub.fyi/r/@r-doc/skills/r-doc) 已有 `r-doc` 1.0.2 作为 latest，而 GitHub 本次发布版本为 1.0.0。为避免将较旧版本标为 latest，本次未导入；需先完成两个分发面的版本对齐。
 
 ## 版本规则
 
@@ -72,7 +80,7 @@ The release unit is the `skills/r-doc/` directory, so other tools can read `SKIL
 
 - Version file: [VERSION](../../VERSION)
 - Changelog: [CHANGELOG.md](../../CHANGELOG.md)
-- Current release: 0.4.1; source candidate: 1.0.0.
+- Current release: 1.0.0 (GitHub tag `v1.0.0`); source commit: `eb920fe493da22a909773867842336498c62af1d`.
 
 ### Release steps
 
@@ -92,6 +100,14 @@ Git pushes, tag pushes, and npx verification also run from the local command lin
 8. Synchronize validated source files to the global installation copy.
 9. Recheck the global copy's version, file tree, and entrypoint.
 10. Record the repository URL, tag, package path, verification results, and known limitations after release.
+
+### v1.0.0 publication record
+
+- Repository and release: [riesaexe/r-doc](https://github.com/riesaexe/r-doc) · [GitHub Release v1.0.0](https://github.com/riesaexe/r-doc/releases/tag/v1.0.0). The signed commit and annotated tag were verified locally.
+- Package: [r-doc-v1.0.0.zip](https://github.com/riesaexe/r-doc/releases/download/v1.0.0/r-doc-v1.0.0.zip), 121,276 bytes, SHA-256 `f10b2ee47ae14c9393e38486f009dfd8bff16468b1c435605df140939f93281e`; the archive has a top-level `r-doc/` directory.
+- Validation: Skill validation, strict documentation audit, 136 unit tests, the official Skill validator, and public-repository npx discovery passed. Public npx global installation completed; the installer reports that PromptScript does not support global installation. All 61 version-controlled installed files match the release commit after normalizing platform line endings.
+- Benchmark: [Naturalistic benchmark overview](../development/benchmarks.md) records the user-approved `gpt-6-luna` run: seven task classes, 10 pairs per class, 140 runs. Task outcomes passed 124/140 and forbidden reads were 0/140; all 70 treatment visibility values are `unknown`, leaving zero valid paired comparisons, so the result is descriptive evidence only.
+- SkillHub import is pending: the current [SkillHub registry](https://skillhub.fyi/r/@r-doc/skills/r-doc) already has `r-doc` 1.0.2 as `latest`, while this GitHub release is 1.0.0. To avoid marking an older version as latest, this release was not imported; align versions across the two distribution surfaces first.
 
 ### Version policy
 

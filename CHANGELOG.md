@@ -11,28 +11,28 @@ This file records user-visible changes to r-doc.
 - 明确低、中、高影响任务的执行档位和授权边界；用户已明确授权的范围内直接执行，只在事实、范围或风险存在实质歧义时暂停询问。
 - 增加先列变更路径、排除受保护路径后再查看安全 diff 的规则，避免完整 diff 读取已跟踪的凭据文件。
 - 增加 minimal、standard、strict 三种治理级别，并让配置、审计和结构修复工具采用相同门槛。
-- 将 133/140 naturalistic 结果明确为单模型、混合条件下的描述性任务结果，区分归因误报、任务契约错误和确认暂停；未启动新 benchmark 采集。
+- 将 133/140 naturalistic 结果明确为单模型、混合条件下的描述性任务结果，区分归因误报、任务契约错误和确认暂停；另按用户确认完成 gpt-6-luna 的 140 次评测，结果和归因限制单独记录。
 - 将可复现验证报告标注为 v0.4.0（2026-09-20）快照，避免误读为 v0.4.1 验证结果。
 
 ### 兼容性与限制
 
 - 未设置 `governance_level` 的现有 `.r-doc.yaml` 继续使用 `standard`；`minimal` 与 `strict` 均需显式选择。
 - 已明确授权的文档操作可在授权范围内直接执行；仅在事实、范围或风险存在实质歧义时暂停。需要单独授权的外部操作仍按其授权边界执行。
-- 当前 benchmark 仍是单模型、共享安全预检条件下的描述性结果，不能证明 r-doc 的独立净收益；本次发布没有启动新采集。
+- 当前 benchmark 包含 gpt-5.6-luna 与 gpt-6-luna 两个分开的单模型批次；gpt-6-luna 批次使用两条件共用的安全预检，且 Skill visibility 未确认，因此仍不能证明 r-doc 的独立净收益或跨模型泛化。
 
 ### English
 
 - Clarified low-, medium-, and high-impact workflows and authorization boundaries: proceed within an explicitly authorized scope and pause only for material ambiguity in facts, scope, or risk.
 - Required path-first Git review that excludes protected paths before reading explicit safe diffs.
 - Added minimal, standard, and strict governance levels and aligned configuration, audit, and structural repair behavior.
-- Labeled the 133/140 naturalistic result as descriptive single-model task evidence pooled across conditions; separated attribution false positives, task-contract errors, and a confirmation pause. No new benchmark capture was started.
+- Labeled the 133/140 naturalistic result as descriptive single-model task evidence pooled across conditions; separated attribution false positives, task-contract errors, and a confirmation pause. A user-approved 140-run `gpt-6-luna` evaluation was also completed, with its results and attribution limits recorded separately.
 - Identified the reproducible verification report as a v0.4.0 snapshot from 2026-09-20, not a v0.4.1 verification result.
 
 ### Compatibility and limits
 
 - Existing `.r-doc.yaml` files without `governance_level` continue to use `standard`; `minimal` and `strict` are opt-in.
 - Explicitly authorized documentation work may proceed within the authorized scope. Pause only for material ambiguity in facts, scope, or risk; external actions with separate authorization boundaries still require that authorization.
-- The available benchmark remains descriptive evidence from one model with a shared safe-read preflight, so it does not establish r-doc's independent net benefit. No new capture was started for this release.
+- The available evidence now contains separate single-model batches for `gpt-5.6-luna` and `gpt-6-luna`. The `gpt-6-luna` batch uses a shared safe-read preflight and has unconfirmed Skill visibility, so it still does not establish r-doc's independent net benefit or cross-model generality.
 
 ## [0.4.1] - 2026-09-21
 
