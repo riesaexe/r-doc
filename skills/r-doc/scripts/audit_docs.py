@@ -74,19 +74,29 @@ def check_links(root: Path, files: list[Path], findings: list[Finding]) -> dict[
     return outgoing
 
 
-def check_navigation(root: Path, docs: Path, files: list[Path], outgoing: dict[Path, set[Path]], agents: Path, findings: list[Finding]) -> None:
+def check_navigation(
+    root: Path,
+    docs: Path,
+    files: list[Path],
+    outgoing: dict[Path, set[Path]],
+    agents: Path,
+    findings: list[Finding],
+    config: ProjectConfig,
+) -> None:
     routes: list[tuple[Path, Path]] = []
     docs_index = docs / "README.md"
-    if agents.is_file():
-        routes.append((agents, docs_index))
-    if docs_index.is_file():
-        routes.append((docs_index, agents))
-    for index in files:
-        if index.name == "README.md" and index != docs_index:
-            parent_index = index.parent.parent / "README.md"
-            routes.append((index, parent_index))
-            if parent_index.is_file():
-                routes.append((parent_index, index))
+    if config.governance_level != "minimal":
+        if agents.is_file():
+            routes.append((agents, docs_index))
+        if docs_index.is_file():
+            routes.append((docs_index, agents))
+    if config.governance_level != "minimal":
+        for index in files:
+            if index.name == "README.md" and index != docs_index:
+                parent_index = index.parent.parent / "README.md"
+                routes.append((index, parent_index))
+                if parent_index.is_file():
+                    routes.append((parent_index, index))
     for source, target in routes:
         source_key = canonical_path(root, source)
         target_key = canonical_path(root, target)
@@ -101,7 +111,11 @@ def check_indexes(root: Path, docs: Path, files: list[Path], outgoing: dict[Path
         if path_is_excluded(root, directory, config):
             continue
         contains_markdown = any(path in files for path in directory.rglob("*.md"))
-        if contains_markdown and not (directory / "README.md").is_file():
+        if (
+            config.governance_level != "minimal"
+            and contains_markdown
+            and not (directory / "README.md").is_file()
+        ):
             add(findings, "error", "missing-nested-index", root, directory, "directory contains Markdown documents but no README.md")
 
     docs_index = canonical_path(root, docs / "README.md")
@@ -119,7 +133,7 @@ def check_indexes(root: Path, docs: Path, files: list[Path], outgoing: dict[Path
     for path, count in incoming.items():
         if count == 0:
             add(findings, "error", "unindexed-document", root, path, "document is not reachable from AGENTS.md or an index README.md")
-    check_navigation(root, docs, files, outgoing, agents, findings)
+    check_navigation(root, docs, files, outgoing, agents, findings, config)
 
 
 def parse_iso_date(value: object) -> date | None:
@@ -163,7 +177,8 @@ def check_metadata(
             add(findings, "error", "frontmatter-parse", root, path, str(error))
             continue
         if not values:
-            add(findings, "warning", "metadata-missing", root, path, "topic document has no frontmatter")
+            if config.governance_level != "minimal":
+                add(findings, "warning", "metadata-missing", root, path, "topic document has no frontmatter")
             continue
         records[path] = values
         relation_values[path] = values
@@ -319,7 +334,7 @@ def audit(root: Path) -> list[Finding]:
     docs_index = docs / "README.md"
     if not agents.is_file():
         add(findings, "error", "missing-entrypoint", root, agents, "project root must contain AGENTS.md")
-    if not docs_index.is_file():
+    if config.governance_level != "minimal" and not docs_index.is_file():
         add(findings, "error", "missing-index", root, docs_index, f"project must contain {config.docs_root}/README.md")
     files = markdown_files(docs, root, config)
     root_files = root_markdown_files(root, config)
@@ -362,7 +377,7 @@ def main() -> int:
     gate = config.gate_for(args.stage)
     errors = [item for item in findings if item.severity == "error"]
     warnings = [item for item in findings if item.severity == "warning"]
-    strict = args.strict or gate in {"audit", "blocking"}
+    strict = args.strict or config.governance_level == "strict" or gate in {"audit", "blocking"}
     failed = bool(errors or (strict and warnings))
     if args.json:
         print(json.dumps({"status": "fail" if failed else "pass", "errors": len(errors), "warnings": len(warnings), "strict": strict, "stage": args.stage, "gate": gate, "findings": [asdict(item) for item in findings]}, ensure_ascii=False, indent=2))

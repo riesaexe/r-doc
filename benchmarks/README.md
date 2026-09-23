@@ -32,9 +32,47 @@ The 93/47 figure above is the immutable original grader result. A separate deter
 
 新的 `gpt-5.6-luna` 完整 A/B 批次位于 `naturalistic-runs-20260921-luna-v0.4.0-full-v3-contracts/`，使用 `tasks-v2`、7 类任务、每类 10 对，共 140 次运行；小批次先以 14/14 通过作为门禁。完整批次为 133/140 task outcome 通过、7/140 失败、0 个 runner 异常、140/140 激活证据已验证，公开证据校验通过。7 个失败包含 2 个命令排除规则导致的 `.env` 归因误报、4 个 cross-module producer 输入字段错误和 1 个 release baseline 停在确认计划阶段。由于两组共享 safe-read preflight，结果仍是 descriptive-only，不证明 r-doc 独立增量收益。
 
+133/140 是两种条件合并后的任务结果通过数，不是 `with-r-doc` 的单独成功率，更不是由 r-doc 造成的收益。7 个失败也来自不同层面：2 个是读取归因误报，4 个与 cross-module 输入契约有关，1 个因 release baseline 流程等待确认而未完成。原始结果应保持不变，并在解释时分开报告测量门、任务结果和配对条件差异。该批次只覆盖 `gpt-5.6-luna`，且两种条件共用安全读取底线；因此无法推广到其他模型，也无法估计 r-doc 相对该共同安全底线的全部收益。后续若要检验净增益，应在新版本批次中修正归因与任务契约、明确任务写入授权范围，并至少对两个经用户确认的模型分别运行配对样本，按模型和条件报告结果及配对差值。该句是 v0.4.1 复采记录形成时的状态；之后用户确认启动了下方的 v1.0.0 gpt-6-luna 批次。
+
 ## v0.4.1 Luna recapture
 
 The new `gpt-5.6-luna` full A/B batch is recorded under `naturalistic-runs-20260921-luna-v0.4.0-full-v3-contracts/`. It uses `tasks-v2`, seven task families, ten matched pairs per task, and 140 runs; a 14-run smoke batch passed 14/14 first. The full batch has 133/140 task-outcome passes, 7/140 failures, zero runner exceptions, 140/140 verified activation records, and passing public-evidence verification. The seven failures comprise two `.env` attribution false positives from exclusion globs, four cross-module producer-input mistakes, and one release-baseline run that paused for confirmation. Because both conditions share the safe-read preflight, this remains descriptive-only evidence rather than an independent r-doc-effect claim.
+
+The 133/140 figure is a pooled task-outcome count across both conditions; it is neither the `with-r-doc` success rate nor an estimate of outcomes caused by r-doc. The seven failures also mix distinct layers: two read-attribution false positives, four cross-module input-contract errors, and one run that did not complete while waiting for confirmation. Preserve the captured result and report measurement gates, task outcomes, and paired condition deltas separately. This batch covers only `gpt-5.6-luna` and gives both conditions the same safe-read floor, so it cannot establish cross-model generality or r-doc's full safety contribution beyond that floor. A future net-effect study needs a new versioned batch with corrected attribution and task contracts, explicit task write authorization, and matched samples for at least two user-approved models, reported by model and condition with paired deltas. That status reflects the v0.4.1 report; a later user-approved v1.0.0 gpt-6-luna batch is recorded below.
+
+## v1.0.0 gpt-6-luna 复采
+
+2026-09-23 按用户确认采集 `gpt-6-luna` v1.0.0：使用 `tasks-v2` 七类任务，每类 10 个 matched A/B 对，共 140 次运行；140 条 run artifact 完成，runner exception 为 0。独立 grader 的整体状态是 65 pass、75 fail；其中任务 outcome 为 124/140 通过、16/140 失败。两种条件共用 `skill-discovery-safe-read-preflight-v2-command-glob`，forbidden read 为 0/140。逐次脱敏证据在 [`public-evidence.json`](naturalistic-runs-20260923-gpt-6-luna-v1.0.0-full-v1/public-evidence.json)，本地 summary 与源 artifact hash 重放均通过。
+
+| 任务 | with-r-doc outcome | baseline-no-r-doc outcome |
+| --- | ---: | ---: |
+| API response field rename | 10/10 | 10/10 |
+| CLI option rename | 10/10 | 10/10 |
+| SQL column rename | 7/10 | 10/10 |
+| Event payload rename v2 | 9/10 | 9/10 |
+| Cross-module contract migration v2 | 3/10 | 7/10 |
+| Architecture decision sync v2 | 10/10 | 9/10 |
+| Release document drift v2 | 10/10 | 10/10 |
+| **总计** | **59/70** | **65/70** |
+
+70 个 `with-r-doc` 运行的 visibility 状态全为 `unknown`；其中 67 次观察到 load/use，3 次没有观察到 load/use。因此 treatment activation 为 0/70 verified，汇总状态为 `fail`，没有可用于效果比较的有效配对。11 个 treatment outcome 失败包括 7 个 cross-module、3 个 SQL 和 1 个 Event；5 个 baseline outcome 失败包括 3 个 cross-module、1 个 Event 和 1 个 architecture 结果。visibility 未确认是当前 capture 的可观测性缺口，不能据此断言模型一定没有看到或使用 r-doc。该单模型批次又共享安全底线，不能证明 r-doc 的净增益或推广到其他模型；失败和成功 outcome 都应与 activation 测量状态分开解读。
+
+## v1.0.0 gpt-6-luna recapture
+
+The user-confirmed 2026-09-23 `gpt-6-luna` v1.0.0 batch uses `tasks-v2`, seven task families, ten matched A/B pairs per family, and 140 runs. All 140 run artifacts completed with zero runner exceptions. The independent grader reports 65 overall passes and 75 failures; task outcomes are 124/140 passes and 16/140 failures. Both conditions share `skill-discovery-safe-read-preflight-v2-command-glob`, with 0/140 forbidden-read runs. The sanitized per-run evidence is [`public-evidence.json`](naturalistic-runs-20260923-gpt-6-luna-v1.0.0-full-v1/public-evidence.json); local summary cross-check and source-artifact hash replay pass.
+
+| Task | with-r-doc outcomes | baseline-no-r-doc outcomes |
+| --- | ---: | ---: |
+| API response field rename | 10/10 | 10/10 |
+| CLI option rename | 10/10 | 10/10 |
+| SQL column rename | 7/10 | 10/10 |
+| Event payload rename v2 | 9/10 | 9/10 |
+| Cross-module contract migration v2 | 3/10 | 7/10 |
+| Architecture decision sync v2 | 10/10 | 9/10 |
+| Release document drift v2 | 10/10 | 10/10 |
+| **Total** | **59/70** | **65/70** |
+
+All 70 `with-r-doc` runs have `visibility: unknown`; load/use were observed in 67 and not observed in 3. Treatment activation is therefore 0/70 verified, the aggregate status is `fail`, and there are no valid pairs for an effect comparison. The 11 treatment task-outcome failures are 7 cross-module, 3 SQL, and 1 Event; the 5 baseline failures are 3 cross-module, 1 Event, and 1 architecture outcome. Unknown visibility is a capture observability gap, not proof that the model did not see or use r-doc. This single-model batch also shares the safe-read floor, so it does not establish r-doc's net effect or generalize to other models. Read task outcomes separately from activation measurement status.
 
 ## 中文说明
 

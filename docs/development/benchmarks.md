@@ -4,7 +4,7 @@ type: guide
 status: active
 title: Agent benchmark 与性能基线
 created: 2026-09-15
-updated: 2026-09-19
+updated: 2026-09-23
 ---
 
 # Agent benchmark 与性能基线
@@ -160,9 +160,19 @@ The performance values are local trend data, not CI thresholds or complexity gua
 
 The v0.4.1 recapture uses `benchmarks/naturalistic/tasks-v2/` with gpt-5.6-luna, seven task families, ten matched pairs per task, and 140 runs. The 14-run smoke gate passed 14/14 before the full batch started. The full batch has 133 task-outcome passes and 7 failures, zero runner exceptions, 140 verified activation records, and a passing public-evidence cross-check. The failures are preserved as measured outcomes: two command-attribution `.env` false positives, four producer input-contract mistakes in the cross-module task, and one release-baseline confirmation pause. The batch is descriptive-only because the safe-read preflight is shared by both conditions.
 
+这 133/140 是两种条件合并后的任务结果通过数，不是 `with-r-doc` 单独成功率，也不能说明通过结果由 r-doc 造成。7 个失败包含不同性质的问题：2 个读取归因误报、4 个 cross-module 输入契约错误、1 个因等待确认未完成的 release baseline 任务。应保留原始记录，并分别报告测量有效性、任务结果和按条件配对的差值。批次只覆盖 `gpt-5.6-luna`，且两种条件共用 safe-read preflight，因此不能推广到其他模型，也无法估计 r-doc 相对共同安全底线的全部贡献。后续净增益研究需要在新版本批次中修正归因和任务契约、明确写入授权范围，并至少对两个经用户确认的模型分别采集配对样本，报告分模型的条件结果与配对差值。该句是 v0.4.1 报告形成时的状态；2026-09-23 后续已启动并完成用户确认的 v1.0.0 gpt-6-luna 批次，结果见下文。
+
+The 133/140 figure pools task outcomes across both conditions; it is not the `with-r-doc` success rate and does not show that r-doc caused the passing outcomes. The seven failures represent different issues: two read-attribution false positives, four cross-module input-contract errors, and one release-baseline task left incomplete while waiting for confirmation. Preserve the capture and report measurement validity, task outcomes, and paired condition deltas separately. The batch covers only `gpt-5.6-luna`, and both conditions share the safe-read preflight, so it cannot generalize across models or estimate r-doc's full contribution beyond that shared safety floor. A future net-effect study needs a new versioned batch with corrected attribution and task contracts, explicit write authorization, and matched samples for at least two user-approved models, reported by model and condition with paired deltas. That status reflects the v0.4.1 report; a later user-approved v1.0.0 gpt-6-luna batch is recorded below.
+
+## v1.0.0 gpt-6-luna batch
+
+The user-confirmed 2026-09-23 batch completed 140 runs across seven `tasks-v2` task families, ten matched pairs per task, with zero runner exceptions. Task outcomes passed in 124/140 runs; the independent grader overall passed 65 and failed 75. All 70 `with-r-doc` runs have `visibility: unknown`; load/use were observed in 67 and not observed in 3. This leaves zero verified treatment activations and zero valid paired comparisons. The sanitized 140-run evidence and full source-hash replay pass. The result is descriptive-only because both conditions share the safe-read preflight, and it does not establish cross-model generality. Per-task outcomes and failure categories are recorded in the [benchmark index](../../benchmarks/README.md); raw traces and logs remain local.
+
+2026-09-23 经用户确认完成 `gpt-6-luna` v1.0.0 批次：`tasks-v2` 七类任务各 10 对，共 140 次运行，0 个 runner exception。任务 outcome 为 124/140 通过，独立 grader 整体为 65 pass、75 fail。70 个 `with-r-doc` 运行的 visibility 全为 `unknown`，67 次观察到 load/use，3 次没有观察到；因此 verified treatment activation 和有效配对均为 0。脱敏逐次证据及完整源文件哈希重放通过。两种条件共享 safe-read preflight，且本批只覆盖一个模型，因此不能据此建立 r-doc 净效应或跨模型结论。逐任务 outcome 和失败类别见[benchmark 索引](../../benchmarks/README.md)；原始 trace/log 留在本机。
+
 Back to: [development index](README.md) · [documentation index](../README.md)
 
-## Current evidence-chain status
+## Historical evidence-chain status at v0.4.0
 
 The approved v0.4.0 Luna full batch is recorded under benchmarks/naturalistic-runs-20260920-luna-v0.4.0-full-v1-complex/. It uses gpt-5.6-luna with seven task families, ten matched A/B pairs per task, and 140 final run artifacts. The batch has 70 complete pairs, 93 task-outcome passes, 47 task-outcome failures, zero forbidden-read records after command-segment replay, and 70/70 with-r-doc visible/load/use activation records; baseline activation is not applicable. Its aggregate pass is the measurement-gate result; shared safe-read preflight keeps effect attribution descriptive-only. Public-only and local source-hash verification both pass.
 

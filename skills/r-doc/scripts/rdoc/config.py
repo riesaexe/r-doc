@@ -14,6 +14,7 @@ CONFIG_PATHS = (Path(".r-doc.yaml"), Path("docs/r-doc.yaml"), Path("r-doc.yaml")
 CONFIG_KEYS = {
     "version",
     "project_type",
+    "governance_level",
     "docs_root",
     "required_document_types",
     "exclude",
@@ -23,6 +24,7 @@ CONFIG_KEYS = {
     "decision_notes",
 }
 GATE_VALUES = {"advisory", "audit", "blocking"}
+GOVERNANCE_LEVELS = {"minimal", "standard", "strict"}
 
 
 @dataclass(frozen=True)
@@ -36,6 +38,7 @@ class ProjectConfig:
     relationships: dict[str, tuple[str, ...]] | None = None
     sensitive_allowlist: dict[str, tuple[str, ...]] | None = None
     source: Path | None = None
+    governance_level: str = "standard"
 
     def docs_path(self, root: Path) -> Path:
         return root / self.docs_root
@@ -107,6 +110,18 @@ def load_project_config(root: Path) -> tuple[ProjectConfig, list[ConfigProblem]]
         problems.append(_config_error(source, "config-version", f"unsupported configuration version: {values['version']!r}"))
     if "project_type" in values and not isinstance(values["project_type"], str):
         problems.append(_config_error(source, "config-project-type", "project_type must be a string"))
+    governance_level = "standard"
+    raw_governance_level = values.get("governance_level", governance_level)
+    if not isinstance(raw_governance_level, str) or raw_governance_level not in GOVERNANCE_LEVELS:
+        problems.append(
+            _config_error(
+                source,
+                "config-governance-level",
+                f"governance_level must be one of: {', '.join(sorted(GOVERNANCE_LEVELS))}",
+            )
+        )
+    else:
+        governance_level = raw_governance_level
     raw_docs_root = values.get("docs_root", docs_root)
     if not isinstance(raw_docs_root, str) or not raw_docs_root.strip():
         problems.append(_config_error(source, "config-docs-root", "docs_root must be a non-empty relative path"))
@@ -210,6 +225,7 @@ def load_project_config(root: Path) -> tuple[ProjectConfig, list[ConfigProblem]]
                 sensitive_allowlist[code] = parsed_values
 
     return ProjectConfig(
+        governance_level=governance_level,
         docs_root=docs_root,
         decision_notes_root=decision_notes_root,
         decision_notes_required=decision_notes_required,

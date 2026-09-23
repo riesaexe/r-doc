@@ -4,7 +4,7 @@ type: release
 status: active
 title: r-doc 发布指南
 created: 2026-09-14
-updated: 2026-09-21
+updated: 2026-09-23
 ---
 
 # r-doc 发布指南
@@ -17,7 +17,7 @@ updated: 2026-09-21
 
 - 版本文件：[VERSION](../../VERSION)
 - 变更记录：[CHANGELOG.md](../../CHANGELOG.md)
-- 当前发布版本：0.4.1；源代码版本：0.4.1
+- 当前发布版本：0.4.1；源代码候选版本：1.0.0
 
 ## 发布步骤
 
@@ -72,7 +72,7 @@ The release unit is the `skills/r-doc/` directory, so other tools can read `SKIL
 
 - Version file: [VERSION](../../VERSION)
 - Changelog: [CHANGELOG.md](../../CHANGELOG.md)
-- Current release: 0.4.1; source version: 0.4.1.
+- Current release: 0.4.1; source candidate: 1.0.0.
 
 ### Release steps
 

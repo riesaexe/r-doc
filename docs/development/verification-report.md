@@ -2,23 +2,25 @@
 id: VERIFICATION-RDOC-001
 type: report
 status: active
-title: r-doc 可复现验证记录
+title: r-doc v0.4.0 可复现验证快照
 created: 2026-09-14
-updated: 2026-09-19
+updated: 2026-09-23
 validation:
+  source_skill_version: "0.4.0"
+  snapshot_date: "2026-09-20"
   parser: PyYAML BaseLoader
   scenarios:
     - nested-mapping
     - nested-list
 ---
 
-# r-doc 可复现验证记录
+# r-doc v0.4.0 可复现验证快照
 
 ## 摘要
 
-这份记录保存当前源副本的可复现验证结果，避免只在发布说明中口头声称“已验证”。命令均从项目根目录执行，脚本不会修改项目文档。
+这份记录保存 r-doc v0.4.0（2026-09-20）的可复现验证快照，避免只在发布说明中口头声称“已验证”。表中 121 项测试和其他结果均属于该快照，不代表 v0.4.1 已完成相同验证。v0.4.1 后续 benchmark 证据和限制见 [Agent benchmark 与性能基线](benchmarks.md)。
 
-## 当前结果
+## v0.4.0 快照结果
 
 | 检查 | 命令 | 结果 |
 | --- | --- | --- |
@@ -83,13 +85,13 @@ validation:
 
 ## 限制
 
-这份记录证明当前源副本和确定性验证路径可复现，不等同于真实外部项目的长期采用数据。Conformance 的历史结果与当前版本门已分离；formal naturalistic 根目录的旧批次仍供审计，新 Luna 批次已在当前契约下完成 80 次采集，但只形成 9 个跨 3 个任务的完整配对。visible/load/use 记录仍不能替代 OS 级文件访问 telemetry；命令级 `.env`/`secrets.md` forbidden reads 和缺失 use 证据是当前明确问题，因而本批次不能支持正向或负向 Skill-effect 结论。
+这份 v0.4.0 快照说明当时的源副本和确定性验证路径可复现，不等同于真实外部项目的长期采用数据，也不是 v0.4.1 的验证证明。Conformance 的历史结果与版本门已分离；formal naturalistic 根目录的旧批次仍供审计，v0.4.0 时的新 Luna 批次在当时契约下完成 80 次采集，但只形成 9 个跨 3 个任务的完整配对。visible/load/use 记录不能替代 OS 级文件访问 telemetry；该批次的命令级 `.env`/`secrets.md` forbidden reads 和缺失 use 证据，使其不能支持正向或负向 Skill-effect 结论。v0.4.1 的最新 naturalistic 批次及其限制见 [Agent benchmark 与性能基线](benchmarks.md)；本报告未刷新 v0.4.1 的确定性验证数据。
 
 返回：[开发文档索引](README.md) · [文档总索引](../README.md)
 
 ## English verification summary
 
-This record captures reproducible checks for the current source copy. Commands run from the repository root are read-only unless explicitly stated.
+This is the reproducible verification snapshot for r-doc v0.4.0 as of 2026-09-20. The 121-test result and all other checks below belong to that version; they do not establish that v0.4.1 passed the same checks. Later v0.4.1 benchmark evidence and limitations are recorded in [Agent benchmarks and performance baseline](benchmarks.md).
 
 | Check | Result |
 | --- | --- |
@@ -104,6 +106,6 @@ This record captures reproducible checks for the current source copy. Commands r
 | Diff whitespace check | PASS |
 | Source/runtime-copy synchronization | PASS; key source files have matching SHA-256 hashes in the global runtime copy |
 
-The old naturalistic records remain historical, while the fresh Luna batch has been recaptured and regraded under the activation-evidence and schema-2 hash gate. It has ten paired repetitions per task but only 9 complete verified pairs across 3 tasks because 31 `with-r-doc` runs lack observed Skill use; 6 runs pass overall and 74 fail a gate, with 67 forbidden-read runs remaining after removing 3 path-enumeration false positives. Six failures have a passing task outcome but unverified activation. The current data proves the new runner can record activation signals and replay results, but it does not establish positive or negative Skill effectiveness. Any new model or repetition batch requires explicit user confirmation before capture. The conformance score proves trace/evidence structure and protocol execution, not natural activation or independent task effectiveness.
+The old naturalistic records remain historical, while the Luna batch available at the v0.4.0 snapshot had been recaptured and regraded under the activation-evidence and schema-2 hash gate. It had ten paired repetitions per task but only 9 complete verified pairs across 3 tasks because 31 `with-r-doc` runs lacked observed Skill use; 6 runs passed overall and 74 failed a gate, with 67 forbidden-read runs remaining after removing 3 path-enumeration false positives. Six failures had a passing task outcome but unverified activation. That dataset proved the runner could record activation signals and replay results, but did not establish positive or negative Skill effectiveness. Any new model or repetition batch requires explicit user confirmation before capture. The conformance score proves trace/evidence structure and protocol execution, not natural activation or independent task effectiveness.
 
 Back to: [development index](README.md) · [documentation index](../README.md)

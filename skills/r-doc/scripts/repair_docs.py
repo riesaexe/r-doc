@@ -98,7 +98,25 @@ def index_content(directory: Path, entries: list[tuple[str, str]], root: Path, d
     return "\n".join(lines)
 
 
-def agent_content(docs_root: str) -> str:
+def agent_content(docs_root: str, governance_level: str = "standard") -> str:
+    if governance_level == "minimal":
+        return "\n".join(
+            [
+                "# Project documentation entrypoint",
+                "",
+                "This is a generated navigation skeleton. Complete project-specific commands, rules, and routes after reviewing the repository.",
+                "",
+                "## Context-loading order",
+                "",
+                "1. Read this file;",
+                "2. Follow the project-document links below;",
+                "",
+                "## Project documents",
+                "",
+                "Link only the maintained documents needed to understand this project.",
+                "",
+            ]
+        )
     docs_index = f"{docs_root.strip('/')}/README.md"
     return "\n".join(
         [
@@ -210,14 +228,22 @@ def plan_repairs(root: Path) -> list[RepairAction]:
     if not inside(root, docs):
         raise ValueError(f"configured documentation root leaves the project root: {config.docs_root}")
     actions: list[RepairAction] = []
+    minimal = config.governance_level == "minimal"
     if not agents.exists():
-        actions.append(RepairAction("create", relative(root, agents), "create missing project entrypoint", agent_content(config.docs_root)))
-    if not docs_index.exists():
+        actions.append(
+            RepairAction(
+                "create",
+                relative(root, agents),
+                "create missing project entrypoint",
+                agent_content(config.docs_root, config.governance_level),
+            )
+        )
+    if not minimal and not docs_index.exists():
         entries = directory_entries(docs, root, config) if docs.is_dir() else []
         actions.append(RepairAction("create", relative(root, docs_index), "create missing documentation index", index_content(docs, entries, root, docs)))
 
     existing_dirs = []
-    if docs.is_dir():
+    if docs.is_dir() and not minimal:
         existing_dirs = [path for path in docs.rglob("*") if path.is_dir() and not path.is_symlink() and not path_is_excluded(root, path, config)]
     planned_indexes: set[Path] = set()
     for directory in sorted(existing_dirs):
@@ -227,7 +253,7 @@ def plan_repairs(root: Path) -> list[RepairAction]:
             actions.append(RepairAction("create", relative(root, index), "create missing nested documentation index", index_content(directory, entries, root, docs)))
             planned_indexes.add(index)
 
-    if docs_index.is_file():
+    if not minimal and docs_index.is_file():
         updated = update_index(docs_index, root, directory_entries(docs, root, config), root / "AGENTS.md", "Project entrypoint")
         if updated is not None:
             actions.append(RepairAction("update", relative(root, docs_index), "complete the documentation index routes", updated, docs_index.read_text(encoding="utf-8")))
@@ -237,7 +263,7 @@ def plan_repairs(root: Path) -> list[RepairAction]:
             updated = update_index(index, root, directory_entries(directory, root, config), directory.parent / "README.md", "Parent index")
             if updated is not None:
                 actions.append(RepairAction("update", relative(root, index), "complete the nested index routes", updated, index.read_text(encoding="utf-8")))
-    if agents.is_file():
+    if not minimal and agents.is_file():
         updated = update_agent(agents, root, docs_index)
         if updated is not None:
             actions.append(RepairAction("update", relative(root, agents), "add the documentation index route", updated, agents.read_text(encoding="utf-8")))

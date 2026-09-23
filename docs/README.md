@@ -21,7 +21,7 @@
 | [r-doc 架构说明](design/r-doc-architecture.md) | 源副本、安装副本和资源组织 | active |
 | [开发文档索引](development/README.md) | 开发文档入口 | active |
 | [开发与验证流程](development/workflow.md) | 日常修改、校验和 QA | active |
-| [可复现验证记录](development/verification-report.md) | 当前源副本的验证证据和限制 | active |
+| [可复现验证记录](development/verification-report.md) | 按 Skill 版本记录的验证快照和限制 | active |
 | [Agent benchmark 与性能基线](development/benchmarks.md) | 真实 Agent 运行记录和审计规模基线 | active |
 | [发布指南](release/README.md) | 版本和发布流程 | active |
 | [GitHub 与 npx skills 发布指南](release/github-and-npx.md) | 公开仓库、安装和 SkillHub 导入 | active |

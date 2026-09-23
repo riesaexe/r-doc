@@ -17,20 +17,20 @@ python scripts/repair_docs.py --root <project-root>
 python scripts/repair_docs.py --root <project-root> --apply
 ~~~
 
-The preview is read-only. Apply mode is explicit and guarded; read [repair.md](repair.md) before using it.
+The preview is read-only. Apply mode is explicit and guarded; when the user has authorized the repair and the preview matches that scope, apply it in the same task without requesting another confirmation. Read [repair.md](repair.md) before using it.
 
 The helper is read-only. It checks:
 
-- root `AGENTS.md`, the configured documentation root, and their required bidirectional navigation;
+- root `AGENTS.md`; at `standard` and `strict`, the configured documentation root and required bidirectional navigation;
 - directly maintained Markdown files in the project root, such as `README.md`, `CONTRIBUTING.md`, and `SECURITY.md`, for links and sensitive values; `README.md` is included by default, and `exclude` applies to these root files as well; metadata and index coverage remain scoped to the configured documentation root;
-- `README.md` indexes for documentation subdirectories;
+- required `README.md` indexes for documentation subdirectories at `standard` and `strict`;
 - relative, reference-style, parenthesized, and image Markdown links, missing targets, missing Markdown anchors, and resolved paths that escape the project root; fenced code blocks, inline code spans, and HTML comments are excluded from link parsing; unused reference definitions are checked for target existence but do not create navigation edges;
 - GitHub-compatible anchor targets from ATX and Setext headings, duplicate heading suffixes, Unicode/CJK text, preserved emoji code points, punctuation and consecutive-space cases, plus explicit `<a name="...">` and `<a id="...">` anchors; renderer-specific anchor rules outside this contract are not inferred;
-- whether documents under the configured documentation root are reachable from an index;
-- supported frontmatter fields, lifecycle status, duplicate IDs, dates, titles, relationship IDs, existing `related_code` files, non-existent-but-in-root `planned_code` paths, supersession successors and successor links, and configured document-type requirements;
+- whether documents under the configured documentation root are reachable from the root entrypoint or an index;
+- supported frontmatter fields, lifecycle status, duplicate IDs, dates, titles, relationship IDs, existing `related_code` files, non-existent-but-in-root `planned_code` paths, supersession successors and successor links, and configured document-type requirements; topic frontmatter may be omitted at `minimal`;
 - decision-note supersession targets, required links, self-references, cycles, and archive dates;
 - optional decision notes under `.agents/notes/` or the configured `decision_notes.root`, including lifecycle/class path routing, frontmatter, required sections, related code paths, and the required notes index;
-- project configuration, including duplicate files, invalid fields, configured stage names, stage gates, exclusions, and custom documentation roots;
+- project configuration, including duplicate files, invalid fields, governance level, configured stage names, stage gates, exclusions, and custom documentation roots;
 - common secret and token patterns.
 
 The helpers use PyYAML's safe `BaseLoader` for frontmatter mappings, nested mappings, and block lists. Malformed YAML or a non-mapping frontmatter block is reported as `frontmatter-parse`; it is not treated as an empty metadata object. PyYAML is pinned in the repository's `requirements-dev.txt` so local and CI behavior use the same parser.
@@ -59,7 +59,7 @@ Use normal mode during exploration. Use `--strict` before merge or release so wa
 
 ## Migrating an existing project
 
-The bidirectional navigation rule is intentional. After adopting the 0.2.3 governance checks, an existing project may newly report `missing-navigation-link` when `docs/README.md` does not link back to `AGENTS.md`, or when a nested `README.md` does not link to its parent index. This is an adaptation requirement, not a content rewrite requirement. For the complete behavior-change history from 0.2.0 through the current release, read [migration-matrix.md](migration-matrix.md).
+The bidirectional navigation rule applies at `standard` and `strict`. After adopting the 0.2.3 governance checks, a project at those levels may newly report `missing-navigation-link` when `docs/README.md` does not link back to `AGENTS.md`, or when a nested `README.md` does not link to its parent index. At `minimal`, link maintained documents directly from `AGENTS.md` or an existing index. For the complete behavior-change history from 0.2.0 through the current release, read [migration-matrix.md](migration-matrix.md).
 
 For a safe migration:
 

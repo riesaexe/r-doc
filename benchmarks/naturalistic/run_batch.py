@@ -66,12 +66,13 @@ def _sanitize_error(error: BaseException, project_root: Path, batch_root: Path) 
 def _build_jobs(
     task_ids: tuple[str, ...],
     run_ids: tuple[str, ...],
+    model: str,
     profile_suffix: str,
 ) -> list[dict[str, str]]:
     jobs: list[dict[str, str]] = []
     for task_id in task_ids:
         for condition in CONDITIONS:
-            profile = f"{condition}-gpt-5.6-luna-{profile_suffix}"
+            profile = f"{condition}-{model}-{profile_suffix}"
             for run_id in run_ids:
                 jobs.append(
                     {
@@ -90,6 +91,7 @@ def _run_job(
     project_root: Path,
     tasks_root: Path,
     batch_root: Path,
+    model: str,
     timeout: int,
 ) -> dict[str, Any]:
     task_path = tasks_root / f"{job['task_id']}.json"
@@ -101,7 +103,7 @@ def _run_job(
             profile=job["profile"],
             run_id=job["run_id"],
             condition=job["condition"],
-            model="gpt-5.6-luna",
+            model=model,
             timeout=timeout,
         )
         return {
@@ -170,6 +172,7 @@ def run_batch(
     tasks_root: Path,
     task_ids: tuple[str, ...],
     run_count: int,
+    model: str,
     max_workers: int,
     timeout: int,
     profile_suffix: str,
@@ -178,6 +181,8 @@ def run_batch(
         raise ValueError(f"batch root must be new or empty: {batch_root}")
     if not tasks_root.is_dir():
         raise ValueError(f"tasks root does not exist: {tasks_root}")
+    if not model.strip():
+        raise ValueError("model must be a non-empty confirmed model name")
     if run_count <= 0 or max_workers <= 0 or timeout <= 0:
         raise ValueError("run-count, max-workers, and timeout must be positive")
 
@@ -193,15 +198,15 @@ def run_batch(
 
     version = (project_root / "VERSION").read_text(encoding="utf-8-sig").strip()
     run_ids = tuple(f"run-{index:03d}" for index in range(1, run_count + 1))
-    jobs = _build_jobs(task_ids, run_ids, profile_suffix)
+    jobs = _build_jobs(task_ids, run_ids, model, profile_suffix)
     batch_root.mkdir(parents=True, exist_ok=True)
     started_at = _now()
     manifest = {
         "schema_version": 1,
         "batch_kind": "naturalistic-effectiveness-full",
-        "scope": "paired naturalistic effectiveness with existing rename tasks and complex governance tasks",
+        "scope": "paired naturalistic effectiveness across the explicitly selected task families",
         "skill_version": version,
-        "model": "gpt-5.6-luna",
+        "model": model,
         "runner": "benchmarks/naturalistic/capture_codex.py",
         "runner_preflight": RUNNER_PREFLIGHT_VERSION,
         "root": _relative_or_label(batch_root, project_root),
@@ -210,6 +215,12 @@ def run_batch(
         "run_ids": list(run_ids),
         "conditions": list(CONDITIONS),
         "expected_run_count": len(jobs),
+        "pairing_design": {
+            "task_count": len(task_ids),
+            "repetitions_per_task": run_count,
+            "condition_count": len(CONDITIONS),
+            "total_runs": len(jobs),
+        },
         "max_workers": max_workers,
         "timeout_seconds": timeout,
         "started_at": started_at,
@@ -248,6 +259,7 @@ def run_batch(
                 project_root=project_root,
                 tasks_root=tasks_root,
                 batch_root=batch_root,
+                model=model,
                 timeout=timeout,
             ): job
             for job in jobs
@@ -309,8 +321,6 @@ def main() -> int:
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--profile-suffix", default="v0.4.0-full-v1-complex")
     args = parser.parse_args()
-    if args.model != "gpt-5.6-luna":
-        parser.error("this confirmed batch requires --model gpt-5.6-luna")
     task_ids = tuple(args.task_id) if args.task_id else DEFAULT_TASK_IDS
     try:
         result = run_batch(
@@ -319,6 +329,7 @@ def main() -> int:
             tasks_root=_resolve(project_root, args.tasks_root),
             task_ids=task_ids,
             run_count=args.run_count,
+            model=args.model,
             max_workers=args.max_workers,
             timeout=args.timeout,
             profile_suffix=args.profile_suffix,

@@ -4,7 +4,7 @@
 
 ## A file exists but is not reachable
 
-Creating `docs/new-topic.md` is not enough. Add it to the nearest index and confirm that the index itself is reachable from `AGENTS.md` and `docs/README.md`. Use the safe repair preview for missing structural links, then run the strict audit.
+At `standard` or `strict`, creating `docs/new-topic.md` is not enough. Add it to the nearest required index and verify parent/child navigation. At `minimal`, link the document directly from `AGENTS.md` or an existing index. Use the safe repair preview for authorized structural links, then run the audit.
 
 ## Repairing a conflict by overwriting facts
 

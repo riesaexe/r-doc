@@ -4,7 +4,7 @@ type: index
 status: active
 title: 开发文档索引
 created: 2026-09-14
-updated: 2026-09-15
+updated: 2026-09-23
 ---
 
 # 开发文档索引
@@ -16,7 +16,7 @@ updated: 2026-09-15
 ## 推荐阅读顺序
 
 1. [开发与验证流程](workflow.md)
-2. [可复现验证记录](verification-report.md)
+2. [版本化验证快照](verification-report.md)
 3. [Agent benchmark 与性能基线](benchmarks.md)
 
 返回：[文档总索引](../README.md) · [项目入口](../../AGENTS.md)
@@ -28,7 +28,7 @@ This directory records daily r-doc changes, deterministic verification, temporar
 Recommended reading order:
 
 1. [Development and verification workflow](workflow.md)
-2. [Reproducible verification report](verification-report.md)
+2. [Versioned verification snapshot](verification-report.md)
 3. [Agent benchmarks and performance baseline](benchmarks.md)
 
 Back to: [documentation index](../README.md) · [project entrypoint](../../AGENTS.md)

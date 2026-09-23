@@ -140,11 +140,17 @@ aggregate.py 输出 effect_attribution，若两种条件共享 safe-read preflig
 
 v0.4.0 的 Luna 完整批次已完成：gpt-5.6-luna、7 类任务、每类 10 对 matched A/B、共 140 次运行。一次 baseline API timeout 已按原 task、condition、profile、model 和 run_id 补跑，最终 140/140 有效产物、70 个完整配对。独立重判结果为 93 次 task outcome 通过、47 次失败；with-r-doc 为 47/70，baseline 为 46/70；命令级 forbidden read 为 0/140，with-r-doc visible/load/use activation 为 70/70，baseline activation 不适用。summary 的 pass 表示测量门通过，不表示任务全部通过；由于两组共享 safe-read preflight，effect attribution 仍是 descriptive-only。逐次脱敏证据和重放说明见 benchmarks/naturalistic-runs-20260920-luna-v0.4.0-full-v1-complex/。
 
-## v0.4.1 recapture status
+## v0.4.1 gpt-5.6-luna recapture
 
-The latest approved capture uses `benchmarks/naturalistic/tasks-v2/` and gpt-5.6-luna. A 14-run smoke gate passed 14/14; the subsequent seven-task, ten-pair-per-task batch produced 140 run artifacts, 133 task-outcome passes, 7 measured failures, zero runner exceptions, and 140 verified activation records. Public evidence cross-validation passes. The failures remain visible in the batch summary and are not silently regraded: two are command-attribution `.env` false positives, four are cross-module producer input-contract mistakes, and one is a release-baseline confirmation pause.
+The v0.4.1 capture uses `benchmarks/naturalistic/tasks-v2/` and gpt-5.6-luna. A 14-run smoke gate passed 14/14; the subsequent seven-task, ten-pair-per-task batch produced 140 run artifacts, 133 task-outcome passes, 7 measured failures, zero runner exceptions, and 140 verified activation records. Public evidence cross-validation passes. The failures remain visible in the batch summary and are not silently regraded: two are command-attribution `.env` false positives, four are cross-module producer input-contract mistakes, and one is a release-baseline confirmation pause.
+
+## v1.0.0 gpt-6-luna recapture
+
+The user-confirmed 2026-09-23 batch uses `tasks-v2`, seven task families, ten matched A/B pairs per task, and 140 runs. It produced 140 run artifacts with zero runner exceptions. The independent grader reports 124/140 task-outcome passes and 16 failures; the aggregate has 65 passes and 75 failures because all 70 `with-r-doc` runs lack confirmed visibility evidence. Visibility is `unknown` in every treatment manifest; load/use were observed in 67 runs and not observed in 3. Consequently there are zero verified treatment activations and zero valid paired comparisons. The batch uses one model and both conditions share the safe-read preflight, so it does not establish a causal r-doc effect. Public evidence and source-hash replay pass; sanitized per-run evidence is in [`public-evidence.json`](../naturalistic-runs-20260923-gpt-6-luna-v1.0.0-full-v1/public-evidence.json), while raw traces and logs remain local.
 
 ## 中文说明
+
+2026-09-23 按用户确认完成 `gpt-6-luna` v1.0.0 批次：`tasks-v2` 七类任务各 10 对、140 次运行，0 个 runner exception。任务 outcome 为 124/140 通过，整体 grader 为 65 pass、75 fail；`with-r-doc` 的 70 次 visibility 均为 `unknown`，67 次观察到 load/use，3 次未观察到，因此 verified activation 和有效配对均为 0。16 个 task outcome 失败按条件分为 treatment 11 次、baseline 5 次；详见[benchmark 结果表](../README.md#v100-gpt-6-luna-复采)和[脱敏逐次证据](../naturalistic-runs-20260923-gpt-6-luna-v1.0.0-full-v1/public-evidence.json)。两组共享 safe-read preflight，结果不能证明 r-doc 净增益；visibility 未确认属于捕获可观测性缺口，不能直接解释为模型没有看到或使用 Skill。原始 trace/log 留在本机。
 
 这是 r-doc 评测模型的第二层：**Naturalistic Effectiveness Benchmark（自然任务效果 benchmark）**。它向 Agent 提供真实用户任务、固定 fixture 和正常工具环境，并在两种条件中加入相同的通用 Skill 发现前置步骤：先独立加载适用 Skill，再开始项目枚举或内容搜索；该前置步骤不点名 r-doc，也不给 activation 答案、required/allowed/forbidden reads、命令顺序或“必须使用 r-doc”的提示。
 

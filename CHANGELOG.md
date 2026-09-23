@@ -4,6 +4,36 @@ This file records user-visible changes to r-doc.
 
 ## Unreleased
 
+## [1.0.0] - 2026-09-23
+
+### 中文摘要
+
+- 明确低、中、高影响任务的执行档位和授权边界；用户已明确授权的范围内直接执行，只在事实、范围或风险存在实质歧义时暂停询问。
+- 增加先列变更路径、排除受保护路径后再查看安全 diff 的规则，避免完整 diff 读取已跟踪的凭据文件。
+- 增加 minimal、standard、strict 三种治理级别，并让配置、审计和结构修复工具采用相同门槛。
+- 将 133/140 naturalistic 结果明确为单模型、混合条件下的描述性任务结果，区分归因误报、任务契约错误和确认暂停；未启动新 benchmark 采集。
+- 将可复现验证报告标注为 v0.4.0（2026-09-20）快照，避免误读为 v0.4.1 验证结果。
+
+### 兼容性与限制
+
+- 未设置 `governance_level` 的现有 `.r-doc.yaml` 继续使用 `standard`；`minimal` 与 `strict` 均需显式选择。
+- 已明确授权的文档操作可在授权范围内直接执行；仅在事实、范围或风险存在实质歧义时暂停。需要单独授权的外部操作仍按其授权边界执行。
+- 当前 benchmark 仍是单模型、共享安全预检条件下的描述性结果，不能证明 r-doc 的独立净收益；本次发布没有启动新采集。
+
+### English
+
+- Clarified low-, medium-, and high-impact workflows and authorization boundaries: proceed within an explicitly authorized scope and pause only for material ambiguity in facts, scope, or risk.
+- Required path-first Git review that excludes protected paths before reading explicit safe diffs.
+- Added minimal, standard, and strict governance levels and aligned configuration, audit, and structural repair behavior.
+- Labeled the 133/140 naturalistic result as descriptive single-model task evidence pooled across conditions; separated attribution false positives, task-contract errors, and a confirmation pause. No new benchmark capture was started.
+- Identified the reproducible verification report as a v0.4.0 snapshot from 2026-09-20, not a v0.4.1 verification result.
+
+### Compatibility and limits
+
+- Existing `.r-doc.yaml` files without `governance_level` continue to use `standard`; `minimal` and `strict` are opt-in.
+- Explicitly authorized documentation work may proceed within the authorized scope. Pause only for material ambiguity in facts, scope, or risk; external actions with separate authorization boundaries still require that authorization.
+- The available benchmark remains descriptive evidence from one model with a shared safe-read preflight, so it does not establish r-doc's independent net benefit. No new capture was started for this release.
+
 ## [0.4.1] - 2026-09-21
 
 - 收敛 naturalistic grader 的参数形状与自然语言断言契约，补充 v2 复杂任务规格、批次编排、公开证据校验和可观察耗时/token 指标；新增的 gpt-5.6-luna 完整 A/B 批次包含 140 次运行，133 次通过、7 次失败，失败原因和限制保持可复核，不将结果解释为 r-doc 的独立增量收益。

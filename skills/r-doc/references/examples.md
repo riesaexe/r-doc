@@ -27,7 +27,7 @@ CREATE AGENTS.md - create missing project entrypoint
 CREATE docs/README.md - create missing documentation index
 ~~~
 
-After confirmation, run the same command with `--apply`, then complete project-specific commands and rules in `AGENTS.md`. The generated files are navigation scaffolding, not a claim that the repository knowledge is complete.
+When the user's request authorizes initialization and the preview matches that scope, run the same command with `--apply` in the same task, then complete project-specific commands and rules in `AGENTS.md`. Do not ask for another confirmation for the displayed safe navigation changes. The generated files are navigation scaffolding, not a claim that the repository knowledge is complete.
 
 ## Example 2: Trace an API change
 
